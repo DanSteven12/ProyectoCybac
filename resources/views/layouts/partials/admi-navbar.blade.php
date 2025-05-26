@@ -278,6 +278,9 @@
             <a href="{{ route('admin.roles.index') }}" class="menu-card">
                 <span>Roles</span>
             </a>
+             <a href="{{ route('admin.services.index') }}" class="menu-card">
+                <span>Servicios</span>
+            </a>
             <a href="/horarios" class="menu-card">
                 <span>Horarios</span>
             </a>
