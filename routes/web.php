@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Admin\RoleController;
+use App\Http\Controllers\Admin\ServiceController;  // Importación añadida
 use App\Http\Controllers\LoginController;
 use App\Http\Controllers\RegisterController;
 use App\Http\Controllers\Admin\UsersController;
@@ -31,7 +32,13 @@ Route::get('/', function () {
 Route::middleware(['auth', 'role:admin'])->prefix('admin')->name('admin.')->group(function () {
     Route::get('/dashboard', [AdminController::class, 'dashboard'])->name('dashboard');
 
+     // Rutas para servicios
+    Route::resource('services', ServiceController::class);
+    
+    // Gestión de usuarios
+    Route::resource('users', UsersController::class);
     // // Gestión de usuarios
+
     // Route::resource('users', UsersController::class);
 });
 

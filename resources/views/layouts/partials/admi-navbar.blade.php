@@ -280,6 +280,11 @@
             </a>
             <a href="{{ route('admin.memberships.index') }}" class="menu-card">
                 <span>Membresias</span>
+             <a href="{{ route('admin.services.index') }}" class="menu-card">
+                <span>Servicios</span>
+            </a>
+            <a href="/horarios" class="menu-card">
+                <span>Horarios</span>
             </a>
             <a href="/contacto" class="menu-card">
                 <span>Contacto</span>
