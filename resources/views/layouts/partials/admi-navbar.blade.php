@@ -283,6 +283,12 @@
              <a href="{{ route('admin.services.index') }}" class="menu-card">
                 <span>Servicios</span>
             </a>
+             <a href="{{ route('admin.requirements.index') }}" class="menu-card">
+                <span>Requerimientos</span>
+            </a>
+            <a href="{{ route('admin.classes.index') }}" class="menu-card">
+                <span>Clases</span>
+            </a>
             <a href="/horarios" class="menu-card">
                 <span>Horarios</span>
             </a>

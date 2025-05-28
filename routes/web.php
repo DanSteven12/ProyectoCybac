@@ -8,6 +8,8 @@ use App\Http\Controllers\Admin\UsersController;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\InstructorController;
 // use App\Http\Controllers\MembershipController;
+use App\Http\Controllers\Admin\RequirementController;
+use App\Http\Controllers\Admin\ClassesController;
 use App\Http\Controllers\User\MembershipController as UserMembershipController;
 use App\Http\Controllers\Admin\MembershipController as AdminMembershipController;
 use Illuminate\Support\Facades\Route;
@@ -84,4 +86,13 @@ Route::middleware(['auth'])->prefix('user')->name('user.')->group(function () {
 
     // Guardar comprobante
     Route::post('payments/store', [UserMembershipController::class, 'storeReceipt'])->name('payments.store');
+});
+
+Route::middleware(['auth'])->prefix('admin')->name('admin.')->group(function () {
+    Route::resource('requirements', RequirementController::class);
+});
+
+
+Route::middleware(['auth'])->prefix('admin')->name('admin.')->group(function () {
+    Route::resource('classes', ClassesController::class);
 });
