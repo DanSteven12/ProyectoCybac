@@ -272,8 +272,8 @@
             <a href="{{ route('user.dashboard') }}" class="menu-card">
                 <span>Inicio</span>
             </a>
-            <a href="/horarios" class="menu-card">
-                <span>Horarios</span>
+            <a href="{{ route('user.memberships.index') }}" class="menu-card">
+                <span>Membresias</span>
             </a>
             <a href="/contacto" class="menu-card">
                 <span>Contacto</span>

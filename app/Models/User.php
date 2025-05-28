@@ -36,4 +36,10 @@ class User extends Authenticatable
         ]);
     }
 
+    // RELACIÓN: Un usuario tiene muchos pagos
+    public function payments()
+    {
+        return $this->hasMany(Payment::class);
+    }
+
 }

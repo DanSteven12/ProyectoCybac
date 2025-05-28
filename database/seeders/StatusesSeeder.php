@@ -11,8 +11,13 @@ class StatusesSeeder extends Seeder
     {
         $statuses = [
             ['name' => 'Activo', 'type' => 1],
-            ['name' => 'Inactivo', 'type' => 2],
-            ['name' => 'Pendiente', 'type' => 3],
+            ['name' => 'Inactivo', 'type' => 1],
+            ['name' => 'Pendiente', 'type' => 1],
+
+             // Estados para pagos o membresías
+            ['name' => 'Pendiente de revisión', 'type' => 2],
+            ['name' => 'Aprobado', 'type' => 2],
+            ['name' => 'Rechazado', 'type' => 2],
         ];
 
         foreach ($statuses as $status) {

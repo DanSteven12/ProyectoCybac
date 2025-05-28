@@ -8,7 +8,6 @@ class DatabaseSeeder extends Seeder {
     public function run(): void {
         $this->call([
             StatusesSeeder::class,
-            UserSeeder::class, // Primero crea usuarios
             RoleSeeder::class,
             
         ]);

@@ -6,6 +6,9 @@ use App\Http\Controllers\RegisterController;
 use App\Http\Controllers\Admin\UsersController;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\InstructorController;
+// use App\Http\Controllers\MembershipController;
+use App\Http\Controllers\User\MembershipController as UserMembershipController;
+use App\Http\Controllers\Admin\MembershipController as AdminMembershipController;
 use Illuminate\Support\Facades\Route;
 
 // Rutas públicas: login y registro
@@ -50,4 +53,28 @@ Route::resource('roles', RoleController::class)->middleware(['auth', 'can:admin'
 
 Route::middleware(['auth', 'can:admin'])->prefix('admin')->name('admin.')->group(function () {
     Route::resource('roles', RoleController::class);
+});
+
+
+// Rutas de membresía
+Route::middleware(['auth'])->prefix('user')->name('user.')->group(function () {
+    // Rutas resource para ver membresías
+Route::resource('memberships', UserMembershipController::class)->only(['index', 'show']);
+    // Rutas adicionales para pagar una membresía
+Route::get('memberships/{membership}/pay', [UserMembershipController::class, 'pay'])->name('memberships.pay');
+Route::post('memberships/{membership}/pay', [UserMembershipController::class, 'processPayment'])->name('memberships.process');
+});
+
+Route::middleware(['auth', 'can:admin'])->prefix('admin')->name('admin.')->group(function () {
+    Route::resource('memberships', AdminMembershipController::class);
+});
+
+Route::middleware(['auth'])->prefix('user')->name('user.')->group(function () {
+    Route::resource('memberships', UserMembershipController::class)->only(['index']);
+
+    // Vista para subir comprobante
+    Route::get('payments/{membership}/upload', [UserMembershipController::class, 'uploadReceipt'])->name('payments.upload');
+
+    // Guardar comprobante
+    Route::post('payments/store', [UserMembershipController::class, 'storeReceipt'])->name('payments.store');
 });
