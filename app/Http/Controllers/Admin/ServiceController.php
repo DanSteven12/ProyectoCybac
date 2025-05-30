@@ -70,7 +70,7 @@ class ServiceController extends Controller
         $service->update($request->all());
 
         return redirect()->route('admin.services.index')
-                         ->with('success', 'Service updated successfully.');
+                         ->with('success', 'Servicio actualizado.');
     }
 
     /**
@@ -81,6 +81,6 @@ class ServiceController extends Controller
         $service->delete();
 
         return redirect()->route('admin.services.index')
-                         ->with('success', 'Service deleted successfully.');
+                         ->with('success', 'Servicio eliminado.');
     }
 }
