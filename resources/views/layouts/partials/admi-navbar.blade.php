@@ -21,7 +21,7 @@
         }
 
         body {
-            padding-top: 100px; /* Altura del navbar */
+            padding-top: 100px; /* Ajustado para el navbar más grande */
         }
 
         /* Header Principal */
@@ -29,48 +29,51 @@
             position: fixed;
             top: 0;
             width: 100%;
-            height: 90px;
+            height: 100px; /* Aumentado para acomodar logo de 80px */
             background: #2c3e50;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: 0 2rem;
+            padding: 0 20px;
             z-index: 1000;
             box-shadow: 0 2px 15px rgba(0, 0, 0, 0.2);
         }
 
         /* Contenedor Logo */
         .logo-container {
-            position: absolute;
-            left: 20px;
             display: flex;
             align-items: center;
             height: 100%;
+            flex: 1;
+            min-width: 0;
+            max-width: 70%; /* Limita el ancho para dejar espacio a los controles */
         }
 
         .logo {
-            width: 80px;
+            width: 80px; /* Tamaño fijo solicitado */
             height: 80px;
             border-radius: 50%;
             object-fit: cover;
             border: 2px solid #3498db;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
             transition: all 0.3s ease;
-            margin-left: 100px;
         }
 
         .brand-name {
             color: white;
             font-size: 1.8rem;
             font-weight: 700;
-            margin-left: 30px;
+            margin-left: 20px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
         }
 
         /* Controles Derecha */
         .header-controls {
             display: flex;
             align-items: center;
-            gap: 1.5rem;
+            gap: 15px;
             margin-left: auto;
         }
 
@@ -79,12 +82,13 @@
             background: rgba(255, 255, 255, 0.1);
             color: white;
             border: none;
-            padding: 8px 15px;
+            padding: 10px 15px;
             border-radius: 20px;
             cursor: pointer;
             transition: all 0.3s ease;
             font-size: 1.4rem;
             font-weight: 600;
+            white-space: nowrap;
         }
 
         .logout-button:hover {
@@ -95,10 +99,16 @@
         /* Botón Hamburguesa */
         .hamburger-btn {
             cursor: pointer;
-            padding: 0.8rem;
+            padding: 10px;
             background: rgba(255, 255, 255, 0.1);
             border-radius: 8px;
-            transition: all 0.3s ease;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            width: 50px;
+            height: 50px;
+            flex-shrink: 0;
         }
 
         .hamburger-btn:hover {
@@ -107,15 +117,15 @@
 
         .hamburger-bar {
             width: 25px;
-            height: 2px;
+            height: 3px;
             background: white;
-            margin: 5px 0;
+            margin: 4px 0;
             transition: all 0.3s ease;
             border-radius: 2px;
         }
 
         .active .hamburger-bar:first-child {
-            transform: rotate(45deg) translate(5px, 5px);
+            transform: rotate(45deg) translate(6px, 6px);
         }
 
         .active .hamburger-bar:nth-child(2) {
@@ -123,7 +133,7 @@
         }
 
         .active .hamburger-bar:last-child {
-            transform: rotate(-45deg) translate(5px, -5px);
+            transform: rotate(-45deg) translate(6px, -6px);
         }
 
         /* Menú Overlay */
@@ -141,6 +151,7 @@
             display: flex;
             align-items: center;
             justify-content: center;
+            overflow-y: auto;
         }
 
         .overlay-active {
@@ -195,49 +206,97 @@
         }
 
         /* Responsive */
-        @media (max-width: 768px) {
+        @media (max-width: 992px) {
             .main-header {
-                padding: 0 1rem;
-                height: 60px;
+                padding: 0 15px;
             }
-
-            .logo {
-                width: 40px;
-                height: 40px;
-                left: 10px;
-            }
-
+            
             .brand-name {
-                font-size: 1.5rem;
-                margin-left: 50px;
+                font-size: 1.6rem;
+                margin-left: 15px;
             }
-
-            .header-controls {
-                gap: 1rem;
-            }
-
+            
             .logout-button {
-                padding: 6px 12px;
+                padding: 8px 12px;
                 font-size: 1.2rem;
             }
+        }
 
-            .hamburger-btn {
-                padding: 0.6rem;
+        @media (max-width: 768px) {
+            body {
+                padding-top: 90px;
             }
 
+            .main-header {
+                height: 90px;
+            }
+            
+            .logo {
+                width: 70px;
+                height: 70px;
+            }
+            
+            .brand-name {
+                font-size: 1.4rem;
+            }
+            
+            .hamburger-btn {
+                width: 45px;
+                height: 45px;
+                padding: 8px;
+            }
+            
             .hamburger-bar {
                 width: 22px;
+                height: 2px;
             }
+        }
 
-            .menu-grid {
-                grid-template-columns: 1fr;
-                padding: 1rem;
-                gap: 1rem;
+        @media (max-width: 576px) {
+            .main-header {
+                height: 85px;
+                padding: 0 10px;
             }
+            
+            .logo {
+                width: 60px;
+                height: 60px;
+            }
+            
+            .brand-name {
+                font-size: 1.2rem;
+                margin-left: 10px;
+                max-width: 120px;
+            }
+            
+            .logout-button {
+                padding: 6px 10px;
+                font-size: 1rem;
+            }
+            
+            .header-controls {
+                gap: 10px;
+            }
+        }
 
-            .menu-card {
-                min-height: 100px;
-                padding: 1rem;
+        @media (max-width: 400px) {
+            .brand-name {
+                display: none;
+            }
+            
+            .logo {
+                margin-left: 0;
+            }
+            
+            .logout-button {
+                padding: 5px 8px;
+                font-size: 0.9rem;
+            }
+            
+            .hamburger-btn {
+                width: 40px;
+                height: 40px;
+                padding: 6px;
             }
         }
     </style>
@@ -269,7 +328,7 @@
     <!-- Menú Overlay -->
     <div class="overlay" id="menuOverlay">
         <div class="menu-grid">
-            <a href="{{ route('admin.dashboard') }}" class="menu-card">
+             <a href="{{ route('admin.dashboard') }}" class="menu-card">
                 <span>Inicio</span>
             </a>
             <a href="{{ route('admin.users.index') }}" class="menu-card">
@@ -289,8 +348,8 @@
             <a href="{{ route('admin.classes.index') }}" class="menu-card">
                 <span>Clases</span>
             </a>
-            <a href="/horarios" class="menu-card">
-                <span>Horarios</span>
+            <a href="{{ route('admin.payments.index') }}" class="menu-card">
+                <span>Pagos</span>
             </a>
             <a href="/contacto" class="menu-card">
                 <span>Contacto</span>
@@ -324,6 +383,15 @@
                 toggleMenu();
             }
         });
+
+        // Ajustar altura del overlay al cambiar tamaño de pantalla
+        function adjustOverlayHeight() {
+            if (menuOverlay.classList.contains('overlay-active')) {
+                document.body.style.overflow = 'hidden';
+            }
+        }
+
+        window.addEventListener('resize', adjustOverlayHeight);
     </script>
 </body>
 </html>

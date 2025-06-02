@@ -16,9 +16,9 @@
 </head>
 
 <body>
+    
     <!-- Navbar -->
     @include('layouts.partials.admi-navbar')
-
     <!-- Contenido principal -->
     <main class="main-wrapper">
         @yield('content')
@@ -33,5 +33,7 @@
     <script src="{{ asset('assets/js/script.js') }}"></script>
     
     @yield('scripts')
+
+    
 </body>
 </html>

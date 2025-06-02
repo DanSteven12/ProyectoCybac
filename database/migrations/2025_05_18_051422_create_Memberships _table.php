@@ -13,6 +13,7 @@ return new class extends Migration {
             $table->string('name', 50);
             $table->text('description');
             $table->integer('duration');
+            $table->decimal('price', 10, 2);
             $table->timestamps();
         });
     }

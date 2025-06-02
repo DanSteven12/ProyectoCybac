@@ -7,6 +7,7 @@
     <div class="card shadow-sm p-4">
         <h4>{{ $membership->name }}</h4>
         <p><strong>Duración:</strong> {{ $membership->duration }} días</p>
+        <p><strong>Precio actual:</strong> ${{ number_format($membership->price, 2) }}</p>
         <p><strong>Descripción:</strong> {{ $membership->description }}</p>
 
         <hr>

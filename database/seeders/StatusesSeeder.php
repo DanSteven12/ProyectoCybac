@@ -18,6 +18,7 @@ class StatusesSeeder extends Seeder
             ['name' => 'Pendiente de revisión', 'type' => 2],
             ['name' => 'Aprobado', 'type' => 2],
             ['name' => 'Rechazado', 'type' => 2],
+            ['name' => 'Vencido', 'type' => 2], 
         ];
 
         foreach ($statuses as $status) {

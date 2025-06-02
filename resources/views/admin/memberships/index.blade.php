@@ -14,7 +14,8 @@
             <tr>
                 <th>Nombre</th>
                 <th>Descripción</th>
-                <th>Duración (días)</th>
+                <th>Precio</th>
+                <th>Duración</th>
                 <th>Estado</th>
                 <th>Acciones</th>
             </tr>
@@ -24,6 +25,7 @@
                 <tr>
                     <td>{{ $membership->name }}</td>
                     <td>{{ $membership->description }}</td>
+                    <td>{{ $membership->price }}</td>
                     <td>{{ $membership->duration }}</td>
                     <td>{{ $membership->status->name ?? 'N/A' }}</td>
                     <td>

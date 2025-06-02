@@ -12,6 +12,8 @@ use App\Http\Controllers\Admin\RequirementController;
 use App\Http\Controllers\Admin\ClassesController;
 use App\Http\Controllers\User\MembershipController as UserMembershipController;
 use App\Http\Controllers\Admin\MembershipController as AdminMembershipController;
+use App\Http\Controllers\Admin\PaymentController as AdminPaymentController;
+use App\Http\Controllers\User\PaymentHistoryController as UserPaymentController;
 use Illuminate\Support\Facades\Route;
 
 // Rutas públicas: login y registro
@@ -95,4 +97,21 @@ Route::middleware(['auth'])->prefix('admin')->name('admin.')->group(function () 
 
 Route::middleware(['auth'])->prefix('admin')->name('admin.')->group(function () {
     Route::resource('classes', ClassesController::class);
+});
+
+Route::middleware(['auth', 'can:admin'])->prefix('admin')->name('admin.')->group(function () {
+    Route::resource('payments', AdminPaymentController::class)->only(['index', 'show', 'update']);
+
+    // Rutas adicionales (pueden mantenerse si prefieres manejarlas separadas)
+    Route::post('payments/{payment}/approve', [AdminPaymentController::class, 'approve'])->name('payments.approve');
+    Route::post('payments/{payment}/reject', [AdminPaymentController::class, 'reject'])->name('payments.reject');
+});
+
+// Dentro del grupo con middleware 'auth'
+Route::middleware(['auth', 'verified'])->group(function () {
+    // ... otras rutas
+    
+    // Historial de pagos
+    Route::get('/history', [UserPaymentController::class, 'index'])
+        ->name('user.payments.index');
 });

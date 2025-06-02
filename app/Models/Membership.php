@@ -13,6 +13,7 @@ class Membership extends Model
         'name',
         'description',
         'duration',
+        'price',
     ];
 
     // RELACIÓN: una membresía pertenece a un estado
@@ -26,4 +27,32 @@ class Membership extends Model
     {
         return $this->hasMany(Payment::class);
     }
+public function latestPayment()
+{
+    return $this->hasOne(Payment::class)->latestOfMany();
+}
+
+
+    public function getReadableDurationAttribute()
+{
+    $dias = $this->duration;
+    $años = intdiv($dias, 365);
+    $meses = intdiv($dias % 365, 30);
+    $texto = '';
+
+    if ($años > 0) {
+        $texto .= $años . ' ' . ($años == 1 ? 'año' : 'años');
+    }
+
+    if ($meses > 0) {
+        $texto .= ($texto ? ' y ' : '') . $meses . ' ' . ($meses == 1 ? 'mes' : 'meses');
+    }
+
+    if (!$texto) {
+        $texto = $dias . ' días';
+    }
+
+    return $texto;
+}
+
 }
