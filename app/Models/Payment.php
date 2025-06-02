@@ -2,6 +2,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Payment extends Model
@@ -34,5 +35,10 @@ class Payment extends Model
     public function status()
     {
         return $this->belongsTo(Status::class);
+    }
+
+    public function getFormattedDateAttribute()
+    {
+        return Carbon::parse($this->date)->format('d/m/Y'); // Puedes cambiar a 'Y-m-d' si prefieres
     }
 }

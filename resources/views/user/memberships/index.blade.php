@@ -117,7 +117,8 @@
                         <strong>{{ $membership->name }}</strong><br>
                         <div class="name">{{ $membership->description }}</div>
                         <div class="mt-2">
-                            <small><strong>Duración:</strong> {{ $membership->duration }} días</small><br>
+                            <small>Precio:</strong> ${{ number_format($membership->price, 2) }}</small><br>
+                            <small><strong>Duración:</strong> {{ $membership->readable_duration }}</small><br>
                         </div>
                         <div class="mt-3">
                             <a href="{{ route('user.memberships.pay', $membership->id) }}" class="btn btn-light btn-sm">Contratar</a>

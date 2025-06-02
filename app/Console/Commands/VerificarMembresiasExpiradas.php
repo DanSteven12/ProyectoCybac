@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Console\Commands;
 
 use Illuminate\Console\Command;
@@ -12,18 +13,16 @@ class VerificarMembresiasExpiradas extends Command
 
     public function handle()
     {
-        $pagosActivos = Payment::where('status_id', 1)->get();
+        $pagosActivos = Payment::with('membership')->where('status_id', 1)->get();
 
         foreach ($pagosActivos as $pago) {
-            $endDate = match ($pago->membership_id) {
-                1 => Carbon::parse($pago->date)->addDays(30),
-                2 => Carbon::parse($pago->date)->addDays(180),
-                3 => Carbon::parse($pago->date)->addDays(365),
-                default => Carbon::parse($pago->date)->addDays(30),
-            };
+            // Asegura que exista la relación con la membresía
+            if ($pago->membership) {
+                $fechaExpiracion = Carbon::parse($pago->date)->addDays($pago->membership->duration);
 
-            if (Carbon::now()->gt($endDate)) {
-                $pago->update(['status_id' => 2]); // 2 = inactiva o vencida
+                if (now()->greaterThan($fechaExpiracion)) {
+                    $pago->update(['status_id' => 2]); // 2 = vencida
+                }
             }
         }
 

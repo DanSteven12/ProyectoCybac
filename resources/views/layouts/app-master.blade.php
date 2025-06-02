@@ -10,9 +10,10 @@
  </head>
  
  <body>
+    
      <!-- Navbar -->
      @include('layouts.partials.navbar')
-     
+    
  
      <!-- Contenido principal -->
      <div class="main-wrapper">
@@ -21,7 +22,6 @@
  
      <!-- Footer -->
      @include('layouts.partials.footer')
- 
  </body>
  
  </html>

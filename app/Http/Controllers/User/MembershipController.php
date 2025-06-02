@@ -21,7 +21,12 @@ class MembershipController extends Controller
     // Mostrar detalle de membresía y opción de pago
     public function pay(Membership $membership)
     {
-        return view('user.memberships.pay', compact('membership'));
+        $user = Auth::user();
+        $previousPayment = Payment::where('user_id', $user->id)
+            ->where('membership_id', $membership->id)
+            ->latest()->first();
+        
+        return view('user.memberships.pay', compact('membership', 'user', 'previousPayment'));
     }
 
     // Mostrar formulario para subir comprobante
@@ -35,26 +40,25 @@ class MembershipController extends Controller
     {
         $request->validate([
             'membership_id' => 'required|exists:memberships,id',
-            'date' => 'required|date',
-            'price' => 'required|numeric',
             'receipt' => 'required|file|mimes:jpg,jpeg,png,pdf|max:5120',
         ]);
 
         $user = Auth::user();
-
+        $membership = Membership::findOrFail($request->membership_id);
         $filePath = $request->file('receipt')->store('comprobantes', 'public');
 
-        Payment::create([
-            'user_id' => $user->id,
-            'membership_id' => $request->membership_id,
-            'status_id' => 2, // Pendiente de revisión
-            'date' => $request->date,
-            'price' => $request->price,
-            'receipt_url' => $filePath,
-            'comment' => null, // El admin agregará comentario si es rechazado
-        ]);
+    // Crear un nuevo registro sin modificar registros previos
+    Payment::create([
+        'user_id' => $user->id,
+        'membership_id' => $membership->id,
+        'status_id' => 4, // Pendiente de revisión
+        'date' => Carbon::now(), // Aquí se usa la fecha actual
+        'price' => $membership->price,
+        'receipt_url' => $filePath,
+        'comment' => null,
+    ]);
 
-        return redirect()->route('dashboard')->with('status', 'Comprobante enviado. Espera la validación del administrador.');
+        return redirect()->route('user.payments.index')->with('status', 'Comprobante enviado. Espera la validación del administrador.');
     }
 
     // Validar vigencia actual del usuario

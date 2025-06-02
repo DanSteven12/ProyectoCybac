@@ -23,6 +23,15 @@
         </div>
 
         <div class="mb-3">
+            <label for="price" class="form-label">Precio ($)</label>
+            <input type="number" step="0.01" min="0" name="price" id="price"
+                class="form-control @error('price') is-invalid @enderror"
+                value="{{ old('price', $membership->price) }}" required>
+            @error('price')<div class="invalid-feedback">{{ $message }}</div>@enderror
+        </div>
+
+
+        <div class="mb-3">
             <label for="duration" class="form-label">Duración (días)</label>
             <input type="number" name="duration" id="duration" 
                    class="form-control @error('duration') is-invalid @enderror" 

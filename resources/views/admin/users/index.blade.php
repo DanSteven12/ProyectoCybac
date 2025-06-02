@@ -46,7 +46,7 @@
                                     <td>{{ $user->names }}</td>
                                     <td>{{ $user->last_name }}</td>
                                     <td>{{ $user->email }}</td>
-                                   <td>{{ $user->getRoleNames()->first() ?? 'N/A' }}</td>
+                                    <td>{{ $user->getRoleNames()->first() ?? 'N/A' }}</td>
                                     <td>{{ $user->statuses->name ?? 'N/A' }}</td>
                                     <td>{{ \Carbon\Carbon::parse($user->birth_date)->translatedFormat('d F Y') }}</td>
                                     <td>{{ $user->gender }}</td>
