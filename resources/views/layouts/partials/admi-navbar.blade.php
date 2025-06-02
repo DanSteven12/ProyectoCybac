@@ -188,7 +188,12 @@
         .menu-card:nth-child(2) { background: #e74c3c; }
         .menu-card:nth-child(3) { background: #2ecc71; }
         .menu-card:nth-child(4) { background: #9b59b6; }
-        .menu-card:nth-child(5) { background: #3498db; }
+        .menu-card:nth-child(5) { background: #6034db; }
+        .menu-card:nth-child(6) { background: #26d8cf; }
+        .menu-card:nth-child(7) { background: #b41212; }
+        .menu-card:nth-child(8) { background: #c7db14; }
+        .menu-card:nth-child(9) { background: #0b07da; }
+
 
         .menu-card:hover {
             transform: translateY(-5px);
