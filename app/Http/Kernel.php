@@ -71,6 +71,6 @@ class Kernel extends HttpKernel
     'role' => \App\Http\Middleware\CheckRole::class,
     'can' => \Illuminate\Auth\Middleware\Authorize::class,
     'check.role' => \App\Http\Middleware\CheckRole::class,
-    'active.membership' => \App\Http\Middleware\EnsureMembershipIsActive::class,
+    'check.membership' => \App\Http\Middleware\CheckActiveMembership::class,
 ];
 }

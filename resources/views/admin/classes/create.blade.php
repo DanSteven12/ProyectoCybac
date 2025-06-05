@@ -55,7 +55,7 @@
 
                             <div class="col-md-6">
                                 <label class="form-label">Hora</label>
-                                <input type="time" name="time" class="form-control" required>
+                                <input type="time" name="time" value="{{ old('time') }}" required>
                             </div>
                         </div>
 

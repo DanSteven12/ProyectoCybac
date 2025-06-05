@@ -3,6 +3,13 @@
 @php use Illuminate\Support\Facades\Storage; @endphp
 
 @section('content')
+<style>
+    .pendiente { background-color: #fff3cd; } /* Amarillo claro */
+    .aprobado { background-color: #d4edda; }  /* Verde claro */
+    .rechazado { background-color: #f8d7da; } /* Rojo claro */
+    .vencido { background-color: #e2e3e5; color: #6c757d; } /* Gris claro */
+</style>
+
 <div class="container mt-4">
     <h2 class="mb-4">Lista de Pagos</h2>
 
@@ -45,7 +52,12 @@
                 <td>{{ $payment->membership->name }} ({{ $payment->membership->duration }} días)</td>
                 <td>${{ number_format($payment->price, 2) }}</td>
                 <td>{{ $statusName }}</td>
-                <td>{{ $payment->date }}</td>
+                <td>
+                    {{ $payment->date }}
+                    @if($statusName === 'Vencido' && $payment->expiration_date)
+                        <br><small class="text-danger">Expiró: {{ \Carbon\Carbon::parse($payment->expiration_date)->format('d/m/Y') }}</small>
+                    @endif
+                </td>
                 <td>
                     <a href="{{ Storage::url($payment->receipt_url) }}" target="_blank" class="btn btn-sm btn-outline-primary">
                         Ver archivo
@@ -86,7 +98,7 @@
 </div>
 
 <script>
-    // Por defecto mostrar pendientes (o cambiar a lo que quieras)
+    // Por defecto mostrar pendientes
     window.onload = function() {
         filterPayments('pendiente');
     }
@@ -166,3 +178,4 @@
     }
 </script>
 @endsection
+
