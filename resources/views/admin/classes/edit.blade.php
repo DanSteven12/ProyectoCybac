@@ -60,8 +60,8 @@
                         <div class="row mb-3">
                             <div class="col-md-6">
                                 <label class="form-label">Hora</label>
-                                <input type="time" name="time" class="form-control" 
-                                       value="{{ $class->time->format('H:i') }}" required>
+                                <input type="time" name="time" 
+                                value="{{ \Carbon\Carbon::parse($class->time)->format('H:i') }}" required>
                             </div>
 
                             <div class="col-md-6">

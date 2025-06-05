@@ -5,7 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class ClassModel extends Model
+class Classes extends Model
 {
     use HasFactory;
 
@@ -23,7 +23,7 @@ class ClassModel extends Model
 
     protected $casts = [
         'date' => 'date', // ✔️ Para que date sea un objeto Carbon
-        'time' => 'date', // ✔️ O usar 'datetime:H:i' solo si es datetime en la DB
+        'time' => 'string', // ✔️ O usar 'datetime:H:i' solo si es datetime en la DB
     ];
 
     // Relación con servicio
@@ -44,8 +44,10 @@ class ClassModel extends Model
         return $this->belongsTo(User::class, 'instructor_id');
     }
 
-
-
+    public function registrations()
+    {
+        return $this->hasMany(Registration::class, 'class_id');
+    }
     // Verificar disponibilidad
     public function isAvailable()
     {

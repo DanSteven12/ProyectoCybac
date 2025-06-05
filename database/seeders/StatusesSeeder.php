@@ -19,6 +19,11 @@ class StatusesSeeder extends Seeder
             ['name' => 'Aprobado', 'type' => 2],
             ['name' => 'Rechazado', 'type' => 2],
             ['name' => 'Vencido', 'type' => 2], 
+
+             // Estados para clases (type = 3)
+            ['name' => 'Disponible', 'type' => 3],
+            ['name' => 'Cupo lleno', 'type' => 3],
+            ['name' => 'Cancelada', 'type' => 3],
         ];
 
         foreach ($statuses as $status) {

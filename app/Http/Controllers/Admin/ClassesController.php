@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
-use App\Models\ClassModel;
+use App\Models\Classes;
 use App\Models\Service;
 use App\Models\Status;
 use App\Models\User;
@@ -15,7 +15,7 @@ class ClassesController extends Controller
     // Mostrar todas las clases
     public function index()
     {
-        $classes = ClassModel::with(['service', 'instructor', 'status'])
+        $classes = Classes::with(['service', 'instructor', 'status'])
             ->orderBy('date')
             ->orderBy('time')
             ->paginate(10);
@@ -28,7 +28,7 @@ class ClassesController extends Controller
     {
         $services = Service::all();
         $instructors = User::role('instructor')->get(); // usando Spatie
-        $statuses = Status::where('type', 1)->get(); // ✔️ Estados para clases
+        $statuses = Status::where('type', 3)->get(); // Estados para clases
 
         return view('admin.classes.create', compact('services', 'instructors', 'statuses'));
     }
@@ -41,56 +41,74 @@ class ClassesController extends Controller
             'instructor_id'  => 'required|exists:users,id',
             'status_id'      => 'required|exists:statuses,id',
             'date'           => 'required|date|after_or_equal:today',
-            'time'           => 'required',
+            'time'           => 'required|date_format:H:i',
             'description'    => 'required|string|max:500',
             'max_capacity'   => 'required|integer|min:1|max:30',
             'room'           => 'required|string|max:50',
         ]);
 
-        ClassModel::create($validated);
+        Classes::create($validated);
 
         return redirect()->route('admin.classes.index')
             ->with('success', 'Clase creada exitosamente');
     }
 
-    // Mostrar detalles de una clase
-    public function show(ClassModel $class)
-    {
-        return view('admin.classes.show', compact('class'));
-    }
+    
 
     // Mostrar formulario para editar una clase
-    public function edit(ClassModel $class)
+    public function edit(Classes $class)
     {
         $services = Service::all();
         $instructors = User::role('instructor')->get(); // usando Spatie
-        $statuses = Status::where('type', 1)->get(); // ✔️ Estados para clases
+        $statuses = Status::where('type', 3)->get(); // Estados para clases
 
         return view('admin.classes.edit', compact('class', 'services', 'instructors', 'statuses'));
     }
 
-    // Actualizar clase
-    public function update(Request $request, ClassModel $class)
-    {
+    // Actualizar clase (incluye actualización desde inscripciones)
+    public function update(Request $request, Classes $class)
+{
+    if ($request->has('status_id') && !$request->has('service_id')) {
+        // Solo está actualizando estado desde inscripciones
         $validated = $request->validate([
-            'service_id'     => 'required|exists:services,id',
-            'instructor_id'  => 'required|exists:users,id',
-            'status_id'      => 'required|exists:statuses,id',
-            'date'           => 'required|date',
-            'time'           => 'required',
-            'description'    => 'required|string|max:500',
-            'max_capacity'   => 'required|integer|min:1|max:30',
-            'room'           => 'required|string|max:50',
+            'status_id' => 'required|exists:statuses,id',
+            'cancellation_comment' => 'nullable|string|max:500',
+        ]);
+
+        $class->update($validated);
+
+        // Si vino desde la vista de inscripciones, recarga esa misma
+        if ($request->input('from') === 'registrations') {
+            return redirect()->route('admin.classes.registrations', $class->id)
+                             ->with('success', 'Estado actualizado correctamente.');
+        }
+
+        // Si no vino de ahí, volver al index
+        return redirect()->route('admin.classes.index')
+                         ->with('success', 'Clase actualizada correctamente.');
+    } else {
+        // Actualización completa
+        $validated = $request->validate([
+            'service_id'    => 'required|exists:services,id',
+            'instructor_id' => 'required|exists:users,id',
+            'status_id'     => 'required|exists:statuses,id',
+            'date'          => 'required|date',
+            'time'          => 'required',
+            'description'   => 'required|string|max:500',
+            'max_capacity'  => 'required|integer|min:1|max:30',
+            'room'          => 'required|string|max:50',
         ]);
 
         $class->update($validated);
 
         return redirect()->route('admin.classes.index')
-            ->with('success', 'Clase actualizada exitosamente');
+                    ->with('success', 'Clase actualizada correctamente.');
     }
+}
+
 
     // Eliminar clase
-    public function destroy(ClassModel $class)
+    public function destroy(Classes $class)
     {
         $class->delete();
 
@@ -102,7 +120,7 @@ class ClassesController extends Controller
     public function availableClasses()
     {
         $services = Service::all();
-        $classes = ClassModel::whereHas('status', function ($query) {
+        $classes = Classes::whereHas('status', function ($query) {
                 $query->where('name', 'Activo')->where('type', 1);
             })
             ->where('date', '>=', Carbon::today())
@@ -113,4 +131,23 @@ class ClassesController extends Controller
 
         return view('classes.available', compact('classes', 'services'));
     }
+    // NUEVO: Mostrar inscripciones para una clase
+public function registrations(Classes $class)
+{
+    // Cargar relaciones necesarias
+    $class->load('service', 'instructor', 'status');
+
+    // Obtener inscripciones (asumiendo que tienes relación "registrations" en Classes)
+    $inscritos = $class->registrations()->with('user')->get();
+
+    // Calcular cupos restantes
+    $faltantes = $class->max_capacity - $inscritos->count();
+
+    // Obtener estados tipo 3 para cambiar estado de clase desde la vista de inscripciones
+    $classStatuses = Status::where('type', 3)->get();
+
+    return view('admin.classes.registrations', compact('class', 'inscritos', 'faltantes', 'classStatuses'));
+}
+
+    // Si quieres actualizar estado y comentario desde esta vista, puedes reutilizar update()
 }

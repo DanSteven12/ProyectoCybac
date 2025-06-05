@@ -13,16 +13,16 @@ class PaymentController extends Controller
     {
         $payments = Payment::with(['user', 'membership', 'status'])->latest()->get();
 
-        // Auto-update expired payments
+        // Auto-update expired payments (estatus 'Vencido' = 7)
         foreach ($payments as $payment) {
-            $paymentDate = Carbon::parse($payment->date); // assuming 'date' is the payment date
-            $durationDays = $payment->membership->duration; // duration in days
+            $paymentDate = Carbon::parse($payment->date);
+            $durationDays = $payment->membership->duration ?? 30;
             $expirationDate = $paymentDate->copy()->addDays($durationDays);
 
             if (Carbon::now()->greaterThan($expirationDate) && $payment->status_id != 7) {
                 $payment->update([
-                    'status_id' => 7,
-                    'admin_comment' => 'Payment automatically marked as expired.',
+                    'status_id' => 7, // Vencido
+                    'comment' => 'Pago marcado automáticamente como vencido.',
                 ]);
             }
         }
@@ -38,7 +38,7 @@ class PaymentController extends Controller
     public function update(Request $request, Payment $payment)
     {
         $request->validate([
-            'status_id' => 'required|in:4,5,6',
+            'status_id' => 'required|in:4,5,6', // 4 = Pendiente, 5 = Aprobado, 6 = Rechazado
             'comment' => 'nullable|string|max:1000',
         ]);
 
@@ -49,14 +49,16 @@ class PaymentController extends Controller
             return back()->withErrors(['comment' => 'Debes proporcionar un motivo para rechazar el pago.']);
         }
 
-        $payment->update([
+        $updateData = [
             'status_id' => $statusId,
             'comment' => $statusId == 6 
                 ? $comment 
                 : ($statusId == 5 
                     ? 'Pago aprobado por el administrador.' 
                     : 'Pago en revisión.')
-        ]);
+        ];
+
+        $payment->update($updateData);
 
         return back()->with('status', 'Pago actualizado correctamente.');
     }

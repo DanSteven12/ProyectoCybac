@@ -58,16 +58,22 @@
                             </tr>
                         </thead>
                         <tbody>
-                           @forelse($paymentsPending as $payment)
+                            @forelse($paymentsPending as $payment)
                             <tr>
-                                <td>{{ $payment->membership->name }}</td>
+                                <td>{{ $payment->membership->name ?? 'No disponible' }}</td>
                                 <td>{{ \Carbon\Carbon::parse($payment->date)->format('d/m/Y') }}</td>
                                 <td>${{ number_format($payment->price, 2) }}</td>
-                                <td>{{ ucfirst($payment->status->name) }}</td>
+                                <td>
+                                    <span class="badge bg-warning text-dark rounded-pill py-2 px-3">
+                                        {{ ucfirst($payment->status->name) }}
+                                    </span>
+                                </td>
                             </tr>
-                           @empty
-                            <tr><td colspan="4" class="text-center">No hay pagos pendientes.</td></tr>
-                           @endforelse
+                            @empty
+                            <tr>
+                                <td colspan="4" class="text-center">No hay pagos pendientes.</td>
+                            </tr>
+                            @endforelse
                         </tbody>
                     </table>
                 </div>
@@ -103,7 +109,9 @@
                                 </td>
                             </tr>
                             @empty
-                            <tr><td colspan="6" class="text-center">No hay pagos aprobados.</td></tr>
+                            <tr>
+                                <td colspan="5" class="text-center">No hay pagos aprobados.</td>
+                            </tr>
                             @endforelse
                         </tbody>
                     </table>
@@ -133,9 +141,7 @@
                                 <td>{{ $payment->membership->name ?? 'No disponible' }}</td>
                                 <td>{{ \Carbon\Carbon::parse($payment->date)->format('d/m/Y') }}</td>
                                 <td>${{ number_format($payment->price, 2) }}</td>
-                                <td style="white-space: pre-wrap; word-wrap: break-word; max-width: 200px;">
-                                    {{ $payment->comment ?? 'No especificado' }}
-                                </td>
+                                <td style="white-space: pre-wrap; max-width: 200px;">{{ $payment->comment ?? 'No especificado' }}</td>
                                 <td>{{ $payment->updated_at->format('d/m/Y') }}</td>
                                 <td>
                                     <span class="badge bg-danger text-white rounded-pill py-2 px-3">
@@ -144,7 +150,9 @@
                                 </td>
                             </tr>
                             @empty
-                            <tr><td colspan="6" class="text-center">No hay pagos rechazados.</td></tr>
+                            <tr>
+                                <td colspan="6" class="text-center">No hay pagos rechazados.</td>
+                            </tr>
                             @endforelse
                         </tbody>
                     </table>
@@ -181,13 +189,14 @@
                                 </td>
                             </tr>
                             @empty
-                            <tr><td colspan="5" class="text-center">No hay pagos vencidos.</td></tr>
+                            <tr>
+                                <td colspan="5" class="text-center">No hay pagos vencidos.</td>
+                            </tr>
                             @endforelse
                         </tbody>
                     </table>
                 </div>
             </div>
-
         </div>
     </div>
 </div>
@@ -195,57 +204,54 @@
 <!-- Script para alternar tablas -->
 <script>
 document.addEventListener('DOMContentLoaded', function () {
-    const btnPending = document.getElementById('btn-pending');
-    const btnApproved = document.getElementById('btn-approved');
-    const btnRejected = document.getElementById('btn-rejected');
-    const btnExpired = document.getElementById('btn-expired');
+    const btns = {
+        pending: document.getElementById('btn-pending'),
+        approved: document.getElementById('btn-approved'),
+        rejected: document.getElementById('btn-rejected'),
+        expired: document.getElementById('btn-expired')
+    };
 
-    const tablePending = document.getElementById('table-pending');
-    const tableApproved = document.getElementById('table-approved');
-    const tableRejected = document.getElementById('table-rejected');
-    const tableExpired = document.getElementById('table-expired');
+    const tables = {
+        pending: document.getElementById('table-pending'),
+        approved: document.getElementById('table-approved'),
+        rejected: document.getElementById('table-rejected'),
+        expired: document.getElementById('table-expired')
+    };
 
     function clearActive() {
-        btnPending.classList.remove('active');
-        btnApproved.classList.remove('active');
-        btnRejected.classList.remove('active');
-        btnExpired.classList.remove('active');
+        Object.values(btns).forEach(btn => btn.classList.remove('active'));
     }
 
-    btnPending.addEventListener('click', () => {
+    function hideAllTables() {
+        Object.values(tables).forEach(tbl => tbl.style.display = 'none');
+    }
+
+    btns.pending.addEventListener('click', () => {
         clearActive();
-        btnPending.classList.add('active');
-        tablePending.style.display = '';
-        tableApproved.style.display = 'none';
-        tableRejected.style.display = 'none';
-        tableExpired.style.display = 'none';
+        btns.pending.classList.add('active');
+        hideAllTables();
+        tables.pending.style.display = '';
     });
 
-    btnApproved.addEventListener('click', () => {
+    btns.approved.addEventListener('click', () => {
         clearActive();
-        btnApproved.classList.add('active');
-        tablePending.style.display = 'none';
-        tableApproved.style.display = '';
-        tableRejected.style.display = 'none';
-        tableExpired.style.display = 'none';
+        btns.approved.classList.add('active');
+        hideAllTables();
+        tables.approved.style.display = '';
     });
 
-    btnRejected.addEventListener('click', () => {
+    btns.rejected.addEventListener('click', () => {
         clearActive();
-        btnRejected.classList.add('active');
-        tablePending.style.display = 'none';
-        tableApproved.style.display = 'none';
-        tableRejected.style.display = '';
-        tableExpired.style.display = 'none';
+        btns.rejected.classList.add('active');
+        hideAllTables();
+        tables.rejected.style.display = '';
     });
 
-    btnExpired.addEventListener('click', () => {
+    btns.expired.addEventListener('click', () => {
         clearActive();
-        btnExpired.classList.add('active');
-        tablePending.style.display = 'none';
-        tableApproved.style.display = 'none';
-        tableRejected.style.display = 'none';
-        tableExpired.style.display = '';
+        btns.expired.classList.add('active');
+        hideAllTables();
+        tables.expired.style.display = '';
     });
 });
 </script>
@@ -254,6 +260,7 @@ document.addEventListener('DOMContentLoaded', function () {
     .btn-outline-custom {
         color: #0A2647;
         border-color: #FFC107;
+        transition: background-color 0.3s ease, color 0.3s ease;
     }
     .btn-outline-custom:hover,
     .btn-outline-custom.active {
@@ -264,5 +271,4 @@ document.addEventListener('DOMContentLoaded', function () {
         color: #FFC107;
     }
 </style>
-
 @endsection

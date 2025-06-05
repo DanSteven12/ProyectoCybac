@@ -337,6 +337,9 @@
             <a href="{{ route('user.payments.index') }}" class="menu-card">
                 <span>Historial de pagos</span>
             </a>
+            <a href="{{ route('user.classes.index') }}" class="menu-card">
+                <span>Catálogo de Clases</span>
+            </a>
         </div>
     </div>
 

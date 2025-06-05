@@ -9,7 +9,8 @@ use App\Http\Controllers\AdminController;
 use App\Http\Controllers\InstructorController;
 // use App\Http\Controllers\MembershipController;
 use App\Http\Controllers\Admin\RequirementController;
-use App\Http\Controllers\Admin\ClassesController;
+use App\Http\Controllers\Admin\ClassesController as adminClassesController;
+use App\Http\Controllers\User\ClassesController as userClassesController;
 use App\Http\Controllers\User\MembershipController as UserMembershipController;
 use App\Http\Controllers\Admin\MembershipController as AdminMembershipController;
 use App\Http\Controllers\Admin\PaymentController as AdminPaymentController;
@@ -95,23 +96,30 @@ Route::middleware(['auth'])->prefix('admin')->name('admin.')->group(function () 
 });
 
 
-Route::middleware(['auth'])->prefix('admin')->name('admin.')->group(function () {
-    Route::resource('classes', ClassesController::class);
+Route::middleware(['auth', 'can:admin'])->prefix('admin')->name('admin.')->group(function () {
+    Route::resource('classes', AdminClassesController::class);
+    Route::get('classes/{class}/registrations', [AdminClassesController::class, 'registrations'])
+        ->name('classes.registrations');
 });
+
 
 Route::middleware(['auth', 'can:admin'])->prefix('admin')->name('admin.')->group(function () {
     Route::resource('payments', AdminPaymentController::class)->only(['index', 'show', 'update']);
-
-    // Rutas adicionales (pueden mantenerse si prefieres manejarlas separadas)
     Route::post('payments/{payment}/approve', [AdminPaymentController::class, 'approve'])->name('payments.approve');
     Route::post('payments/{payment}/reject', [AdminPaymentController::class, 'reject'])->name('payments.reject');
 });
 
 // Dentro del grupo con middleware 'auth'
 Route::middleware(['auth', 'verified'])->group(function () {
-    // ... otras rutas
-    
-    // Historial de pagos
     Route::get('/history', [UserPaymentController::class, 'index'])
         ->name('user.payments.index');
+});
+
+
+Route::middleware(['auth'])->prefix('user')->name('user.')->group(function () {
+    Route::get('/classes', [UserClassesController::class, 'index'])->name('classes.index');
+    Route::post('/classes/register/{id}', [UserClassesController::class, 'reserve'])->name('classes.register');  // Método reserve()
+    Route::delete('/classes/cancel/{id}', [UserClassesController::class, 'cancelReservation'])->name('classes.cancel');  // Método cancelReservation()
+    Route::get('/history', [UserClassesController::class, 'history'])->name('history');
+    Route::post('/classes/rate/{registration}', [UserClassesController::class, 'rate'])->name('classes.rate');
 });
