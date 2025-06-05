@@ -10,17 +10,19 @@ use Illuminate\Support\Facades\Log;
 
 class RequirementController extends Controller
 {
-    public function index()
-    {
-        $requirements = Requirement::with('service')
-                        ->orderBy('created_at', 'desc')
-                        ->paginate(10);
-        
-        $services = Service::all();
-        
-        return view('admin.requirements.index', compact('requirements', 'services'));
-    }
-
+public function index()
+{
+    $requirements = Requirement::with('service')->latest('updated_at')->paginate(10);
+    
+    // Obtener la fecha de última actualización
+    $lastUpdated = Requirement::latest('updated_at')->value('updated_at');
+    $lastUpdated = $lastUpdated ? $lastUpdated->format('d/m/Y') : null;
+    
+    return view('admin.requirements.index', [
+        'requirements' => $requirements,
+        'lastUpdated' => $lastUpdated
+    ]);
+}
     public function create()
     {
         $services = Service::all();

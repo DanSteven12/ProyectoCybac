@@ -17,10 +17,13 @@ class UsersController extends Controller
         // Tu lógica para mostrar el dashboard admin
         return view('user.dashboard');
     }
-   public function index()
+public function index()
 {
-    $users = User::paginate(10);  // o con relaciones: User::with('roles')->paginate(10);
-    return view('admin.users.index', compact('users'));
+    $users = User::paginate(10);
+    $currentDate = now()->format('d/m/Y'); // Formato DD/MM/YYYY
+    $totalUsers = User::count(); // Total de usuarios registrados
+    
+    return view('admin.users.index', compact('users', 'currentDate', 'totalUsers'));
 }
 
 
