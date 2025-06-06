@@ -1,9 +1,11 @@
 @extends('layouts.auth-master')
 
 @section('content')
+<div class="container-fluid px-4 mt-5">
+    <br><br><br><br><br><br><br><br>
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-<div class="min-vh-100 d-flex align-items-center" style="background-color: #F4F4F4; padding: 1.5rem 0;">
-    <div class="container">
+<div class="min-vh-100 d-flex align-items-center py-4" style="background-color: #F4F4F4;">
+
         <div class="row justify-content-center">
             <div class="col-12 col-md-10 col-lg-10">
                 <div class="d-none d-md-block" style="height: 1rem;"></div>
@@ -172,12 +174,20 @@
 <style>
     /* Aquí tus estilos existentes, sin cambios excepto flex horizontal agregado */
 
-    /* Para que el formulario sea responsive y la disposición horizontal se convierta en vertical en móviles */
-    @media (max-width: 767.98px) {
-        .form-horizontal-container {
+@media (max-width: 767.98px) {
+    .form-horizontal-container > div {
+        flex: 1 1 100% !important; /* Fuerza ocupar todo el ancho */
+        min-width: 100% !important;
+    }
+    
+    /* Campos nombre/apellido en columna en móviles muy pequeños */
+    @media (max-width: 400px) {
+        div[style*="display: flex"] {
             flex-direction: column !important;
+            gap: 0.75rem !important;
         }
     }
+}
 
     /* El resto de estilos los puedes mantener igual */
      /* Estilos generales */
