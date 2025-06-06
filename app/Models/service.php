@@ -13,4 +13,11 @@ class Service extends Model
         'name',
         'description'
     ];
+
+
+    public function requirements()
+    {
+        return $this->hasMany(Requirement::class);
+    }
+
 }

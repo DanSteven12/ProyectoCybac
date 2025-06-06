@@ -17,6 +17,8 @@ return new class extends Migration {
             $table->text('description');
             $table->integer('max_capacity');
             $table->string('room', 50);
+            $table->text('comment')->nullable();
+            $table->boolean('notification')->default(0)->nullable();
             $table->timestamps();
         });
     }

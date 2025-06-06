@@ -18,7 +18,9 @@ class Classes extends Model
         'time',
         'description',
         'max_capacity',
-        'room'
+        'room',
+        'comment',
+        'notification',
     ];
 
     protected $casts = [

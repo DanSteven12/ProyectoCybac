@@ -7,7 +7,6 @@
     <style>
         @import url("https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700&display=swap");
 
-        /* Estilos Base */
         * {
             box-sizing: border-box;
             font-family: "Nunito", sans-serif;
@@ -21,15 +20,14 @@
         }
 
         body {
-            padding-top: 100px; /* Ajustado para el navbar más grande */
+            padding-top: 100px;
         }
 
-        /* Header Principal */
         .main-header {
             position: fixed;
             top: 0;
             width: 100%;
-            height: 100px; /* Aumentado para acomodar logo de 80px */
+            height: 100px;
             background: #2c3e50;
             display: flex;
             justify-content: space-between;
@@ -39,24 +37,22 @@
             box-shadow: 0 2px 15px rgba(0, 0, 0, 0.2);
         }
 
-        /* Contenedor Logo */
         .logo-container {
             display: flex;
             align-items: center;
             height: 100%;
             flex: 1;
             min-width: 0;
-            max-width: 70%; /* Limita el ancho para dejar espacio a los controles */
+            max-width: 70%;
         }
 
         .logo {
-            width: 80px; /* Tamaño fijo solicitado */
+            width: 80px;
             height: 80px;
             border-radius: 50%;
             object-fit: cover;
             border: 2px solid #3498db;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-            transition: all 0.3s ease;
         }
 
         .brand-name {
@@ -69,7 +65,6 @@
             text-overflow: ellipsis;
         }
 
-        /* Controles Derecha */
         .header-controls {
             display: flex;
             align-items: center;
@@ -77,7 +72,6 @@
             margin-left: auto;
         }
 
-        /* Botón Logout */
         .logout-button {
             background: rgba(255, 255, 255, 0.1);
             color: white;
@@ -88,7 +82,6 @@
             transition: all 0.3s ease;
             font-size: 1.4rem;
             font-weight: 600;
-            white-space: nowrap;
         }
 
         .logout-button:hover {
@@ -96,7 +89,6 @@
             transform: translateY(-1px);
         }
 
-        /* Botón Hamburguesa */
         .hamburger-btn {
             cursor: pointer;
             padding: 10px;
@@ -108,11 +100,6 @@
             align-items: center;
             width: 50px;
             height: 50px;
-            flex-shrink: 0;
-        }
-
-        .hamburger-btn:hover {
-            background: rgba(255, 255, 255, 0.2);
         }
 
         .hamburger-bar {
@@ -136,7 +123,6 @@
             transform: rotate(-45deg) translate(6px, -6px);
         }
 
-        /* Menú Overlay */
         .overlay {
             position: fixed;
             top: 0;
@@ -145,7 +131,7 @@
             height: 100vh;
             background: rgba(0, 0, 0, 0.96);
             transform: translateX(-100%);
-            transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            transition: transform 0.4s ease;
             z-index: 1001;
             padding: 2rem;
             display: flex;
@@ -158,7 +144,6 @@
             transform: translateX(0) !important;
         }
 
-        /* Tarjetas del Menú */
         .menu-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
@@ -188,7 +173,6 @@
         .menu-card:nth-child(2) { background: #e74c3c; }
         .menu-card:nth-child(3) { background: #2ecc71; }
         .menu-card:nth-child(4) { background: #9b59b6; }
-        .menu-card:nth-child(5) { background: #3498db; }
 
         .menu-card:hover {
             transform: translateY(-5px);
@@ -201,122 +185,20 @@
             font-weight: 600;
             text-transform: uppercase;
             letter-spacing: 1px;
-            position: relative;
-            z-index: 2;
-        }
-
-        /* Responsive */
-        @media (max-width: 992px) {
-            .main-header {
-                padding: 0 15px;
-            }
-            
-            .brand-name {
-                font-size: 1.6rem;
-                margin-left: 15px;
-            }
-            
-            .logout-button {
-                padding: 8px 12px;
-                font-size: 1.2rem;
-            }
-        }
-
-        @media (max-width: 768px) {
-            body {
-                padding-top: 90px;
-            }
-
-            .main-header {
-                height: 90px;
-            }
-            
-            .logo {
-                width: 70px;
-                height: 70px;
-            }
-            
-            .brand-name {
-                font-size: 1.4rem;
-            }
-            
-            .hamburger-btn {
-                width: 45px;
-                height: 45px;
-                padding: 8px;
-            }
-            
-            .hamburger-bar {
-                width: 22px;
-                height: 2px;
-            }
-        }
-
-        @media (max-width: 576px) {
-            .main-header {
-                height: 85px;
-                padding: 0 10px;
-            }
-            
-            .logo {
-                width: 60px;
-                height: 60px;
-            }
-            
-            .brand-name {
-                font-size: 1.2rem;
-                margin-left: 10px;
-                max-width: 120px;
-            }
-            
-            .logout-button {
-                padding: 6px 10px;
-                font-size: 1rem;
-            }
-            
-            .header-controls {
-                gap: 10px;
-            }
-        }
-
-        @media (max-width: 400px) {
-            .brand-name {
-                display: none;
-            }
-            
-            .logo {
-                margin-left: 0;
-            }
-            
-            .logout-button {
-                padding: 5px 8px;
-                font-size: 0.9rem;
-            }
-            
-            .hamburger-btn {
-                width: 40px;
-                height: 40px;
-                padding: 6px;
-            }
         }
     </style>
 </head>
 <body>
-    <!-- Navbar Superior -->
     <header class="main-header">
         <div class="logo-container">
             <img src="/images/logo.png" alt="FITNFLOW" class="logo">
             <span class="brand-name">FITNFLOW</span>
         </div>
-        
         <div class="header-controls">
             <form method="POST" action="{{ route('logout') }}" id="logout-form">
                 @csrf
-                <button type="submit" class="logout-button">
-                    Cerrar Sesión
-                </button>
+                <button type="submit" class="logout-button">Cerrar Sesión</button>
             </form>
-            
             <div class="hamburger-btn" id="hamburgerBtn">
                 <div class="hamburger-bar"></div>
                 <div class="hamburger-bar"></div>
@@ -325,21 +207,15 @@
         </div>
     </header>
 
-    <!-- Menú Overlay -->
     <div class="overlay" id="menuOverlay">
         <div class="menu-grid">
-            <a href="{{ route('user.dashboard') }}" class="menu-card">
-                <span>Inicio</span>
-            </a>
-            <a href="{{ route('user.memberships.index') }}" class="menu-card">
-                <span>Membresias</span>
-            </a>
-            <a href="{{ route('user.payments.index') }}" class="menu-card">
-                <span>Historial de pagos</span>
-            </a>
-            <a href="{{ route('user.classes.index') }}" class="menu-card">
-                <span>Catálogo de Clases</span>
-            </a>
+            <a href="{{ route('user.dashboard') }}" class="menu-card"><span>Inicio</span></a>
+            <a href="{{ route('user.memberships.index') }}" class="menu-card"><span>Membresías</span></a>
+            <a href="{{ route('user.payments.index') }}" class="menu-card"><span>Historial de pagos</span></a>
+            @if ($hasApprovedMembership)
+    <a href="{{ route('user.classes.index') }}" class="menu-card"><span>Reserva tus Clases</span></a>
+@endif
+
         </div>
     </div>
 
@@ -353,27 +229,25 @@
             document.body.style.overflow = menuOverlay.classList.contains('overlay-active') ? 'hidden' : 'auto';
         }
 
-        // Event listeners
         hamburgerBtn.addEventListener('click', toggleMenu);
-        
+
         document.querySelectorAll('.menu-card').forEach(card => {
             card.addEventListener('click', toggleMenu);
         });
 
         menuOverlay.addEventListener('click', (e) => {
-            if(e.target === menuOverlay) toggleMenu();
+            if (e.target === menuOverlay) toggleMenu();
         });
 
         document.addEventListener('keydown', (e) => {
-            if(e.key === 'Escape' && menuOverlay.classList.contains('overlay-active')) {
+            if (e.key === 'Escape' && menuOverlay.classList.contains('overlay-active')) {
                 toggleMenu();
             }
         });
 
-        // Ajustar altura del overlay al cambiar tamaño de pantalla
         function adjustOverlayHeight() {
-            if (menuOverlay.classList.contains('overlay-active')) {
-                document.body.style.overflow = 'hidden';
+            if (window.innerWidth > 768 && menuOverlay.classList.contains('overlay-active')) {
+                toggleMenu();
             }
         }
 

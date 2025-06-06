@@ -69,42 +69,40 @@ class ClassesController extends Controller
     public function update(Request $request, Classes $class)
 {
     if ($request->has('status_id') && !$request->has('service_id')) {
-        // Solo está actualizando estado desde inscripciones
+        // Solo actualización de estado y comentario desde inscripciones
         $validated = $request->validate([
             'status_id' => 'required|exists:statuses,id',
-            'cancellation_comment' => 'nullable|string|max:500',
+            'comment'   => 'nullable|string|max:500',
         ]);
 
         $class->update($validated);
 
-        // Si vino desde la vista de inscripciones, recarga esa misma
-        if ($request->input('from') === 'registrations') {
-            return redirect()->route('admin.classes.registrations', $class->id)
-                             ->with('success', 'Estado actualizado correctamente.');
-        }
-
-        // Si no vino de ahí, volver al index
-        return redirect()->route('admin.classes.index')
+        return $request->input('from') === 'registrations'
+            ? redirect()->route('admin.classes.registrations', $class->id)
+                         ->with('success', 'Estado actualizado correctamente.')
+            : redirect()->route('admin.classes.index')
                          ->with('success', 'Clase actualizada correctamente.');
     } else {
-        // Actualización completa
+        // Actualización completa desde formulario de edición
         $validated = $request->validate([
             'service_id'    => 'required|exists:services,id',
             'instructor_id' => 'required|exists:users,id',
             'status_id'     => 'required|exists:statuses,id',
             'date'          => 'required|date',
-            'time'          => 'required',
+            'time'          => 'required|date_format:H:i',
             'description'   => 'required|string|max:500',
             'max_capacity'  => 'required|integer|min:1|max:30',
             'room'          => 'required|string|max:50',
+            'comment'       => 'nullable|string|max:500',
         ]);
 
         $class->update($validated);
 
         return redirect()->route('admin.classes.index')
-                    ->with('success', 'Clase actualizada correctamente.');
+            ->with('success', 'Clase actualizada correctamente.');
     }
 }
+
 
 
     // Eliminar clase
