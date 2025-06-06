@@ -19,9 +19,10 @@ public function index()
         ->where('name', 'Disponible')
         ->value('id');
 
+    // Clases disponibles
     $classes = $disponibleStatusId
         ? Classes::withCount('registrations')
-            ->with(['service', 'instructor', 'registrations'])
+            ->with(['service.requirements', 'instructor', 'registrations'])
             ->where('status_id', $disponibleStatusId)
             ->where('date', '>=', now()->startOfDay())
             ->orderBy('date')
@@ -31,6 +32,7 @@ public function index()
 
     $userId = auth()->id();
 
+    // Clases reservadas por el usuario
     $upcomingRegistrations = Registration::with('class.service', 'class.instructor')
         ->where('user_id', $userId)
         ->whereHas('class', function ($query) {
@@ -38,8 +40,18 @@ public function index()
         })
         ->get();
 
-    return view('user.classes.index', compact('classes', 'upcomingRegistrations'));
+    // Comentarios solo de clases no disponibles y con comentario
+    $comments = Classes::with('service')
+        ->where('status_id', '!=', $disponibleStatusId)
+        ->whereNotNull('comment')
+        ->where('comment', '!=', '')
+        ->orderBy('date', 'desc')
+        ->take(5)
+        ->get();
+
+    return view('user.classes.index', compact('classes', 'upcomingRegistrations', 'comments'));
 }
+
 
 public function reserve($classId)
 {
@@ -71,9 +83,14 @@ public function reserve($classId)
     return back()->with('success', 'Clase reservada con éxito.');
 }
 
-public function cancelReservation($classId)
+public function cancelReservation(Request $request, $classId)
 {
     $user = auth()->user();
+
+    $request->validate([
+        'reason' => 'required|string|max:500',
+    ]);
+
     $registration = Registration::where('user_id', $user->id)
         ->where('class_id', $classId)
         ->first();
@@ -83,15 +100,24 @@ public function cancelReservation($classId)
     }
 
     $class = $registration->class;
-    $fechaHoraClase = Carbon::parse("{$class->date} {$class->time}");
+    $date = Carbon::parse($class->date)->format('Y-m-d');
+    $time = $class->time;
+    $classDateTime = Carbon::parse("$date $time");
 
-    if (now()->greaterThan($fechaHoraClase->copy()->subHours(2))) {
-        return back()->with('error', 'Ya no puedes cancelar esta clase con menos de 2 horas de anticipación.');
+    if (now()->greaterThan($classDateTime->copy()->subHours(2))) {
+        return back()->with('error', 'No puedes cancelar esta clase con menos de 2 horas de anticipación.');
     }
 
+    // Guarda la razón en la columna antes de eliminar (opcional según tu lógica)
+    $registration->cancellation_reason = $request->reason;
+    $registration->save();
+
+    // Luego elimina la inscripción (si no quieres conservar el registro, puedes usar soft deletes si prefieres)
     $registration->delete();
-    return back()->with('success', 'Inscripción cancelada correctamente.');
-  }
+
+    return back()->with('success', 'Inscripción cancelada exitosamente.');
+}
+
 
 }
 

@@ -1,13 +1,12 @@
 <?php
 
 use App\Http\Controllers\Admin\RoleController;
-use App\Http\Controllers\Admin\ServiceController;  // Importación añadida
+use App\Http\Controllers\Admin\ServiceController; 
 use App\Http\Controllers\LoginController;
 use App\Http\Controllers\RegisterController;
 use App\Http\Controllers\Admin\UsersController;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\InstructorController;
-// use App\Http\Controllers\MembershipController;
 use App\Http\Controllers\Admin\RequirementController;
 use App\Http\Controllers\Admin\ClassesController as adminClassesController;
 use App\Http\Controllers\User\ClassesController as userClassesController;
@@ -77,10 +76,6 @@ Route::get('memberships/{membership}/pay', [UserMembershipController::class, 'pa
 Route::post('memberships/{membership}/pay', [UserMembershipController::class, 'processPayment'])->name('memberships.process');
 });
 
-Route::middleware(['auth', 'can:admin'])->prefix('admin')->name('admin.')->group(function () {
-    Route::resource('memberships', AdminMembershipController::class);
-});
-
 Route::middleware(['auth'])->prefix('user')->name('user.')->group(function () {
     Route::resource('memberships', UserMembershipController::class)->only(['index']);
 
@@ -90,6 +85,12 @@ Route::middleware(['auth'])->prefix('user')->name('user.')->group(function () {
     // Guardar comprobante
     Route::post('payments/store', [UserMembershipController::class, 'storeReceipt'])->name('payments.store');
 });
+
+Route::middleware(['auth', 'can:admin'])->prefix('admin')->name('admin.')->group(function () {
+    Route::resource('memberships', AdminMembershipController::class);
+});
+
+
 
 Route::middleware(['auth'])->prefix('admin')->name('admin.')->group(function () {
     Route::resource('requirements', RequirementController::class);
@@ -115,11 +116,17 @@ Route::middleware(['auth', 'verified'])->group(function () {
         ->name('user.payments.index');
 });
 
-
+// Rutas accesibles solo con autenticación (sin necesidad de membresía activa)
 Route::middleware(['auth'])->prefix('user')->name('user.')->group(function () {
-    Route::get('/classes', [UserClassesController::class, 'index'])->name('classes.index');
-    Route::post('/classes/register/{id}', [UserClassesController::class, 'reserve'])->name('classes.register');  // Método reserve()
-    Route::delete('/classes/cancel/{id}', [UserClassesController::class, 'cancelReservation'])->name('classes.cancel');  // Método cancelReservation()
     Route::get('/history', [UserClassesController::class, 'history'])->name('history');
+});
+
+// Rutas que requieren membresía activa y vigente
+Route::middleware(['auth', 'check.membership'])->prefix('user')->name('user.')->group(function () {
+    Route::get('/classes', [UserClassesController::class, 'index'])->name('classes.index');
+    Route::post('/classes/register/{id}', [UserClassesController::class, 'reserve'])->name('classes.register');
+    Route::delete('/classes/cancel/{id}', [UserClassesController::class, 'cancelReservation'])->name('classes.cancel');
     Route::post('/classes/rate/{registration}', [UserClassesController::class, 'rate'])->name('classes.rate');
 });
+
+

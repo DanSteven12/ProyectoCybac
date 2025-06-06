@@ -2,6 +2,16 @@
 
 @section('content')
 <div class="container-fluid py-4">
+    @if($class->status && strtolower($class->status->name) === 'cancelada' && !empty($class->comment))
+        <div class="alert alert-secondary border-start border-4 border-danger mb-4 shadow-sm">
+            <h5 class="mb-2 text-danger fw-bold">
+                <i class="bi bi-x-circle-fill me-1"></i> Motivo de cancelación
+            </h5>
+            <p class="mb-0 text-muted">{{ $class->comment }}</p>
+        </div>
+    @endif
+
+<div class="container-fluid py-4">
     <div class="mb-4">
         <h2 class="fw-bold">
             Inscripciones para la clase:
@@ -79,14 +89,14 @@
                 </div>
 
                 <div class="col-md-6">
-                    <label for="cancellation_comment" class="form-label">Comentario (opcional)</label>
+                    <label for="comment" class="form-label">Comentario (Obligatorio)</label>
                     <textarea
-                        name="cancellation_comment"
-                        id="cancellation_comment"
+                        name="comment"
+                        id="comment"
                         rows="3"
-                        class="form-control @error('cancellation_comment') is-invalid @enderror"
-                        placeholder="Añade un comentario sobre la cancelación o el estado">{{ old('cancellation_comment', $class->cancellation_comment) }}</textarea>
-                    @error('cancellation_comment')
+                        class="form-control @error('comment') is-invalid @enderror"
+                        placeholder="Añade un comentario sobre la cancelación o el estado">{{ old('comment', $class->comment) }}</textarea>
+                    @error('comment')
                         <div class="invalid-feedback">{{ $message }}</div>
                     @enderror
                 </div>
