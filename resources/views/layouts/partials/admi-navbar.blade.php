@@ -356,9 +356,6 @@
             <a href="{{ route('admin.payments.index') }}" class="menu-card">
                 <span>Pagos</span>
             </a>
-            <a href="/contacto" class="menu-card">
-                <span>Contacto</span>
-            </a>
         </div>
     </div>
 

@@ -46,20 +46,6 @@
                             </thead>
                             <tbody>
                                 @forelse($users as $user)
-<<<<<<< Updated upstream
-                                <tr>
-                                    <td>{{ ($users->currentPage() - 1) * $users->perPage() + $loop->iteration }}</td>
-                                    <td>{{ $user->names }}</td>
-                                    <td>{{ $user->last_name }}</td>
-                                    <td>{{ $user->email }}</td>
-                                    <td>{{ $user->getRoleNames()->first() ?? 'N/A' }}</td>
-                                    <td>{{ $user->statuses->name ?? 'N/A' }}</td>
-                                    <td>{{ \Carbon\Carbon::parse($user->birth_date)->translatedFormat('d F Y') }}</td>
-                                    <td>{{ $user->gender }}</td>
-                                    <td>{{ $user->specialty ?? 'N/A' }}</td>
-                                    <td>{{ $user->certification ?? 'N/A' }}</td>
-                                    <td>
-=======
                                 <tr style="border-bottom: 2px solid #F4F4F4;">
                                     <td class="ps-5" style="font-size: 1.4rem; color: #1A365D; font-weight: 600;">{{ $user->names }}</td>
                                     <td style="font-size: 1.4rem; color: #1A365D; font-weight: 600;">{{ $user->last_name }}</td>
@@ -71,7 +57,6 @@
                                     <td style="font-size: 1.4rem; color: #1A365D; font-weight: 600;">{{ $user->specialty ?? 'N/A' }}</td>
                                     <td style="font-size: 1.4rem; color: #1A365D; font-weight: 600;">{{ $user->certification ?? 'N/A' }}</td>
                                     <td class="pe-5 text-end">
->>>>>>> Stashed changes
                                         <div class="btn-group" role="group">
                                             <a href="{{ route('admin.users.edit', $user) }}" class="btn py-2 px-3 mx-1" 
                                                style="background-color: #2EC4B6; color: #FFFFFF; font-size: 1.3rem; font-weight: 500; min-width: 100px;">

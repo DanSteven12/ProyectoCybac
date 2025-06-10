@@ -26,6 +26,7 @@ class Classes extends Model
     protected $casts = [
         'date' => 'date', // ✔️ Para que date sea un objeto Carbon
         'time' => 'string', // ✔️ O usar 'datetime:H:i' solo si es datetime en la DB
+        'notification' => 'boolean',
     ];
 
     // Relación con servicio

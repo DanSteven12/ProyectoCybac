@@ -8,15 +8,29 @@ use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
 class Kernel extends ConsoleKernel
 {
     /**
-     * Define the application's command schedule.
+     * Los comandos Artisan personalizados.
+     *
+     * @var array
+     */
+    protected $commands = [
+        \App\Console\Commands\NotifyCancelledClasses::class,
+        // Puedes agregar otros comandos aquí
+    ];
+
+    /**
+     * Define el horario de los comandos.
      */
     protected function schedule(Schedule $schedule): void
     {
         $schedule->command('verificar:membresias')->daily();
+
+        $schedule->command('classes:notify-cancelled')->everyMinute();
+
+
     }
 
     /**
-     * Register the commands for the application.
+     * Registra los comandos para la aplicación.
      */
     protected function commands(): void
     {

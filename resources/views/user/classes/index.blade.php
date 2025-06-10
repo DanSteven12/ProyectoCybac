@@ -18,89 +18,73 @@
     </div>
 @endif
 
+<h2>Clases disponibles</h2>
 
+@foreach ($classes as $class)
+    <div class="card my-3">
+        <div class="card-body">
+            <h5>{{ $class->service->name }} - {{ $class->description }}</h5>
+            <p><strong>Requisitos:</strong></p>
+            <ul>
+                @foreach ($class->service->requirements as $requirement)
+                    <li>{{ $requirement->name }}</li>
+                @endforeach
+            </ul>
+            <p>Instructor: {{ $class->instructor->names }} {{ $class->instructor->last_name }}</p>
+            <p>Fecha: {{ $class->date->format('d/m/Y') }} | Hora: {{ \Carbon\Carbon::parse($class->time)->format('h:i A') }}</p>
+            <p>Cupos: {{ $class->registrations_count }} / {{ $class->max_capacity }}</p>
 
-    <h2>Clases disponibles</h2>
+            @php
+                $isRegistered = $class->registrations->contains('user_id', auth()->id());
+                $classDateTime = \Carbon\Carbon::parse($class->date->format('Y-m-d') . ' ' . $class->time);
+                $canCancel = now()->lessThan($classDateTime->copy()->subHours(2));
+            @endphp
 
-    @foreach ($classes as $class)
-        <div class="card my-3">
+            @if ($isRegistered)
+                @if ($canCancel)
+                    <!-- Formulario simple para cancelar inscripción sin motivo -->
+                    <form method="POST" action="{{ route('user.classes.cancel', $class->id) }}" class="d-inline">
+                        @csrf
+                        @method('DELETE')
+                        <button type="submit" class="btn btn-danger" onclick="return confirm('¿Estás seguro de cancelar la inscripción?')">
+                            Cancelar inscripción
+                        </button>
+                    </form>
+                @else
+                    <p class="text-muted mt-2">Ya no puedes cancelar esta clase (menos de 2 horas de anticipación).</p>
+                @endif
+            @elseif ($class->registrations_count < $class->max_capacity)
+                <form method="POST" action="{{ route('user.classes.register', $class->id) }}">
+                    @csrf
+                    <button class="btn btn-primary">Reservar clase</button>
+                </form>
+            @else
+                <p class="text-danger">Cupo lleno</p>
+            @endif
+        </div>
+    </div>
+@endforeach
+
+<h3 class="mt-5">Próximas clases reservadas</h3>
+@if ($upcomingRegistrations->isEmpty())
+    <p>No tienes reservas próximas.</p>
+@else
+    @foreach ($upcomingRegistrations as $registration)
+        <div class="card my-2">
             <div class="card-body">
-                <h5>{{ $class->service->name }} - {{ $class->description }}</h5>
+                <h5>{{ $registration->class->service->name }} - {{ $registration->class->description }}</h5>
+                <p>Instructor: {{ $registration->class->instructor->names }} {{ $registration->class->instructor->last_name }}</p>
+                <p>Fecha: {{ $registration->class->date->format('d/m/Y') }} | Hora: {{ \Carbon\Carbon::parse($registration->class->time)->format('h:i A') }}</p>
                 <p><strong>Requisitos:</strong></p>
                 <ul>
-                    @foreach ($class->service->requirements as $requirement)
+                    @foreach ($registration->class->service->requirements as $requirement)
                         <li>{{ $requirement->name }}</li>
                     @endforeach
                 </ul>
-                <p>Instructor: {{ $class->instructor->names }} {{ $class->instructor->last_name }}</p>
-                <p>Fecha: {{ $class->date->format('d/m/Y') }} | Hora: {{ \Carbon\Carbon::parse($class->time)->format('h:i A') }}</p>
-                <p>Cupos: {{ $class->registrations_count }} / {{ $class->max_capacity }}</p>
-
-                @php
-                    $isRegistered = $class->registrations->contains('user_id', auth()->id());
-                @endphp
-
-                @if ($isRegistered)
-                    <!-- Botón para abrir el modal -->
-                    <button class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#cancelModal{{ $class->id }}">
-                        Cancelar inscripción
-                    </button>
-
-                    <!-- Modal de cancelación -->
-                    <div class="modal fade" id="cancelModal{{ $class->id }}" tabindex="-1" aria-labelledby="cancelModalLabel{{ $class->id }}" aria-hidden="true">
-                        <div class="modal-dialog">
-                            <div class="modal-content">
-                                <form method="POST" action="{{ route('user.classes.cancel', $class->id) }}">
-                                    @csrf
-                                    @method('DELETE')
-                                    <div class="modal-header">
-                                        <h5 class="modal-title" id="cancelModalLabel{{ $class->id }}">Cancelar inscripción</h5>
-                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
-                                    </div>
-                                    <div class="modal-body">
-                                        <p>Por favor, indica el motivo de la cancelación:</p>
-                                        <textarea name="reason" class="form-control" rows="3" required placeholder="Motivo..."></textarea>
-                                    </div>
-                                    <div class="modal-footer">
-                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
-                                        <button type="submit" class="btn btn-danger">Confirmar cancelación</button>
-                                    </div>
-                                </form>
-                            </div>
-                        </div>
-                    </div>
-                @elseif ($class->registrations_count < $class->max_capacity)
-                    <form method="POST" action="{{ route('user.classes.register', $class->id) }}">
-                        @csrf
-                        <button class="btn btn-primary">Reservar clase</button>
-                    </form>
-                @else
-                    <p class="text-danger">Cupo lleno</p>
-                @endif
             </div>
         </div>
     @endforeach
-
-    <h3 class="mt-5">Próximas clases reservadas</h3>
-    @if ($upcomingRegistrations->isEmpty())
-        <p>No tienes reservas próximas.</p>
-    @else
-        @foreach ($upcomingRegistrations as $registration)
-            <div class="card my-2">
-                <div class="card-body">
-                    <h5>{{ $registration->class->service->name }} - {{ $registration->class->description }}</h5>
-                    <p>Instructor: {{ $registration->class->instructor->names }} {{ $registration->class->instructor->last_name }}</p>
-                    <p>Fecha: {{ $registration->class->date->format('d/m/Y') }} | Hora: {{ \Carbon\Carbon::parse($registration->class->time)->format('h:i A') }}</p>
-                    <p><strong>Requisitos:</strong></p>
-                    <ul>
-                        @foreach ($registration->class->service->requirements as $requirement)
-                            <li>{{ $requirement->name }}</li>
-                        @endforeach
-                    </ul>
-                </div>
-            </div>
-        @endforeach
-    @endif
+@endif
 
 </div>
 @endsection

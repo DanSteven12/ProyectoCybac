@@ -135,7 +135,7 @@
                                     {{ $registration->user?->last_name ?? '' }}
                                 </td>
                                 <td>{{ $registration->user?->email ?? 'Correo no disponible' }}</td>
-                                <td>{{ \Carbon\Carbon::parse($registration->created_at)->format('d/m/Y H:i') }}</td>
+                                <td>{{ \Carbon\Carbon::parse($registration->created_at)->format('d/m/Y') }}</td>
                             </tr>
                         @endforeach
                     </tbody>

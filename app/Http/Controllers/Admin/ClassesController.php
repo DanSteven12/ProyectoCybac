@@ -66,7 +66,7 @@ class ClassesController extends Controller
     }
 
     // Actualizar clase (incluye actualización desde inscripciones)
-    public function update(Request $request, Classes $class)
+   public function update(Request $request, Classes $class)
 {
     if ($request->has('status_id') && !$request->has('service_id')) {
         // Solo actualización de estado y comentario desde inscripciones
@@ -76,6 +76,15 @@ class ClassesController extends Controller
         ]);
 
         $class->update($validated);
+
+        // Obtener ID del estado "Cancelada"
+        $cancelledStatusId = Status::where('type', 3)->where('name', 'Cancelada')->value('id');
+
+        // Si el estado NO es "Cancelada", resetear notification a 0
+        if ($validated['status_id'] != $cancelledStatusId) {
+            $class->notification = 0;
+            $class->save();
+        }
 
         return $request->input('from') === 'registrations'
             ? redirect()->route('admin.classes.registrations', $class->id)
@@ -98,10 +107,20 @@ class ClassesController extends Controller
 
         $class->update($validated);
 
+        // Obtener ID del estado "Cancelada"
+        $cancelledStatusId = Status::where('type', 3)->where('name', 'Cancelada')->value('id');
+
+        // Si el estado NO es "Cancelada", resetear notification a 0
+        if ($validated['status_id'] != $cancelledStatusId) {
+            $class->notification = 0;
+            $class->save();
+        }
+
         return redirect()->route('admin.classes.index')
             ->with('success', 'Clase actualizada correctamente.');
     }
 }
+
 
 
 
@@ -147,5 +166,4 @@ public function registrations(Classes $class)
     return view('admin.classes.registrations', compact('class', 'inscritos', 'faltantes', 'classStatuses'));
 }
 
-    // Si quieres actualizar estado y comentario desde esta vista, puedes reutilizar update()
 }
