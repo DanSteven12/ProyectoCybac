@@ -27,10 +27,10 @@ class Membership extends Model
     {
         return $this->hasMany(Payment::class);
     }
-public function latestPayment()
-{
-    return $this->hasOne(Payment::class)->latestOfMany();
-}
+    public function latestPayment()
+    {
+        return $this->hasOne(Payment::class)->latestOfMany();
+    }
 
 
     public function getReadableDurationAttribute()

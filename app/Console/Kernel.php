@@ -14,7 +14,7 @@ class Kernel extends ConsoleKernel
      */
     protected $commands = [
         \App\Console\Commands\NotifyCancelledClasses::class,
-        // Puedes agregar otros comandos aquí
+        \App\Console\Commands\CheckMembershipExpirations::class,
     ];
 
     /**
@@ -23,6 +23,8 @@ class Kernel extends ConsoleKernel
     protected function schedule(Schedule $schedule): void
     {
         $schedule->command('verificar:membresias')->daily();
+
+        $schedule->command('check:memberships')->hourly();
 
         $schedule->command('classes:notify-cancelled')->everyMinute();
 

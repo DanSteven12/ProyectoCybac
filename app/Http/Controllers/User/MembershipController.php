@@ -63,20 +63,25 @@ class MembershipController extends Controller
 
     // Validar vigencia actual del usuario
     public function verificarVigencia()
-    {
-        $payment = Payment::where('user_id', Auth::id())->latest()->first();
+{
+    $payment = Payment::where('user_id', Auth::id())->latest()->first();
 
-        if (!$payment) {
-            return redirect()->back()->withErrors('No has contratado una membresía activa.');
-        }
-
-        $endDate = Carbon::parse($payment->date)->addDays($payment->membership->duration ?? 30);
-        $isExpired = Carbon::now()->gt($endDate);
-
-        if ($isExpired) {
-            return redirect()->back()->withErrors('Tu membresía ha vencido. No puedes agendar clases.');
-        }
-
-        return true;
+    if (!$payment) {
+        return redirect()->back()->withErrors('No has contratado una membresía activa.');
     }
+
+    // Sumar duración y ajustar al final del día
+    $endDate = Carbon::parse($payment->date)
+        ->addDays($payment->membership->duration ?? 30)
+        ->endOfDay();
+
+    $isExpired = Carbon::now()->gt($endDate);
+
+    if ($isExpired) {
+        return redirect()->back()->withErrors('Tu membresía ha vencido. No puedes agendar clases.');
+    }
+
+    return true;
+}
+
 }

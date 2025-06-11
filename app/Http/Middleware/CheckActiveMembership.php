@@ -10,33 +10,46 @@ use Carbon\Carbon;
 
 class CheckActiveMembership
 {
-    public function handle($request, Closure $next)
+    public function handle(Request $request, Closure $next)
     {
         $user = Auth::user();
 
+        // Estado aprobado para pagos
         $approvedStatusId = Status::where('name', 'Aprobado')
-            ->where('type', 2) // Tipo 2: estados de pago/membresía
+            ->where('type', 2)
             ->value('id');
 
-        // Obtenemos el pago aprobado más reciente
+        // Estado activo para membresías
+        $activeMembershipStatusId = Status::where('name', 'Activo')
+            ->where('type', 1)
+            ->value('id');
+
+        // Último pago aprobado
         $activePayment = $user->payments()
             ->where('status_id', $approvedStatusId)
             ->latest()
             ->first();
 
-        if (!$activePayment) {
+        // Validación básica
+        if (!$activePayment || !$activePayment->membership) {
             return redirect()->route('user.memberships.index')
                 ->with('warning', 'Necesitas una membresía aprobada y vigente para acceder.');
         }
 
-        // Calculamos la fecha de expiración sumando duración a la fecha de pago
+        // Verifica que la membresía esté activa
+        if ($activePayment->membership->status_id !== $activeMembershipStatusId) {
+            return redirect()->route('user.memberships.index')
+                ->with('warning', 'Tu membresía ya no está activa. Debes renovarla.');
+        }
+
+        // Calcular expiración
         $paymentDate = Carbon::parse($activePayment->date);
         $durationDays = $activePayment->membership->duration ?? 30;
-        $expirationDate = $paymentDate->copy()->addDays($durationDays);
 
-        // Verificamos si la membresía ya expiró
-        if ($expirationDate->isPast()) {
-            return redirect()->route('memberships.index')
+        $expirationDate = $paymentDate->copy()->addDays($durationDays)->endOfDay();
+
+        if (Carbon::now()->greaterThan($expirationDate)) {
+            return redirect()->route('user.memberships.index')
                 ->with('warning', 'Tu membresía ha vencido. Necesitas renovarla.');
         }
 

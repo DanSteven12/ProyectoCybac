@@ -4,28 +4,41 @@ namespace App\Console\Commands;
 
 use Illuminate\Console\Command;
 use App\Models\Payment;
+use App\Models\Status;
 use Carbon\Carbon;
 
 class VerificarMembresiasExpiradas extends Command
 {
     protected $signature = 'verificar:membresias';
-    protected $description = 'Verifica y cancela automáticamente las membresías expiradas';
+    protected $description = 'Marca los pagos aprobados como vencidos si han expirado.';
 
     public function handle()
     {
-        $pagosActivos = Payment::with('membership')->where('status_id', 1)->get();
+        $now = Carbon::now();
 
-        foreach ($pagosActivos as $pago) {
-            // Asegura que exista la relación con la membresía
-            if ($pago->membership) {
-                $fechaExpiracion = Carbon::parse($pago->date)->addDays($pago->membership->duration);
+        // IDs de estados
+        $statusAprobadoId = Status::where('name', 'Aprobado')->where('type', 2)->value('id'); // estado de pago activo
+        $statusPagoVencidoId = Status::where('name', 'Vencida')->where('type', 2)->value('id'); // estado de pago vencido
 
-                if (now()->greaterThan($fechaExpiracion)) {
-                    $pago->update(['status_id' => 2]); // 2 = vencida
-                }
+        // Obtener todos los pagos aprobados con su membresía
+        $pagos = Payment::with('membership')
+            ->where('status_id', $statusAprobadoId)
+            ->get();
+
+        foreach ($pagos as $pago) {
+            if (!$pago->membership) {
+                continue;
+            }
+
+            $fechaExpiracion = Carbon::parse($pago->date)
+                ->addDays($pago->membership->duration)
+                ->endOfDay();
+
+            if ($now->greaterThan($fechaExpiracion)) {
+                $pago->update(['status_id' => $statusPagoVencidoId]);
             }
         }
 
-        $this->info('Membresías vencidas actualizadas correctamente.');
+        $this->info('Pagos vencidos actualizados correctamente.');
     }
 }
