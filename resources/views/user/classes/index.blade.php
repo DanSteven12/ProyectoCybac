@@ -6,17 +6,34 @@
 @if($comments->count())
     <div class="grid grid-cols-1 gap-4 mb-6">
         @foreach($comments as $class)
-            <div class="bg-white border-l-4 border-red-500 shadow-md p-4 rounded-lg">
-                <h2 class="text-lg font-semibold text-red-600 mb-2">Motivo de cancelación de la clase</h2>
+            @if($class->status->name === 'Rechazada') {{-- Asegura que aún esté rechazada --}}
+                <div class="bg-white border-l-4 border-red-500 shadow-md p-4 rounded-lg">
+                    <h2 class="text-lg font-semibold text-red-600 mb-2">Motivo de cancelación de la clase</h2>
+                    <p class="text-sm text-gray-700">
+                        <span class="font-medium text-gray-800">Clase:</span> {{ $class->service->name }}<br>
+                        <span class="font-medium text-gray-800">Fecha:</span> {{ \Carbon\Carbon::parse($class->date)->format('d/m/Y') }}<br>
+                        <span class="font-medium text-gray-800">Motivo:</span> {{ $class->comment }}
+                    </p>
+                </div>
+            @endif
+        @endforeach
+    </div>
+@endif
+
+@if($clasesLlenas->count())
+    <div class="grid grid-cols-1 gap-4 mb-6">
+        @foreach($clasesLlenas as $class)
+            <div class="bg-white border-l-4 border-yellow-500 shadow-md p-4 rounded-lg">
+                <h2 class="text-lg font-semibold text-yellow-600 mb-2">Clase no disponible (Cupo lleno)</h2>
                 <p class="text-sm text-gray-700">
                     <span class="font-medium text-gray-800">Clase:</span> {{ $class->service->name }}<br>
-                    <span class="font-medium text-gray-800">Fecha:</span> {{ \Carbon\Carbon::parse($class->date)->format('d/m/Y') }}<br>
-                    <span class="font-medium text-gray-800">Motivo:</span> {{ $class->comment }}
+                    <span class="font-medium text-gray-800">Fecha:</span> {{ \Carbon\Carbon::parse($class->date)->format('d/m/Y') }}
                 </p>
             </div>
         @endforeach
     </div>
 @endif
+
 
 <h2>Clases disponibles</h2>
 

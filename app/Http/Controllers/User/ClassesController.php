@@ -12,43 +12,54 @@ use Carbon\Carbon;
 class ClassesController extends Controller
 {
     public function index()
-    {
-        $disponibleStatusId = Status::where('type', 3)
-            ->where('name', 'Disponible')
-            ->value('id');
+{
+    $disponibleStatusId = Status::where('type', 3)->where('name', 'Disponible')->value('id');
+    $cupoLlenoStatusId = Status::where('type', 3)->where('name', 'Cupo lleno')->value('id');
+    $rechazadaStatusId = Status::where('type', 3)->where('name', 'Rechazada')->value('id'); // Asegúrate que exista
 
-        // Clases disponibles
-        $classes = $disponibleStatusId
-            ? Classes::withCount('registrations')
-                ->with(['service.requirements', 'instructor', 'registrations'])
-                ->where('status_id', $disponibleStatusId)
-                ->where('date', '>=', now()->startOfDay())
-                ->orderBy('date')
-                ->orderBy('time')
-                ->get()
-            : collect();
+    $classes = $disponibleStatusId
+        ? Classes::withCount('registrations')
+            ->with(['service.requirements', 'instructor', 'registrations'])
+            ->where('status_id', $disponibleStatusId)
+            ->where('date', '>=', now()->startOfDay())
+            ->orderBy('date')
+            ->orderBy('time')
+            ->get()
+        : collect();
 
-        $userId = auth()->id();
+    $userId = auth()->id();
 
-        // Clases reservadas por el usuario
-        $upcomingRegistrations = Registration::with('class.service', 'class.instructor')
-            ->where('user_id', $userId)
-            ->whereHas('class', function ($query) {
-                $query->where('date', '>=', now()->startOfDay());
-            })
-            ->get();
+    $upcomingRegistrations = Registration::with('class.service', 'class.instructor')
+        ->where('user_id', $userId)
+        ->whereHas('class', function ($query) {
+            $query->where('date', '>=', now()->startOfDay());
+        })
+        ->get();
 
-        // Comentarios solo de clases no disponibles y con comentario
-        $comments = Classes::with('service')
-            ->where('status_id', '!=', $disponibleStatusId)
-            ->whereNotNull('comment')
-            ->where('comment', '!=', '')
-            ->orderBy('date', 'desc')
-            ->take(5)
-            ->get();
+    // Mostrar solo clases canceladas recientemente que sigan en estado Rechazada
+    $comments = Classes::with('service')
+        ->where('status_id', $rechazadaStatusId)
+        ->whereNotNull('comment')
+        ->where('comment', '!=', '')
+        ->orderBy('date', 'desc')
+        ->take(5)
+        ->get();
 
-        return view('user.classes.index', compact('classes', 'upcomingRegistrations', 'comments'));
-    }
+    // Mostrar solo clases con estado actual "Cupo lleno"
+    $clasesLlenas = Classes::with('service')
+        ->where('status_id', $cupoLlenoStatusId)
+        ->orderBy('date', 'desc')
+        ->take(5)
+        ->get();
+
+    return view('user.classes.index', compact(
+        'classes',
+        'upcomingRegistrations',
+        'comments',
+        'clasesLlenas'
+    ));
+}
+
 
     public function reserve($classId)
     {
@@ -72,10 +83,18 @@ class ClassesController extends Controller
             return back()->with('error', 'Ya tienes una clase en ese horario.');
         }
 
+        // Crear la inscripción
         Registration::create([
             'user_id' => $user->id,
             'class_id' => $class->id
         ]);
+
+        // Verificar si se alcanzó el cupo y actualizar estado a "Cupo lleno"
+        if ($class->registrations()->count() >= $class->max_capacity) {
+            $cupoLlenoId = Status::where('type', 3)->where('name', 'Cupo lleno')->value('id');
+            $class->status_id = $cupoLlenoId;
+            $class->save();
+        }
 
         return back()->with('success', 'Clase reservada con éxito.');
     }
@@ -84,7 +103,6 @@ class ClassesController extends Controller
     {
         $user = auth()->user();
 
-        // Ya no validamos 'reason' porque no se envía
         $registration = Registration::where('user_id', $user->id)
             ->where('class_id', $classId)
             ->first();
@@ -102,9 +120,18 @@ class ClassesController extends Controller
             return back()->with('error', 'No puedes cancelar esta clase con menos de 2 horas de anticipación.');
         }
 
-        // Eliminamos directamente la inscripción sin guardar motivo
         $registration->delete();
+
+        // Si el estado era "Cupo lleno" y ahora hay espacio, cambiar a "Disponible"
+        $cupoLlenoId = Status::where('type', 3)->where('name', 'Cupo lleno')->value('id');
+        $disponibleId = Status::where('type', 3)->where('name', 'Disponible')->value('id');
+
+        if ($class->status_id == $cupoLlenoId && $class->registrations()->count() < $class->max_capacity) {
+            $class->status_id = $disponibleId;
+            $class->save();
+        }
 
         return back()->with('success', 'Inscripción cancelada exitosamente.');
     }
 }
+

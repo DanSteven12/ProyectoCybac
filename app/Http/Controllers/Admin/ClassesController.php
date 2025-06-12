@@ -149,8 +149,8 @@ class ClassesController extends Controller
         return view('classes.available', compact('classes', 'services'));
     }
     // NUEVO: Mostrar inscripciones para una clase
-public function registrations(Classes $class)
-{
+        public function registrations(Classes $class)
+        {
     // Cargar relaciones necesarias
     $class->load('service', 'instructor', 'status');
 
@@ -163,7 +163,7 @@ public function registrations(Classes $class)
     // Obtener estados tipo 3 para cambiar estado de clase desde la vista de inscripciones
     $classStatuses = Status::where('type', 3)->get();
 
-    return view('admin.classes.registrations', compact('class', 'inscritos', 'faltantes', 'classStatuses'));
-}
+            return view('admin.classes.registrations', compact('class', 'inscritos', 'faltantes', 'classStatuses'));
+        }
 
 }

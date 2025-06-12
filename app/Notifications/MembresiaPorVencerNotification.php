@@ -24,24 +24,14 @@ class MembresiaPorVencerNotification extends Notification
 
     public function toMail($notifiable)
     {
-        $mail = new MailMessage;
+        $diasTexto = $this->diasRestantes == 1 ? '1 día' : "{$this->diasRestantes} días";
 
-        // Detectar si es texto personalizado (ej: 'menos de 5 horas') o un número de días
-        if (is_numeric($this->diasRestantes)) {
-            $diasTexto = $this->diasRestantes == 1 ? '1 día' : "{$this->diasRestantes} días";
-
-            $mail->subject("Tu membresía vence en {$diasTexto}")
-                 ->line("Hola {$notifiable->name}, tu membresía está por vencer.")
-                 ->line("Te quedan {$diasTexto} para renovarla.");
-        } else {
-            $mail->subject("Tu membresía vence en {$this->diasRestantes}")
-                 ->line("Hola {$notifiable->name}, tu membresía vence pronto.")
-                 ->line("Te queda {$this->diasRestantes} para renovarla.");
-        }
-
-        $mail->action('Renovar ahora', url('/membresia/renovar'))
-             ->line('Gracias por usar nuestra plataforma.');
-
-        return $mail;
+        return (new MailMessage)
+            ->subject("Tu membresía vence en {$diasTexto}")
+            ->greeting("Hola {$notifiable->name},")
+            ->line("Tu membresía está por vencer.")
+            ->line("Te quedan {$diasTexto} para renovarla.")
+            ->action('Renovar ahora', url('/membresia/renovar'))
+            ->line('Gracias por usar nuestra plataforma.');
     }
 }
