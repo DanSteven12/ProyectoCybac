@@ -48,7 +48,7 @@
                     </div>
                     <div>
                         <h4 class="mb-1" style="color: #1A365D; font-size: 1.4rem; font-weight: 600;">{{ $requirement->service->name }}</h4>
-                        <small class="text-muted d-block" style="font-size: 1.3rem; font-weight: 500;">ÚLTIMA ACTUALIZACIÓN: {{ $requirement->updated_at->format('d/m/Y') }}</small>
+                        <small class="text-muted d-block" style="font-size: 1.3rem; font-weight: 500;">ÚLTIMA ACTUALIZACIÓN: {{ \Carbon\Carbon::parse($requirement->updated_at)->translatedFormat('d \d\e F \d\e Y')}}</small>
                     </div>
                 </div>
             </td>

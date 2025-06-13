@@ -53,7 +53,7 @@
                                     <td style="font-size: 1.4rem; color: #1A365D; font-weight: 500;">{{ $user->getRoleNames()->first() ?? 'N/A' }}</td>
                                     <td style="font-size: 1.4rem; color: #1A365D; font-weight: 500;">{{ $user->statuses->name ?? 'N/A' }}</td>
                                     <td style="font-size: 1.4rem; color: #1A365D; font-weight: 500;">
-                                        {{ \Carbon\Carbon::parse($user->birth_date)->locale('es')->translatedFormat('d \d\e F \d\e Y') }}
+                                        {{ \Carbon\Carbon::parse($user->birth_date)->translatedFormat('d \d\e F \d\e Y') }}
                                     </td>  
                                     <td style="font-size: 1.4rem; color: #1A365D; font-weight: 500;">{{ $user->gender }}</td>
                                     <td style="font-size: 1.4rem; color: #1A365D; font-weight: 500;">{{ $user->specialty ?? 'N/A' }}</td>

@@ -58,7 +58,9 @@
                                                 </div>
                                             <div>
                                                 <h4 class="mb-1" style="color: #1A365D; font-size: 1.4rem; font-weight: 600;">Descripción</h4>
-                                                <small class="text-muted d-block" style="font-size: 1.3rem; font-weight: 500;">Detalles del servicio</small>
+                                                <h4 class="mb-1" style="color: #1A365D; font-size: 1.4rem; font-weight: 600;">
+                {{ $service->description ?? 'Sin descripción' }}
+            </h4>
                                                 </div>
                                             </div>
                                         </td>

@@ -60,7 +60,7 @@
                                     <tr style="border-bottom: 2px solid #F4F4F4;">
                                         <td style="font-size: 1.3rem;">{{ $class->service->name }}</td>
                                         <td style="font-size: 1.3rem;">{{ $class->instructor->names }} {{ $class->instructor->last_name }}</td>
-                                        <td class="text-center" style="font-size: 1.3rem;">{{ \Carbon\Carbon::parse($class->date)->format('d/m/Y') }}</td>
+                                        <td class="text-center" style="font-size: 1.3rem;">{{ \Carbon\Carbon::parse($class->date)->translatedFormat('d \d\e F \d\e Y')}}</td>
                                         <td class="text-center" style="font-size: 1.3rem;">{{ \Carbon\Carbon::parse($class->time)->format('h:i A') }}</td>
                                         <td class="text-center" style="font-size: 1.3rem;">{{ $class->max_capacity }}</td>
                                         <td class="text-center" style="font-size: 1.3rem;">{{ $class->registrations->count() }} / {{ $class->max_capacity }}</td>

@@ -67,11 +67,15 @@
                                 <span class="status-badge">{{ $statusName }}</span>
                             </td>
                             <td style="padding: 12px 10px; border: 1px solid #000; font-size: 1.3rem;">
-                                {{ $payment->date }}
+                                {{ \Carbon\Carbon::parse($payment->date)->translatedFormat('d \d\e F \d\e Y') }}
                                 @if($statusName === 'Vencido' && $payment->expiration_date)
-                                    <br><small style="color: #dc3545; font-size: 1.1rem;">Expiró: {{ \Carbon\Carbon::parse($payment->expiration_date)->format('d/m/Y') }}</small>
-                                @endif
+                                <br>
+                                    <small style="color: #dc3545; font-size: 1.1rem;">
+                                                Expiró: {{ \Carbon\Carbon::parse($payment->expiration_date)->translatedFormat('d \d\e F \d\e Y') }}
+                                        </small>
+                                    @endif
                             </td>
+
                             <td style="padding: 12px 10px; border: 1px solid #000; font-size: 1.3rem;">
                                 <a href="{{ Storage::url($payment->receipt_url) }}" target="_blank" class="btn btn-sm receipt-btn" style="font-size: 1.3rem;">
                                     Ver archivo

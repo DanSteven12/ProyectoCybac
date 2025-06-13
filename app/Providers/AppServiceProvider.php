@@ -24,6 +24,8 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
+        Carbon::setLocale('es');
+
         Relation::morphMap([
         'status' => \App\Models\Status::class, // Usa el nombre singular
     ]);
