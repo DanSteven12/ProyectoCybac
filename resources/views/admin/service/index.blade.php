@@ -43,7 +43,7 @@
                                         <td class="ps-5">
                                             <div class="d-flex align-items-center">
                                                 <div class="icon-circle me-4" style="background-color: rgba(26, 54, 93, 0.1); width: 50px; height: 50px;">
-                                                    <i class="fas fa-cog fs-5" style="color: #1A365D;"></i>
+                                                    <i class="fas fa-heart-pulse fs-5" style="color: #FF6B35;"></i> <!-- Aqui esta el icono -->
                                                 </div>
                                                 <div>
                                                     <h4 class="mb-1" style="color: #1A365D; font-size: 1.4rem; font-weight: 600;">{{ $service->name }}</h4>
@@ -51,9 +51,18 @@
                                                 </div>
                                             </div>
                                         </td>
-                                        <td style="font-size: 1.3rem;">
-                                            <p class="mb-0" style="line-height: 1.5;">{{ $service->description }}</p>
+                                        <td class="ps-5">
+                                            <div class="d-flex align-items-center">
+                                                <div class="icon-circle me-4" style="background-color: rgba(26, 54, 93, 0.1); width: 50px; height: 50px;">
+                                                    <i class="fas fa-info-circle fs-5" style="color: #1A365D;"></i> <!-- Ícono de descripción -->
+                                                </div>
+                                            <div>
+                                                <h4 class="mb-1" style="color: #1A365D; font-size: 1.4rem; font-weight: 600;">Descripción</h4>
+                                                <small class="text-muted d-block" style="font-size: 1.3rem; font-weight: 500;">Detalles del servicio</small>
+                                                </div>
+                                            </div>
                                         </td>
+
                                         <td class="pe-5 text-end">
                                             <div class="btn-group" role="group">
                                                 <a href="{{ route('admin.services.edit', $service->id) }}" class="btn py-2 px-3 mx-1" 
@@ -74,7 +83,6 @@
                             </tbody>
                         </table>
                     </div>
-
                     <div class="card-footer py-4" style="background-color: #F4F4F4; border-top: 2px solid #1A365D;">
                         <div class="d-flex justify-content-between align-items-center">
                             <div class="text-muted" style="font-size: 1.4rem; font-weight: 500;">
@@ -82,6 +90,7 @@
                             </div>
                         </div>
                     </div>
+
                 </div>
             </div>
         </div>
@@ -142,7 +151,7 @@
         box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
     }
     /*Estilo del alert*/    
-   .btn-eliminar {
+    .btn-eliminar {
         background-color: #FF6B35 !important;
         color: #FFFFFF !important;
         font-size: 1.3rem !important; /* Aumentado de 1.1rem */
@@ -151,7 +160,7 @@
         border: none !important;
         transition: all 0.3s ease !important;
     }
-      .swal2-actions {
+    .swal2-actions {
         gap: 1.5rem !important; /* Separa los botones */
         margin-top: 1.5rem !important;
     }
@@ -238,6 +247,12 @@
             width: 100%;
             margin: 5px 0;
         }
+
+        /* Ajuste específico para el icono de descripción en móviles */
+        .table td .fa-info-circle {
+            font-size: 1.2rem !important;
+            margin-right: 8px !important;
+        }
     }
 </style>
 
@@ -254,10 +269,10 @@
         Swal.fire({
             title: '¿Eliminar Servicio?',
             html: `<div style="text-align: center;">
-                     <i class="fas fa-exclamation-triangle" style="color: #FF6B35; font-size: 3rem; margin-bottom: 1rem;"></i>
-                     <p>¿Está seguro que desea eliminar este servicio permanentemente?</p>
-                     <p style="font-weight: 600;">Esta acción no se puede deshacer.</p>
-                   </div>`,
+                    <i class="fas fa-exclamation-triangle" style="color: #FF6B35; font-size: 3rem; margin-bottom: 1rem;"></i>
+                    <p>¿Está seguro que desea eliminar este servicio permanentemente?</p>
+                    <p style="font-weight: 600;">Esta acción no se puede deshacer.</p>
+                </div>`,
             icon: 'warning',
             showCancelButton: true,
             confirmButtonText: '<i class="fas fa-trash-alt me-2"></i> Eliminar',

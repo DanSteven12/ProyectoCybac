@@ -19,7 +19,7 @@
                 <div class="card-body p-0">
                     @if (session('success'))
                         <div class="alert alert-dismissible fade show m-4" role="alert" 
-                             style="background-color: #2EC4B6; color: #FFFFFF; border-left: 5px solid #1A365D; font-size: 1.3rem;">
+                            style="background-color: #2EC4B6; color: #FFFFFF; border-left: 5px solid #1A365D; font-size: 1.3rem;">
                             <div class="d-flex align-items-center">
                                 <i class="fas fa-check-circle me-3 fs-4"></i>
                                 <strong class="fs-5">{{ session('success') }}</strong>
@@ -32,42 +32,62 @@
                         <table class="table table-hover align-middle mb-0" style="border-top: none;">
                             <thead>
                                 <tr style="background-color: #1A365D; color: #FFFFFF;">
+                                    <th class="ps-5 py-3" style="font-weight: 600; font-size: 1.4rem; letter-spacing: 0.5px;">SERVICIO</th>
                                     <th class="ps-5 py-3" style="font-weight: 600; font-size: 1.4rem; letter-spacing: 0.5px;">NOMBRE DEL REQUISITO</th>
                                     <th class="text-end pe-5 py-3" style="width: 220px; font-weight: 600; font-size: 1.4rem; letter-spacing: 0.5px;">ACCIONES</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                @foreach($requirements as $requirement)
-                                    <tr style="border-bottom: 2px solid #F4F4F4;">
-                                        <td class="ps-5">
-                                            <div class="d-flex align-items-center">
-                                                <div class="icon-circle me-4" style="background-color: rgba(26, 54, 93, 0.1); width: 50px; height: 50px;">
-                                                    <i class="fas fa-file-alt fs-5" style="color: #1A365D;"></i>
-                                                </div>
-                                                <div>
-                                                    <h4 class="mb-1" style="color: #1A365D; font-size: 1.4rem; font-weight: 600;">{{ $requirement->name }}</h4>
-                                                    <small class="text-muted d-block" style="font-size: 1.3rem; font-weight: 500;">ÚLTIMA ACTUALIZACIÓN: {{ $requirement->updated_at->format('d/m/Y') }}</small>
-                                                </div>
-                                            </div>
-                                        </td>
-                                        <td class="pe-5 text-end">
-                                            <div class="btn-group" role="group">
-                                                <a href="{{ route('admin.requirements.edit', $requirement->id) }}" class="btn py-2 px-3 mx-1" 
-                                                   style="background-color: #2EC4B6; color: #FFFFFF; font-size: 1.3rem; font-weight: 500; min-width: 100px;">
-                                                    <i class="fas fa-edit me-2"></i> EDITAR
-                                                </a>
-                                                <form action="{{ route('admin.requirements.destroy', $requirement->id) }}" method="POST" class="d-inline">
-                                                    @csrf
-                                                    @method('DELETE')
-                                                    <button type="button" class="btn py-2 px-3 mx-1 btn-eliminar" onclick="confirmarEliminacion(event)">
-                                                        <i class="fas fa-trash-alt me-2"></i> ELIMINAR
-                                                    </button>   
-                                                </form>
-                                            </div>
-                                        </td>
-                                    </tr>
-                                @endforeach
-                            </tbody>
+    @foreach($requirements as $requirement)
+        <tr style="border-bottom: 2px solid #F4F4F4;">
+            <!-- SERVICIO (debe mostrar el nombre del servicio) -->
+            <td class="ps-5">
+                <div class="d-flex align-items-center">
+                    <div class="icon-circle me-4" style="background-color: rgba(46, 196, 182, 0.1); width: 50px; height: 50px;">
+                        <i class="fas fa-heart-pulse fs-5" style="color: #FF6B35;"></i>
+                    </div>
+                    <div>
+                        <h4 class="mb-1" style="color: #1A365D; font-size: 1.4rem; font-weight: 600;">{{ $requirement->service->name }}</h4>
+                        <small class="text-muted d-block" style="font-size: 1.3rem; font-weight: 500;">ÚLTIMA ACTUALIZACIÓN: {{ $requirement->updated_at->format('d/m/Y') }}</small>
+                    </div>
+                </div>
+            </td>
+
+            <!-- NOMBRE DEL REQUISITO (debe mostrar el nombre del requisito) -->
+            <td class="ps-5">
+                <div class="d-flex align-items-center">
+                    <div class="icon-circle me-4" style="background-color: rgba(26, 54, 93, 0.1); width: 50px; height: 50px;">
+                        <i class="fas fa-clipboard-list fs-5" style="color: #1A365D;"></i>
+                    </div>
+                    <div>
+                        <h4 class="mb-1" style="color: #1A365D; font-size: 1.4rem; font-weight: 600;">
+                            {{ $requirement->name }}
+                        </h4>
+                        <small class="text-muted d-block" style="font-size: 1.3rem; font-weight: 500;">Detalles del servicio</small>
+                    </div>
+                </div>
+            </td>
+
+            <!-- ACCIONES -->
+            <td class="pe-5 text-end">
+                <div class="btn-group" role="group">
+                    <a href="{{ route('admin.requirements.edit', $requirement->id) }}" class="btn py-2 px-3 mx-1" 
+                       style="background-color: #2EC4B6; color: #FFFFFF; font-size: 1.3rem; font-weight: 500; min-width: 100px;">
+                        <i class="fas fa-edit me-2"></i> EDITAR
+                    </a>
+                    <form action="{{ route('admin.requirements.destroy', $requirement->id) }}" method="POST" class="d-inline">
+                        @csrf
+                        @method('DELETE')
+                        <button type="button" class="btn py-2 px-3 mx-1 btn-eliminar" onclick="confirmarEliminacion(event)">
+                            <i class="fas fa-trash-alt me-2"></i> ELIMINAR
+                        </button>   
+                    </form>
+                </div>
+            </td>
+        </tr>
+    @endforeach
+</tbody>
+
                         </table>
                     </div>
 
@@ -237,15 +257,14 @@
             margin: 5px 0;
         }
         
-        td:nth-child(1) {
+        /* Asegurar que las celdas tengan un ancho mínimo */
+        td:nth-child(1), td:nth-child(2) {
             min-width: 250px;
         }
     }
 </style>
 
 @section('scripts')
-<!-- SweetAlert2 para diálogos personalizados -->
-<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
 <script>
     // Función para confirmación de eliminación

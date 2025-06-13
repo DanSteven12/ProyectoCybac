@@ -1,107 +1,123 @@
 @extends('layouts.admi-app-master')
 
-@php use Illuminate\Support\Facades\Storage; @endphp
-
 @section('content')
-<style>
-    .pendiente { background-color: #fff3cd; } /* Amarillo claro */
-    .aprobado { background-color: #d4edda; }  /* Verde claro */
-    .rechazado { background-color: #f8d7da; } /* Rojo claro */
-    .vencido { background-color: #e2e3e5; color: #6c757d; } /* Gris claro */
-</style>
-
-<div class="container mt-4">
-    <h2 class="mb-4">Lista de Pagos</h2>
-
-    {{-- Filtros --}}
-    <div class="mb-3">
-        <button class="btn btn-outline-secondary me-2" onclick="filterPayments('pendiente')">Pendientes</button>
-        <button class="btn btn-outline-success me-2" onclick="filterPayments('aprobado')">Aprobados</button>
-        <button class="btn btn-outline-danger me-2" onclick="filterPayments('rechazado')">Rechazados</button>
-        <button class="btn btn-outline-dark" onclick="filterPayments('vencido')">Vencidos</button>
+<div class="container-fluid py-4">
+    <div class="mb-4">
+        <h2 class="fw-bold" style="font-size: 1.8rem; color: #1A365D; margin-bottom: 0.5rem;">
+            Lista de Pagos
+        </h2>
+        <p style="font-size: 1.5rem; color: #1A365D; opacity: 0.8; margin-bottom: 1.8rem;">
+            Gestión de pagos de membresías
+        </p>
     </div>
 
-    <table class="table table-bordered table-hover" id="payments-table">
-        <thead class="table-dark">
-            <tr>
-                <th>Usuario</th>
-                <th>Membresía</th>
-                <th>Monto</th>
-                <th>Estado</th>
-                <th>Fecha</th>
-                <th>Comprobante</th>
-                <th id="th-comentario">Comentario</th> {{-- Solo se muestra en rechazados --}}
-                <th id="th-accion">Acción</th> {{-- Solo se muestra en pendientes --}}
-            </tr>
-        </thead>
-        <tbody>
-            @foreach($payments as $payment)
-            @php
-                $statusName = $payment->status->name;
-                $statusClass = '';
-                if($statusName === 'Pendiente de revisión') $statusClass = 'pendiente';
-                else if($statusName === 'Aprobado') $statusClass = 'aprobado';
-                else if($statusName === 'Rechazado') $statusClass = 'rechazado';
-                else if($statusName === 'Vencido') $statusClass = 'vencido';
+    {{-- Filtros --}}
+    <div class="mb-4 filter-buttons">
+        <button class="btn filter-btn pending" onclick="filterPayments('pendiente')" style="font-size: 1.3rem;">
+            Pendientes
+        </button>
+        <button class="btn filter-btn approved" onclick="filterPayments('aprobado')" style="font-size: 1.3rem;">
+            Aprobados
+        </button>
+        <button class="btn filter-btn rejected" onclick="filterPayments('rechazado')" style="font-size: 1.3rem;">
+            Rechazados
+        </button>
+        <button class="btn filter-btn expired" onclick="filterPayments('vencido')" style="font-size: 1.3rem;">
+            Vencidos
+        </button>
+    </div>
 
-                $isPendiente = $statusName === 'Pendiente de revisión';
-                $isRechazado = $statusName === 'Rechazado';
-            @endphp
-            <tr class="payment-row {{ $statusClass }}">
-                <td>{{ $payment->user->names }} {{ $payment->user->last_name }}</td>
-                <td>{{ $payment->membership->name }} ({{ $payment->membership->duration }} días)</td>
-                <td>${{ number_format($payment->price, 2) }}</td>
-                <td>{{ $statusName }}</td>
-                <td>
-                    {{ $payment->date }}
-                    @if($statusName === 'Vencido' && $payment->expiration_date)
-                        <br><small class="text-danger">Expiró: {{ \Carbon\Carbon::parse($payment->expiration_date)->format('d/m/Y') }}</small>
-                    @endif
-                </td>
-                <td>
-                    <a href="{{ Storage::url($payment->receipt_url) }}" target="_blank" class="btn btn-sm btn-outline-primary">
-                        Ver archivo
-                    </a>
-                </td>
+    <div class="card mb-5 payment-card">
+        <div class="card-header payment-card-header">
+            <h5 class="mb-0" style="font-size: 1.5rem;">Registros de pagos</h5>
+        </div>
+        <div class="card-body p-0">
+            <div class="table-responsive">
+                <table class="table align-middle mb-0 payment-table" style="border-collapse: collapse; border: 2px solid #000;">
+                    <thead>
+                        <tr>
+                            <th style="background-color: #1A365D; color: white; padding: 12px 10px; border: 1px solid #000; font-size: 1.4rem;">Usuario</th>
+                            <th style="background-color: #1A365D; color: white; padding: 12px 10px; border: 1px solid #000; font-size: 1.4rem;">Membresía</th>
+                            <th style="background-color: #1A365D; color: white; padding: 12px 10px; border: 1px solid #000; font-size: 1.4rem;">Monto</th>
+                            <th style="background-color: #1A365D; color: white; padding: 12px 10px; border: 1px solid #000; font-size: 1.4rem;">Estado</th>
+                            <th style="background-color: #1A365D; color: white; padding: 12px 10px; border: 1px solid #000; font-size: 1.4rem;">Fecha</th>
+                            <th style="background-color: #1A365D; color: white; padding: 10px 10px; border: 1px solid #000; font-size: 1.4rem;">Comprobante</th>
+                            <th id="th-comentario" style="background-color: #1A365D; color: white; padding: 12px 10px; border: 1px solid #000; font-size: 1.4rem; display: none;">Comentario</th>
+                            <th id="th-accion" style="background-color: #1A365D; color: white; padding: 12px 10px; border: 1px solid #000; font-size: 1.4rem; display: none;">Acción</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach($payments as $payment)
+                        @php
+                            $statusName = $payment->status->name;
+                            $statusClass = '';
+                            if($statusName === 'Pendiente de revisión') $statusClass = 'pendiente';
+                            else if($statusName === 'Aprobado') $statusClass = 'aprobado';
+                            else if($statusName === 'Rechazado') $statusClass = 'rechazado';
+                            else if($statusName === 'Vencido') $statusClass = 'vencido';
 
-                {{-- Comentario solo en rechazados --}}
-                @if($isRechazado)
-                <td class="comentario-col">{{ $payment->comment }}</td>
-                @else
-                <td class="comentario-col" style="display:none;">{{ $payment->comment }}</td> {{-- Mantener celda para tabla pero oculta --}}
-                @endif
+                            $isPendiente = $statusName === 'Pendiente de revisión';
+                            $isRechazado = $statusName === 'Rechazado';
+                        @endphp
+                        <tr class="payment-row {{ $statusClass }}">
+                            <td style="padding: 12px 10px; border: 1px solid #000; font-size: 1.3rem;">{{ $payment->user->names }} {{ $payment->user->last_name }}</td>
+                            <td style="padding: 12px 10px; border: 1px solid #000; font-size: 1.3rem;">{{ $payment->membership->name }} ({{ $payment->membership->duration }} días)</td>
+                            <td style="padding: 12px 10px; border: 1px solid #000; font-size: 1.3rem;">${{ number_format($payment->price, 2) }}</td>
+                            <td style="padding: 12px 10px; border: 1px solid #000; font-size: 1.3rem;">
+                                <span class="status-badge">{{ $statusName }}</span>
+                            </td>
+                            <td style="padding: 12px 10px; border: 1px solid #000; font-size: 1.3rem;">
+                                {{ $payment->date }}
+                                @if($statusName === 'Vencido' && $payment->expiration_date)
+                                    <br><small style="color: #dc3545; font-size: 1.1rem;">Expiró: {{ \Carbon\Carbon::parse($payment->expiration_date)->format('d/m/Y') }}</small>
+                                @endif
+                            </td>
+                            <td style="padding: 12px 10px; border: 1px solid #000; font-size: 1.3rem;">
+                                <a href="{{ Storage::url($payment->receipt_url) }}" target="_blank" class="btn btn-sm receipt-btn" style="font-size: 1.3rem;">
+                                    Ver archivo
+                                </a>
+                            </td>
 
-                {{-- Acción solo en pendientes --}}
-                @if($isPendiente)
-                <td class="accion-col">
-                    <form id="form-{{ $payment->id }}" action="{{ route('admin.payments.update', $payment) }}" method="POST" onsubmit="return validateComment({{ $payment->id }})">
-                        @csrf
-                        @method('PUT')
-                        <select name="status_id" onchange="handleStatusChange(this, {{ $payment->id }})" class="form-select">
-                            <option value="4" {{ $payment->status_id == 4 ? 'selected' : '' }}>Pendiente de revisión</option>
-                            <option value="5" {{ $payment->status_id == 5 ? 'selected' : '' }}>Aprobado</option>
-                            <option value="6" {{ $payment->status_id == 6 ? 'selected' : '' }}>Rechazado</option>
-                        </select>
-                        <div id="comment-area-{{ $payment->id }}" class="mt-2" style="display: none;">
-                            <textarea name="comment" id="comment-{{ $payment->id }}" class="form-control" placeholder="Motivo del rechazo (obligatorio)"></textarea>
-                            <button type="submit" class="btn btn-sm btn-danger mt-2">Rechazar</button>
-                        </div>
-                    </form>
-                </td>
-                @else
-                <td class="accion-col" style="display:none;"></td> {{-- Oculto para mantener estructura --}}
-                @endif
-            </tr>
-            @endforeach
-        </tbody>
-    </table>
+                            {{-- Comentario solo en rechazados --}}
+                            <td class="comentario-col" style="padding: 12px 10px; border: 1px solid #000; font-size: 1.3rem; {{ $isRechazado ? '' : 'display:none' }};">
+                                {{ $isRechazado ? $payment->comment : '' }}
+                            </td>
+
+                            {{-- Acción solo en pendientes --}}
+                            <td class="accion-col" style="padding: 12px 10px; border: 1px solid #000; font-size: 1.3rem; {{ $isPendiente ? '' : 'display:none' }};">
+                                @if($isPendiente)
+                                <form id="form-{{ $payment->id }}" action="{{ route('admin.payments.update', $payment) }}" method="POST" onsubmit="return validateComment({{ $payment->id }})">
+                                    @csrf
+                                    @method('PUT')
+                                    <select name="status_id" onchange="handleStatusChange(this, {{ $payment->id }})" class="form-select status-select" style="font-size: 1.3rem;">
+                                        <option value="4" {{ $payment->status_id == 4 ? 'selected' : '' }}>Pendiente de revisión</option>
+                                        <option value="5" {{ $payment->status_id == 5 ? 'selected' : '' }}>Aprobado</option>
+                                        <option value="6" {{ $payment->status_id == 6 ? 'selected' : '' }}>Rechazado</option>
+                                    </select>
+                                    <div id="comment-area-{{ $payment->id }}" class="mt-2 comment-area" style="display: none;">
+                                        <textarea name="comment" id="comment-{{ $payment->id }}" class="form-control comment-textarea" 
+                                                placeholder="Motivo del rechazo (obligatorio)" style="font-size: 1.3rem;"></textarea>
+                                        <button type="submit" class="btn btn-sm mt-2 reject-btn" style="font-size: 1.3rem;">
+                                            Rechazar
+                                        </button>
+                                    </div>
+                                </form>
+                                @endif
+                            </td>
+                        </tr>
+                        @endforeach
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
 </div>
 
 <script>
     // Por defecto mostrar pendientes
-    window.onload = function() {
+    document.addEventListener('DOMContentLoaded', function() {
         filterPayments('pendiente');
-    }
+    });
 
     function handleStatusChange(select, id) {
         const value = select.value;
@@ -119,12 +135,10 @@
         const select = document.querySelector(`#form-${id} select[name="status_id"]`);
         const comment = document.getElementById(`comment-${id}`);
 
-        if (select.value == 6) { // Rechazado
-            if (!comment.value.trim()) {
-                alert('Por favor, escribe el motivo del rechazo.');
-                comment.focus();
-                return false;
-            }
+        if (select.value == 6 && !comment.value.trim()) {
+            alert('Por favor, escribe el motivo del rechazo.');
+            comment.focus();
+            return false;
         }
         return true;
     }
@@ -135,47 +149,142 @@
         const thComentario = document.getElementById('th-comentario');
 
         allRows.forEach(row => {
-            if(row.classList.contains(tipo)) {
-                row.style.display = '';
-            } else {
-                row.style.display = 'none';
-            }
+            row.style.display = row.classList.contains(tipo) ? '' : 'none';
         });
 
-        // Mostrar u ocultar columna acción (solo pendiente)
-        if(tipo === 'pendiente') {
-            thAccion.style.display = '';
-            allRows.forEach(row => {
-                if(row.classList.contains('pendiente')) {
-                    let tdAccion = row.querySelector('.accion-col');
-                    if(tdAccion) tdAccion.style.display = '';
-                }
-            });
-        } else {
-            thAccion.style.display = 'none';
-            allRows.forEach(row => {
-                let tdAccion = row.querySelector('.accion-col');
-                if(tdAccion) tdAccion.style.display = 'none';
-            });
-        }
+        // Mostrar/ocultar columnas según el filtro
+        thAccion.style.display = tipo === 'pendiente' ? '' : 'none';
+        thComentario.style.display = tipo === 'rechazado' ? '' : 'none';
 
-        // Mostrar u ocultar columna comentario (solo rechazado)
-        if(tipo === 'rechazado') {
-            thComentario.style.display = '';
-            allRows.forEach(row => {
-                if(row.classList.contains('rechazado')) {
-                    let tdComentario = row.querySelector('.comentario-col');
-                    if(tdComentario) tdComentario.style.display = '';
-                }
-            });
-        } else {
-            thComentario.style.display = 'none';
-            allRows.forEach(row => {
-                let tdComentario = row.querySelector('.comentario-col');
-                if(tdComentario) tdComentario.style.display = 'none';
-            });
-        }
+        // Mostrar/ocultar celdas específicas
+        allRows.forEach(row => {
+            const accionCol = row.querySelector('.accion-col');
+            const comentarioCol = row.querySelector('.comentario-col');
+            
+            if (accionCol) accionCol.style.display = tipo === 'pendiente' && row.classList.contains('pendiente') ? '' : 'none';
+            if (comentarioCol) comentarioCol.style.display = tipo === 'rechazado' && row.classList.contains('rechazado') ? '' : 'none';
+        });
     }
 </script>
-@endsection
 
+<style>
+    /* Estilos base */
+    .filter-buttons {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.5rem;
+    }
+    
+    .filter-btn {
+        font-weight: 600;
+        padding: 0.6rem 1rem;
+        border-radius: 6px;
+        transition: all 0.2s ease;
+        /* Cambiamos estas propiedades: */
+        flex: 0 0 auto; /* Eliminamos el crecimiento automático */
+        width: auto; /* Ancho según contenido */
+        min-width: 150px; /* Reducimos el mínimo ancho */
+        text-align: center;
+        border: 2px solid transparent;
+    }
+    
+    /* Resto de tus estilos permanecen igual */
+    .pending {
+        background-color: #FFD166;
+        color: #1A365D;
+    }
+    
+    .approved {
+        background-color: #2EC4B6;
+        color: #FFFFFF;
+        border-color: #2EC4B6;
+    }
+    
+    .rejected {
+        background-color: #FF6B35;
+        color: #FFFFFF;
+        border-color: #FF6B35;
+    }
+    
+    .expired {
+        background-color: #1A365D;
+        color: #FFFFFF;
+        border-color: #1A365D;
+    }
+    
+    .payment-card {
+        border: 2px solid #1A365D;
+        border-radius: 8px;
+        box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+    }
+    
+    .payment-card-header {
+        background-color: #1A365D;
+        color: #FFFFFF;
+        border-bottom: 3px solid #FF6B35;
+    }
+    
+    .status-badge {
+        display: inline-block;
+        padding: 4px 12px;
+        border-radius: 20px;
+        font-weight: 500;
+    }
+    
+    .pendiente .status-badge {
+        background-color: #FFD166;
+        color: #1A365D;
+    }
+    
+    .aprobado .status-badge {
+        background-color: #2EC4B6;
+        color: white;
+    }
+    
+    .rechazado .status-badge {
+        background-color: #FF6B35;
+        color: white;
+    }
+    
+    .vencido .status-badge {
+        background-color: #e9ecef;
+        color: #1A365D;
+    }
+    
+    .receipt-btn {
+        background-color: #1A365D;
+        color: #FFFFFF;
+        border: 1px solid #1A365D;
+        padding: 0.25rem 0.5rem;
+    }
+    
+    .status-select {
+        border: 2px solid #1A365D;
+        width: 100%;
+    }
+    
+    .comment-textarea {
+        border: 2px solid #1A365D;
+        width: 100%;
+    }
+    
+    .reject-btn {
+        background-color: #FF6B35;
+        color: #FFFFFF;
+        border: 1px solid #FF6B35;
+        padding: 0.25rem 0.5rem;
+    }
+    
+    /* Media queries para responsividad */
+    @media (max-width: 768px) {
+        .filter-buttons {
+            flex-direction: column;
+        }
+        
+        .filter-btn {
+            width: 100%;
+            margin-bottom: 0.5rem;
+        }
+    }
+</style>
+@endsection
