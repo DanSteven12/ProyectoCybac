@@ -1,7 +1,7 @@
 @extends('layouts.admi-app-master')
 
 @section('content')
-<div class="container">
+<div class="container-fluid px-4 mt-5">
     <div class="row justify-content-center">
         <div class="col-md-8">
             <div class="card">

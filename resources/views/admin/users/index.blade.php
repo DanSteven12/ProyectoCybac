@@ -19,7 +19,7 @@
                 <div class="card-body p-0">
                     @if (session('success'))
                         <div class="alert alert-dismissible fade show m-4" role="alert" 
-                             style="background-color: #2EC4B6; color: #FFFFFF; border-left: 5px solid #1A365D; font-size: 1.3rem;">
+                            style="background-color: #2EC4B6; color: #FFFFFF; border-left: 5px solid #1A365D; font-size: 1.3rem;">
                             <div class="d-flex align-items-center">
                                 <i class="fas fa-check-circle me-3 fs-4"></i>
                                 <strong class="fs-5">{{ session('success') }}</strong>
@@ -29,45 +29,47 @@
                     @endif
 
                     <div class="table-responsive">
-                        <table class="table table-hover align-middle mb-0" style="border-top: none;">
+                        <table class="table table-hover align-middle mb-0" style="border-top: none; width: 100%;">
                             <thead>
                                 <tr style="background-color: #1A365D; color: #FFFFFF;">
-                                    <th class="ps-5 py-3" style="font-weight: 600; font-size: 1.4rem; letter-spacing: 0.5px;">Nombres</th>
-                                    <th class="py-3" style="font-weight: 600; font-size: 1.4rem; letter-spacing: 0.5px;">Apellidos</th>
-                                    <th class="py-3" style="font-weight: 600; font-size: 1.4rem; letter-spacing: 0.5px;">Email</th>
-                                    <th class="py-3" style="font-weight: 600; font-size: 1.4rem; letter-spacing: 0.5px;">Rol</th>
-                                    <th class="py-3" style="font-weight: 600; font-size: 1.4rem; letter-spacing: 0.5px;">Estado</th>
-                                    <th class="py-3" style="font-weight: 600; font-size: 1.4rem; letter-spacing: 0.5px;">Fecha Nac.</th>
-                                    <th class="py-3" style="font-weight: 600; font-size: 1.4rem; letter-spacing: 0.5px;">Género</th>
-                                    <th class="py-3" style="font-weight: 600; font-size: 1.4rem; letter-spacing: 0.5px;">Especialidad</th>
-                                    <th class="py-3" style="font-weight: 600; font-size: 1.4rem; letter-spacing: 0.5px;">Certificación</th>
-                                    <th class="text-end pe-5 py-3" style="font-weight: 600; font-size: 1.4rem; letter-spacing: 0.5px;">Acciones</th>
+                                    <th class="ps-4 py-3" style="font-weight: 600; font-size: 1.4rem; width: 10%;">Nombres</th>
+                                    <th class="py-3" style="font-weight: 600; font-size: 1.4rem; width: 10%;">Apellidos</th>
+                                    <th class="py-3" style="font-weight: 600; font-size: 1.4rem; width: 15%;">Email</th>
+                                    <th class="py-3" style="font-weight: 600; font-size: 1.4rem; width: 8%;">Rol</th>
+                                    <th class="py-3" style="font-weight: 600; font-size: 1.4rem; width: 8%;">Estado</th>
+                                    <th class="py-3" style="font-weight: 600; font-size: 1.4rem; width: 12%;">Fecha Nac.</th>
+                                    <th class="py-3" style="font-weight: 600; font-size: 1.4rem; width: 8%;">Género</th>
+                                    <th class="py-3" style="font-weight: 600; font-size: 1.4rem; width: 10%;">Especialidad</th>
+                                    <th class="py-3" style="font-weight: 600; font-size: 1.4rem; width: 10%;">Certificación</th>
+                                    <th class="pe-4 py-3 text-center" style="font-weight: 600; font-size: 1.4rem; width: 15%;">Acciones</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 @forelse($users as $user)
                                 <tr style="border-bottom: 2px solid #F4F4F4;">
-                                    <td class="ps-5" style="font-size: 1.4rem; color: #1A365D; font-weight: 600;">{{ $user->names }}</td>
-                                    <td style="font-size: 1.4rem; color: #1A365D; font-weight: 600;">{{ $user->last_name }}</td>
-                                    <td style="font-size: 1.4rem; color: #1A365D; font-weight: 600;">{{ $user->email }}</td>
-                                    <td style="font-size: 1.4rem; color: #1A365D; font-weight: 600;">{{ $user->getRoleNames()->first() ?? 'N/A' }}</td>
-                                    <td style="font-size: 1.4rem; color: #1A365D; font-weight: 600;">{{ $user->statuses->name ?? 'N/A' }}</td>
-                                    <td style="font-size: 1.4rem; color: #1A365D; font-weight: 600;">{{ \Carbon\Carbon::parse($user->birth_date)->translatedFormat('d M Y') }}</td>
-                                    <td style="font-size: 1.4rem; color: #1A365D; font-weight: 600;">{{ $user->gender }}</td>
-                                    <td style="font-size: 1.4rem; color: #1A365D; font-weight: 600;">{{ $user->specialty ?? 'N/A' }}</td>
-                                    <td style="font-size: 1.4rem; color: #1A365D; font-weight: 600;">{{ $user->certification ?? 'N/A' }}</td>
-                                    <td class="pe-5 text-end">
-                                        <div class="btn-group" role="group">
-                                            <a href="{{ route('admin.users.edit', $user) }}" class="btn py-2 px-3 mx-1" 
-                                               style="background-color: #2EC4B6; color: #FFFFFF; font-size: 1.3rem; font-weight: 500; min-width: 100px;">
-                                                <i class="fas fa-edit me-2"></i> EDITAR
+                                    <td class="ps-4" style="font-size: 1.4rem; color: #1A365D; font-weight: 500;">{{ $user->names }}</td>
+                                    <td style="font-size: 1.4rem; color: #1A365D; font-weight: 500;">{{ $user->last_name }}</td>
+                                    <td style="font-size: 1.4rem; color: #1A365D; font-weight: 500;">{{ $user->email }}</td>
+                                    <td style="font-size: 1.4rem; color: #1A365D; font-weight: 500;">{{ $user->getRoleNames()->first() ?? 'N/A' }}</td>
+                                    <td style="font-size: 1.4rem; color: #1A365D; font-weight: 500;">{{ $user->statuses->name ?? 'N/A' }}</td>
+                                    <td style="font-size: 1.4rem; color: #1A365D; font-weight: 500;">
+                                        {{ \Carbon\Carbon::parse($user->birth_date)->locale('es')->translatedFormat('d \d\e F \d\e Y') }}
+                                    </td>  
+                                    <td style="font-size: 1.4rem; color: #1A365D; font-weight: 500;">{{ $user->gender }}</td>
+                                    <td style="font-size: 1.4rem; color: #1A365D; font-weight: 500;">{{ $user->specialty ?? 'N/A' }}</td>
+                                    <td style="font-size: 1.4rem; color: #1A365D; font-weight: 500;">{{ $user->certification ?? 'N/A' }}</td>
+                                    <td class="pe-4 text-center">
+                                        <div class="d-flex justify-content-center">
+                                            <a href="{{ route('admin.users.edit', $user) }}" class="btn py-1 px-2 mx-1" 
+                                            style="background-color: #2EC4B6; color: #FFFFFF; font-size: 1.3rem; font-weight: 500;">
+                                                <i class="fas fa-edit me-1"></i>EDITAR
                                             </a>
                                             <form action="{{ route('admin.users.destroy', $user) }}" method="POST" class="d-inline">
                                                 @csrf
                                                 @method('DELETE')
-                                                <button type="button" class="btn py-2 px-3 mx-1 btn-eliminar" onclick="confirmarEliminacion(event)" 
-                                                        style="font-size: 1.3rem; font-weight: 500; min-width: 100px;">
-                                                    <i class="fas fa-trash-alt me-2"></i> ELIMINAR
+                                                <button type="button" class="btn py-1 px-2 mx-1 btn-eliminar" onclick="confirmarEliminacion(event)" 
+                                                        style="font-size: 1.3rem; font-weight: 500;">
+                                                    <i class="fas fa-trash-alt me-1"></i>ELIMINAR
                                                 </button>   
                                             </form>
                                         </div>
@@ -90,7 +92,7 @@
                     <!-- Contador con fuente más grande -->
                     <div class="card-footer py-4" style="background-color: #F4F4F4; border-top: 2px solid #1A365D;">
                         <div class="d-flex justify-content-between align-items-center">
-                            <div class="text-muted" style="font-size: 1.4rem; font-weight: 500;">
+                            <div class="text-muted" style="font-size: 1.3rem; font-weight: 500;">
                                 <i class="fas fa-clipboard-list me-2"></i> MOSTRANDO <span class="fw-bold">{{ $users->count() }}</span> USUARIOS REGISTRADOS
                             </div>
                         </div>
@@ -111,7 +113,7 @@
 
 <style>
     body {
-        font-size: 1.3rem;
+        font-size: 1.2rem;
     }
     
     .card {
@@ -120,19 +122,20 @@
     }
     
     .table th {
-        padding: 18px 16px;
+        padding: 12px 8px;
         text-transform: uppercase;
     }
     
     .table td {
-        padding: 16px;
+        padding: 12px 8px;
         vertical-align: middle;
     }
     
     .btn {
-        padding: 0.6rem 1.2rem;
+        padding: 0.5rem 1rem;
         border-radius: 6px;
         transition: all 0.2s ease;
+        white-space: nowrap;
     }
     
     .table-hover tbody tr:hover {
@@ -147,8 +150,79 @@
     .btn-eliminar {
         background-color: #FF6B35 !important;
         color: #FFFFFF !important;
+        font-size: 1.3rem !important;
+        font-weight: 500 !important;
+        min-width: 100px !important;
         border: none !important;
         transition: all 0.3s ease !important;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+    /*Estilo del alert*/    
+    .btn-eliminar {
+        background-color: #FF6B35 !important;
+        color: #FFFFFF !important;
+        font-size: 1.3rem !important; /* Aumentado de 1.1rem */
+        font-weight: 500 !important;
+        min-width: 100px !important;
+        border: none !important;
+        transition: all 0.3s ease !important;
+    }
+
+    .swal2-actions {
+        gap: 1.5rem !important;
+        margin-top: 1.5rem !important;
+    }
+    
+    .swal2-confirm, .swal2-cancel {
+        padding: 0.6rem 1.5rem !important;
+        margin: 0 !important;
+    }
+
+    .swal2-popup { 
+        border-radius: 10px !important;
+        border: 2px solid #1A365D !important;
+        font-size: 1.3rem !important;
+    }
+    
+    .swal2-title {
+        color: #1A365D !important;
+        font-size: 1.7rem !important;
+        font-weight: 700 !important;
+    }
+
+    .swal2-icon.swal2-warning {
+        color: #FF6B35 !important;
+        border-color: #FF6B35 !important;
+    }
+
+    .swal2-confirm {
+        background-color: #FF6B35 !important;
+        font-size: 1.3rem !important;
+        font-weight: 500 !important;
+    }
+
+    .swal2-cancel {
+        background-color: #2EC4B6 !important;
+        font-size: 1.3rem !important;
+        font-weight: 500 !important;
+    }
+
+    .pagination .page-item.active .page-link {
+        background-color: #1A365D;
+        border-color: #1A365D;
+        font-size: 1.1rem;
+        padding: 0.5rem 0.9rem;
+    }
+
+    .pagination .page-link {
+        color: #1A365D;
+        font-size: 1.1rem;
+        padding: 0.5rem 0.9rem;
+    }
+
+    .badge {
+        padding: 0.5em 0.9em;
+        font-size: 1.1rem;
     }
     
     /* Ajustes para móviles */
@@ -160,27 +234,27 @@
         
         .table th, .table td {
             white-space: nowrap;
-            font-size: 1.1rem !important;
-            padding: 14px 10px !important;
+            font-size: 1.0rem !important;
+            padding: 10px 6px !important;
         }
         
         .btn {
-            padding: 0.5rem 1.0rem !important;
-            font-size: 1.1rem !important;
+            padding: 0.4rem 0.8rem !important;
+            font-size: 1.0rem !important;
             min-width: auto !important;
         }
         
         .card-header h2 {
-            font-size: 1.6rem !important;
+            font-size: 1.4rem !important;
         }
         
         .card-header .btn {
-            font-size: 1.1rem !important;
-            padding: 0.5rem 1.0rem !important;
+            font-size: 1.0rem !important;
+            padding: 0.4rem 0.8rem !important;
         }
         
         .card-footer div {
-            font-size: 1.1rem !important;
+            font-size: 1.0rem !important;
         }
     }
 </style>
@@ -198,10 +272,10 @@
         Swal.fire({
             title: '¿Eliminar Usuario?',
             html: `<div style="text-align: center;">
-                     <i class="fas fa-exclamation-triangle" style="color: #FF6B35; font-size: 3rem; margin-bottom: 1rem;"></i>
-                     <p>¿Está seguro que desea eliminar este usuario permanentemente?</p>
-                     <p style="font-weight: 600;">Esta acción no se puede deshacer.</p>
-                   </div>`,
+                    <i class="fas fa-exclamation-triangle" style="color: #FF6B35; font-size: 3rem; margin-bottom: 1rem;"></i>
+                    <p>¿Está seguro que desea eliminar este usuario permanentemente?</p>
+                    <p style="font-weight: 600;">Esta acción no se puede deshacer.</p>
+                </div>`,
             icon: 'warning',
             showCancelButton: true,
             confirmButtonText: '<i class="fas fa-trash-alt me-2"></i> Eliminar',

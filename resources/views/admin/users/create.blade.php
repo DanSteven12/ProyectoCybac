@@ -103,23 +103,25 @@
                                 </div>
 
                                 <!-- Estado -->
-                                <div class="mb-3">
-                                    <label for="status_id" class="form-label fw-bold" style="color: #1A365D; font-size: 1.4rem;">Estado</label>
-                                    <select class="form-select @error('status_id') is-invalid @enderror" id="status_id" name="status_id" 
-                                            style="border: 2px solid #1A365D; border-radius: 6px; padding: 10px 14px; font-size: 1.3rem;" required>
-                                        <option value="">Seleccione estado</option>
-                                        @foreach ($statuses as $status)
-                                            <option value="{{ $status->id }}" {{ old('status_id') == $status->id ? 'selected' : '' }}>
-                                                {{ $status->name }}
-                                            </option>
-                                        @endforeach
-                                    </select>
-                                    @error('status_id')
-                                        <div class="invalid-feedback" style="font-size: 1.2rem;">
-                                            <i class="fas fa-exclamation-circle me-2"></i>{{ $message }}
-                                        </div>
-                                    @enderror
-                                </div>
+                            <div class="mb-3">
+                                <label for="status_id" class="form-label fw-bold" style="color: #1A365D; font-size: 1.4rem;">Estado</label>
+                                <select class="form-select @error('status_id') is-invalid @enderror" id="status_id" name="status_id" 
+                                        style="border: 2px solid #1A365D; border-radius: 6px; padding: 10px 14px; font-size: 1.3rem;" required>
+                                <option value="">Seleccione estado</option>
+                                @foreach ($statuses as $status)
+                                    @if(in_array($status->name, ['Activo', 'Inactivo', 'Pendiente']))
+                                <option value="{{ $status->id }}" {{ old('status_id') == $status->id ? 'selected' : '' }}>
+                                        {{ $status->name }}
+                                </option>
+                                @endif
+                                    @endforeach
+                                </select>
+                                @error('status_id')
+                                    <div class="invalid-feedback" style="font-size: 1.2rem;">
+                                        <i class="fas fa-exclamation-circle me-2"></i>{{ $message }}
+                                    </div>
+                                @enderror
+                            </div>
 
                                 <!-- Fecha Nacimiento -->
                                 <div class="mb-3">
