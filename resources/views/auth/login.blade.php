@@ -333,12 +333,10 @@
                                         id="remember">
                                     <label class="form-check-label" for="remember">Recordar sesión</label>
                                 </div>
-                                <button type="button" 
-                                        class="btn-recovery" 
-                                        onclick="window.location.href=''">
-                                    ¿Olvidaste tu contraseña?
-                                </button>
-                            </div>
+                                    <a href="{{ route('password.request') }}" class="btn-recovery">
+                                        ¿Olvidaste tu contraseña?
+                                    </a>
+                                </div>
 
                             <button type="submit" class="btn btn-login mb-3">
                                 <i class="bi bi-box-arrow-in-right me-2"></i>Iniciar sesión

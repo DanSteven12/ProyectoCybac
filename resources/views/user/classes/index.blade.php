@@ -6,7 +6,10 @@
 @if($comments->count())
     <div class="grid grid-cols-1 gap-4 mb-6">
         @foreach($comments as $class)
-            @if($class->status->name === 'Rechazada') {{-- Asegura que aún esté rechazada --}}
+            @php
+                $isCancelada = $class->status && strtolower($class->status->name) === 'cancelada';
+            @endphp
+            @if($isCancelada)
                 <div class="bg-white border-l-4 border-red-500 shadow-md p-4 rounded-lg">
                     <h2 class="text-lg font-semibold text-red-600 mb-2">Motivo de cancelación de la clase</h2>
                     <p class="text-sm text-gray-700">
@@ -19,6 +22,7 @@
         @endforeach
     </div>
 @endif
+
 
 @if($clasesLlenas->count())
     <div class="grid grid-cols-1 gap-4 mb-6">

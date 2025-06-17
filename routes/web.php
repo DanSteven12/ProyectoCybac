@@ -15,6 +15,8 @@ use App\Http\Controllers\Admin\MembershipController as AdminMembershipController
 use App\Http\Controllers\Admin\PaymentController as AdminPaymentController;
 use App\Http\Controllers\User\PaymentHistoryController as UserPaymentController;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\Auth\PasswordResetLinkController;
+use App\Http\Controllers\Auth\NewPasswordController;
 
 // Rutas públicas: login y registro
 Route::get('/login', [LoginController::class, 'showLoginForm'])->name('login');
@@ -129,4 +131,13 @@ Route::middleware(['auth', 'check.membership'])->prefix('user')->name('user.')->
     Route::post('/classes/rate/{registration}', [UserClassesController::class, 'rate'])->name('classes.rate');
 });
 
+//Rutas para recuperacion de password
+// Mostrar formulario para solicitar enlace
+Route::get('/forgot-password', [PasswordResetLinkController::class, 'create'])->name('password.request');
+// Enviar el enlace al correo
+Route::post('/forgot-password', [PasswordResetLinkController::class, 'store'])->name('password.email');
+// Mostrar formulario para establecer nueva contraseña
+Route::get('/reset-password/{token}', [NewPasswordController::class, 'create'])->name('password.reset');
+// Guardar nueva contraseña
+Route::post('/reset-password', [NewPasswordController::class, 'store'])->name('password.update');
 
