@@ -118,44 +118,44 @@
         </div>
     </div>
 
-    <div>
-        <h4 class="mb-3" style="color: #1A365D; font-size: 1.8rem;">Lista de inscritos</h4>
+<div>
+    <h4 class="mb-3" style="color: #1A365D; font-size: 1.8rem;">Lista de inscritos</h4>
 
-        @if($inscritos->isEmpty())
-            <p class="text-muted fst-italic" style="color: #1A365D; font-size: 1.5rem;">No hay usuarios inscritos en esta clase.</p>
-        @else
-            <div class="table-responsive">
-                <table class="table table-bordered table-hover align-middle" style="border: 2px solid #1A365D;">
-                    <thead class="table-dark" style="background-color: #1A365D; color: #FFFFFF;">
-                        <tr>
-                            <th scope="col" style="width: 50px; font-size: 1.4rem;">#</th>
-                            <th scope="col" style="font-size: 1.4rem;">Nombre completo</th>
-                            <th scope="col" style="font-size: 1.4rem;">Correo electrónico</th>
-                            <th scope="col" style="width: 180px; font-size: 1.4rem;">Fecha de inscripción</th>
+    @if($inscritos->isEmpty())
+        <p class="text-muted fst-italic" style="color: #1A365D; font-size: 1.5rem;">No hay usuarios inscritos en esta clase.</p>
+    @else
+        <div class="table-responsive">
+            <table class="table table-bordered table-hover align-middle" style="border: 2px solid #1A365D; width: 100%;">
+                <thead class="table-dark" style="background-color: #1A365D; color: #FFFFFF;">
+                    <tr>
+                        <th scope="col" style="font-size: 1.4rem; font-weight: 600; width: 40%; padding: 12px 15px;">Nombre completo</th>
+                        <th scope="col" style="font-size: 1.4rem; font-weight: 600; width: 35%; padding: 12px 15px;">Correo electrónico</th>
+                        <th scope="col" style="font-size: 1.4rem; font-weight: 600; width: 25%; padding: 12px 15px;">Fecha de inscripción</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach($inscritos as $registration)
+                        <tr style="border-bottom: 1px solid #E0E0E0;">
+                            <td style="color: #1A365D; font-size: 1.3rem; padding: 12px 15px; vertical-align: middle;">
+                                {{ $registration->user?->names ?? 'Nombre no disponible' }}
+                                {{ $registration->user?->last_name ?? '' }}
+                            </td>
+                            <td style="color: #1A365D; font-size: 1.3rem; padding: 12px 15px; vertical-align: middle;">
+                                {{ $registration->user?->email ?? 'Correo no disponible' }}
+                            </td>
+                            <td style="color: #1A365D; font-size: 1.3rem; padding: 12px 15px; vertical-align: middle;">
+                                {{ \Carbon\Carbon::parse($registration->created_at)->format('d/m/Y H:i') }}
+                            </td>
                         </tr>
-                    </thead>
-                    <tbody>
-                        @foreach($inscritos as $index => $registration)
-                            <tr style="border-bottom: 2px solid #F4F4F4;">
-                                <td style="font-size: 1.3rem;">{{ $index + 1 }}</td>
-                                <td style="font-size: 1.3rem;">
-                                    {{ $registration->user?->names ?? 'Nombre no disponible' }}
-                                    {{ $registration->user?->last_name ?? '' }}
-                                </td>
-                                <td>{{ $registration->user?->email ?? 'Correo no disponible' }}</td>
-                                <td>{{ \Carbon\Carbon::parse($registration->created_at)->format('d/m/Y') }}</td>
-                                <td style="font-size: 1.3rem;">{{ $registration->user?->email ?? 'Correo no disponible' }}</td>
-                                <td style="font-size: 1.3rem;">{{ \Carbon\Carbon::parse($registration->created_at)->format('d/m/Y H:i') }}</td>
-                            </tr>
-                        @endforeach
-                    </tbody>
-                </table>
-            </div>
-        @endif
-    </div>
+                    @endforeach
+                </tbody>
+            </table>
+        </div>
+    @endif
+</div>
 
     <div class="mt-4">
-        <a href="{{ route('admin.classes.index') }}" class="btn" style="background-color: #1A365D; color: #FFFFFF; font-size: 1.4rem; font-weight: 600;">
+        <a href="{{ route('admin.classes.index') }}" class="btn" style="background-color: #FF6B35; color: #FFFFFF; font-size: 1.4rem; font-weight: 600;">
             <i class="fas fa-arrow-left me-1"></i> Volver a clases
         </a>
     </div>
@@ -169,14 +169,33 @@
         overflow: hidden;
     }
     
+    .table {
+        border-collapse: separate;
+        border-spacing: 0;
+    }
+    
     .table th {
         padding: 14px 12px;
         text-transform: uppercase;
+        background-color: #1A365D;
+        color: #FFFFFF;
+        font-weight: 600;
+        border: none;
     }
     
     .table td {
         padding: 12px 10px;
         vertical-align: middle;
+        border-bottom: 1px solid #E0E0E0;
+    }
+    
+    .table-bordered {
+        border: 2px solid #1A365D;
+    }
+    
+    .table-bordered th, 
+    .table-bordered td {
+        border: 1px solid #E0E0E0;
     }
     
     .btn {
@@ -186,10 +205,11 @@
         display: inline-flex;
         align-items: center;
         justify-content: center;
+        font-weight: 600;
     }
     
     .table-hover tbody tr:hover {
-        background-color: rgba(46, 196, 182, 0.08);
+        background-color: rgba(26, 54, 93, 0.05);
     }
     
     .alert {
@@ -204,16 +224,19 @@
     .badge {
         padding: 0.5em 0.9em;
         font-size: 1.1rem;
+        font-weight: 600;
     }
 
     @media (max-width: 992px) {
         .table-responsive {
             overflow-x: auto;
+            -webkit-overflow-scrolling: touch;
         }
 
         .table th, .table td {
             font-size: 1.1rem !important;
             padding: 10px 8px !important;
+            white-space: nowrap;
         }
 
         .btn {

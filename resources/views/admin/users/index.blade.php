@@ -56,8 +56,13 @@
                                         {{ \Carbon\Carbon::parse($user->birth_date)->translatedFormat('d \d\e F \d\e Y') }}
                                     </td>  
                                     <td style="font-size: 1.4rem; color: #1A365D; font-weight: 500;">{{ $user->gender }}</td>
-                                    <td style="font-size: 1.4rem; color: #1A365D; font-weight: 500;">{{ $user->specialty ?? 'N/A' }}</td>
-                                    <td style="font-size: 1.4rem; color: #1A365D; font-weight: 500;">{{ $user->certification ?? 'N/A' }}</td>
+                                    <td class="wrap-text" style="font-size: 1.4rem; color: #1A365D; font-weight: 500;">
+    {{ $user->specialty ?? 'N/A' }}
+</td>
+<td class="wrap-text" style="font-size: 1.4rem; color: #1A365D; font-weight: 500;">
+    {{ $user->certification ?? 'N/A' }}
+</td>
+
                                     <td class="pe-4 text-center">
                                         <div class="d-flex justify-content-center">
                                             <a href="{{ route('admin.users.edit', $user) }}" class="btn py-1 px-2 mx-1" 
@@ -257,6 +262,11 @@
             font-size: 1.0rem !important;
         }
     }
+    .wrap-text {
+    white-space: normal;
+    word-break: break-word;
+    }
+
 </style>
 
 @section('scripts')

@@ -6,6 +6,8 @@
     <title>Crear Nuevo Servicio</title>
     <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
         :root {
             --primary-color: #1A365D;
@@ -103,6 +105,63 @@
             font-size: 1.1rem;
             margin-right: 4px;
         }
+/* ESTILOS DEL ALERT (MODIFICADOS PARA COINCIDIR CON LA CAPTURA) */
+.swal2-popup {
+    width: 400px !important;
+    border-radius: 8px !important;
+    padding: 1.5rem !important;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    border: 2px solid #1A365D !important; /* Añadido el borde con el color solicitado */
+}
+    
+.swal2-title {
+    font-size: 1.2rem !important;
+    color: #1A365D !important;
+    font-weight: 600 !important;
+    margin-bottom: 1rem !important;
+}
+    
+.swal2-content {
+    font-size: 1rem !important;
+    color: #1A365D !important;
+}
+    
+.swal2-confirm {
+    background-color: #1A365D !important;
+    color: white !important;
+    border: none !important;
+    font-size: 0.9rem !important;
+    padding: 0.5rem 1.5rem !important;
+    border-radius: 4px !important;
+    font-weight: 600 !important;
+}
+    
+.swal2-icon {
+    width: 3rem !important;
+    height: 3rem !important;
+    margin: 1rem auto 0.5rem !important;
+}
+    
+.swal2-icon.swal2-warning {
+    color: #FF6B35 !important;
+    border-color: #FF6B35 !important;
+}
+        
+        @media (max-width: 576px) {
+            .swal2-popup {
+                width: 300px !important;
+                padding: 1rem !important;
+            }
+            
+            .swal2-title {
+                font-size: 1.1rem !important;
+            }
+            
+            .swal2-content {
+                font-size: 0.9rem !important;
+            }
+        }
+        
     </style>
 </head>
 <body>
@@ -117,7 +176,7 @@
                     </div>
 
                     <div class="card-body p-2" style="background-color: #F4F4F4;">
-                        <form method="POST" action="{{ route('admin.services.store') }}">
+                        <form method="POST" action="{{ route('admin.services.store') }}" class="needs-validation" novalidate>
                             @csrf
 
                             <div class="mb-2">
@@ -165,5 +224,37 @@
         </div>
     </div>
 
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- SweetAlert2 -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+    <script>
+        (function () {
+            'use strict';
+            var forms = document.querySelectorAll('.needs-validation');
+            
+            Array.prototype.slice.call(forms).forEach(function (form) {
+                form.addEventListener('submit', function (event) {
+                    if (!form.checkValidity()) {
+                        event.preventDefault();
+                        event.stopPropagation();
+
+                        Swal.fire({
+                            icon: 'warning',
+                            title: 'Campos incompletos',
+                            text: 'Por favor completa todos los campos obligatorios antes de continuar.',
+                            confirmButtonText: 'Aceptar',
+                            confirmButtonColor: '#1A365D',
+                            background: '#FFFFFF',
+                            iconColor: '#FF6B35',
+                            color: '#1A365D'
+                        });
+                    }
+                    form.classList.add('was-validated');
+                }, false);
+            });
+        })();
+    </script>
 </body>
 </html>

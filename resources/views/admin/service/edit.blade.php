@@ -66,7 +66,7 @@
         }
         
         .btn-submit {
-            background-color: #2EC4B6;
+            background-color: #FF6B35;
             color: white;
             border: none;
         }
@@ -105,6 +105,51 @@
             font-size: 1.08rem;
             margin-right: 3px;
         }
+
+        /* ESTILOS DEL ALERT (SOLO ESTO ES NUEVO) */
+        .swal2-popup {
+            width: 380px !important;
+            border: 2px solid #1A365D !important;
+            border-radius: 8px !important;
+            padding: 1.25rem !important;
+        }
+        
+        .swal2-title {
+            font-size: 1.2rem !important;
+            color: #1A365D !important;
+        }
+        
+        .swal2-html-container {
+            font-size: 1rem !important;
+            color: #1A365D !important;
+        }
+        
+        .swal2-confirm {
+            font-size: 0.9rem !important;
+            padding: 0.4rem 1.2rem !important;
+            background-color: #1A365D !important;
+        }
+        
+        .swal2-icon {
+            width: 2.5rem !important;
+            height: 2.5rem !important;
+        }
+        
+        .swal2-icon.swal2-warning {
+            color: #FF6B35 !important;
+            border-color: #C !important;
+        }
+        
+        @media (max-width: 576px) {
+            .swal2-popup {
+                width: 300px !important;
+                padding: 1rem !important;
+            }
+            
+            .swal2-title {
+                font-size: 1.1rem !important;
+            }
+        }
     </style>
 </head>
 <body>
@@ -119,7 +164,7 @@
                     </div>
 
                     <div class="card-body p-2" style="background-color: #F4F4F4;">
-                        <form method="POST" action="{{ route('admin.services.update', $service->id) }}">
+                        <form method="POST" action="{{ route('admin.services.update', $service->id) }}" class="needs-validation" novalidate>
                             @csrf
                             @method('PUT')
 
@@ -128,8 +173,8 @@
                                     {{ __('Nombre del Servicio') }} <span class="required-star">*</span>
                                 </label>
                                 <input id="name" type="text" class="form-control @error('name') is-invalid @enderror" 
-                                       name="name" value="{{ old('name', $service->name) }}" required autofocus
-                                       placeholder="Ingrese el nombre del servicio">
+                                    name="name" value="{{ old('name', $service->name) }}" required autofocus
+                                    placeholder="Ingrese el nombre del servicio">
 
                                 @error('name')
                                     <span class="invalid-feedback d-block error-feedback" role="alert">
@@ -143,8 +188,8 @@
                                     {{ __('Descripción del Servicio') }}
                                 </label>
                                 <textarea id="description" class="form-control @error('description') is-invalid @enderror" 
-                                          name="description" rows="3"
-                                          placeholder="Describa el servicio en detalle">{{ old('description', $service->description) }}</textarea>
+                                        name="description" rows="3"
+                                        placeholder="Describa el servicio en detalle">{{ old('description', $service->description) }}</textarea>
 
                                 @error('description')
                                     <span class="invalid-feedback d-block error-feedback" role="alert">
@@ -170,5 +215,34 @@
 
     <!-- Bootstrap JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- SweetAlert2 -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+    <script>
+        (function () {
+            'use strict';
+            var form = document.querySelector('.needs-validation');
+            
+            form.addEventListener('submit', function (event) {
+                if (!form.checkValidity()) {
+                    event.preventDefault();
+                    event.stopPropagation();
+
+                    Swal.fire({
+                        icon: 'warning',
+                        title: 'Campos incompletos',
+                        text: 'Por favor completa todos los campos obligatorios antes de continuar.',
+                        confirmButtonText: 'Aceptar',
+                        confirmButtonColor: '#1A365D',
+                        background: '#FFFFFF',
+                        iconColor: '#FF6B35',
+                        color: '#1A365D',
+                        width: 380
+                    });
+                }
+                form.classList.add('was-validated');
+            }, false);
+        })();
+    </script>
 </body>
 </html>

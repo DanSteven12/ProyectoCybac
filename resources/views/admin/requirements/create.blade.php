@@ -32,7 +32,7 @@
                         </div>
                     @endif
 
-                    <form action="{{ route('admin.requirements.store') }}" method="POST">
+                    <form action="{{ route('admin.requirements.store') }}" method="POST" class="needs-validation" novalidate>
                         @csrf
                         <div class="mb-4">
                             <label for="service_id" class="form-label fw-bold" style="color: #1A365D; font-size: 1.3rem;">Servicio</label>
@@ -64,7 +64,7 @@
                         
                         <div class="d-flex justify-content-end gap-3 mt-5">
                             <a href="{{ route('admin.requirements.index') }}" class="btn py-2 px-4" 
-                               style="background-color: #1A365D; color: #FFFFFF; font-weight: 600; font-size: 1.3rem;">
+                            style="background-color: #1A365D; color: #FFFFFF; font-weight: 600; font-size: 1.3rem;">
                                 <i class="fas fa-times-circle me-2"></i> Cancelar
                             </a>
                             <button type="submit" class="btn py-2 px-4" 
@@ -100,6 +100,35 @@
         box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     }
     
+    /* Estilo personalizado para el alert */
+    .swal2-popup.custom-alert {
+        border: 3px solid #1A365D;
+        font-size: 1.4rem;
+        border-radius: 12px;
+        padding: 1.5rem;
+    }
+
+    .swal2-title {
+        font-size: 1.6rem !important;
+        color: #1A365D !important;
+    }
+
+    .swal2-html-container {
+        font-size: 1.4rem !important;
+        color: #1A365D !important;
+    }
+
+    .swal2-confirm {
+        font-size: 1.3rem !important;
+        padding: 0.6rem 1.4rem !important;
+        background-color: #1A365D !important;
+    }
+
+    .swal2-icon.swal2-warning {
+        color: #FF6B35 !important;
+        border-color: #FF6B35 !important;
+    }
+    
     /* Ajustes para móviles */
     @media (max-width: 768px) {
         .card-header h2 {
@@ -115,8 +144,63 @@
             font-size: 1.1rem !important;
             padding: 0.5rem 0.8rem !important;
         }
+        
+        .swal2-popup.custom-alert {
+            font-size: 1.2rem !important;
+            padding: 1rem !important;
+        }
+        
+        .swal2-title {
+            font-size: 1.4rem !important;
+        }
+        
+        .swal2-html-container {
+            font-size: 1.2rem !important;
+        }
+        
+        .swal2-confirm {
+            font-size: 1.1rem !important;
+            padding: 0.5rem 1.2rem !important;
+        }
     }
 </style>
 
+<!-- Include Font Awesome for icons -->
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+
+@section('scripts')
+<!-- SweetAlert2 -->
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+<script>
+    (function () {
+        'use strict';
+        var forms = document.querySelectorAll('.needs-validation');
+
+        Array.prototype.slice.call(forms).forEach(function (form) {
+            form.addEventListener('submit', function (event) {
+                if (!form.checkValidity()) {
+                    event.preventDefault();
+                    event.stopPropagation();
+
+                    Swal.fire({
+                        icon: 'warning',
+                        title: 'Campos incompletos',
+                        text: 'Por favor completa todos los campos obligatorios antes de continuar.',
+                        confirmButtonText: 'Aceptar',
+                        confirmButtonColor: '#1A365D',
+                        background: '#FFFFFF',
+                        iconColor: '#FF6B35',
+                        color: '#1A365D',
+                        customClass: {
+                            popup: 'custom-alert'
+                        }
+                    });
+                }
+                form.classList.add('was-validated');
+            }, false);
+        });
+    })();
+</script>
+
 @endsection

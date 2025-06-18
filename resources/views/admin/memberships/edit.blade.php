@@ -190,22 +190,61 @@
     .card-body {
         padding: 1.2rem !important;
     }
+    /* Estilo personalizado para el alert */
+    .swal2-popup.custom-alert {
+        border: 3px solid #1A365D;
+        font-size: 1.4rem;
+        border-radius: 12px;
+        padding: 1.5rem;
+    }
+
+    .swal2-title {
+        font-size: 1.6rem !important;
+    }
+
+    .swal2-html-container {
+        font-size: 1.4rem !important;
+    }
+
+    .swal2-confirm {
+        font-size: 1.3rem !important;
+        padding: 0.6rem 1.4rem !important;
+    }
 </style>
 
 @section('scripts')
+<!-- SweetAlert2 -->
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
 <script>
     (function () {
-        'use strict'
-        var forms = document.querySelectorAll('.needs-validation')
+        'use strict';
+        var forms = document.querySelectorAll('.needs-validation');
+
         Array.prototype.slice.call(forms).forEach(function (form) {
             form.addEventListener('submit', function (event) {
                 if (!form.checkValidity()) {
-                    event.preventDefault()
-                    event.stopPropagation()
+                    event.preventDefault();
+                    event.stopPropagation();
+
+                    Swal.fire({
+                        icon: 'warning',
+                        title: 'Campos incompletos',
+                        text: 'Por favor completa todos los campos obligatorios antes de continuar.',
+                        confirmButtonText: 'Aceptar',
+                        confirmButtonColor: '#1A365D',
+                        background: '#FFFFFF',
+                        iconColor: '#FF6B35',
+                        color: '#1A365D',
+                        customClass: {
+                            popup: 'custom-alert'
+                        }
+                    });
                 }
-                form.classList.add('was-validated')
-            }, false)
-        })
-    })()
+                form.classList.add('was-validated');
+            }, false);
+        });
+    })();
 </script>
+
 @endsection

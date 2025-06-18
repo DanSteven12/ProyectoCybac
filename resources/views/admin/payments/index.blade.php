@@ -251,8 +251,8 @@
     }
     
     .vencido .status-badge {
-        background-color: #e9ecef;
-        color: #1A365D;
+        background-color: #d82c0d;
+        color: white;
     }
     
     .receipt-btn {

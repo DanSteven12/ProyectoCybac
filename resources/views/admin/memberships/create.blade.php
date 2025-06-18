@@ -103,7 +103,7 @@
                                 <i class="fas fa-times-circle me-1"></i> CANCELAR
                             </a>
                             <button type="submit" class="btn py-1 px-3" 
-                                    style="background-color: #FF6B35; color: #FFFFFF; font-weight: 600; font-size: 1.3rem;">
+                                    style="background-color: #2EC4B6; color: #FFFFFF; font-weight: 600; font-size: 1.3rem;">
                                 <i class="fas fa-save me-1"></i> CREAR
                             </button>
                         </div>
@@ -189,22 +189,60 @@
     .card-body {
         padding: 1.2rem !important;
     }
+    /* Alert de los campos */
+    .swal2-popup.custom-alert {
+        border: 3px solid #1A365D;
+        font-size: 1.4rem;
+        border-radius: 12px;
+        padding: 1.5rem;
+    }
+
+    .swal2-title {
+        font-size: 1.6rem !important;
+    }
+
+    .swal2-html-container {
+        font-size: 1.4rem !important;
+    }
+
+    .swal2-confirm {
+        font-size: 1.3rem !important;
+        padding: 0.6rem 1.4rem !important;
+    }
 </style>
 
 @section('scripts')
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
 <script>
     (function () {
-        'use strict'
-        var forms = document.querySelectorAll('.needs-validation')
+        'use strict';
+        var forms = document.querySelectorAll('.needs-validation');
+
         Array.prototype.slice.call(forms).forEach(function (form) {
             form.addEventListener('submit', function (event) {
                 if (!form.checkValidity()) {
-                    event.preventDefault()
-                    event.stopPropagation()
+                    event.preventDefault();
+                    event.stopPropagation();
+
+                    // Alerta con bordes azules y letras grandes
+                    Swal.fire({
+                        icon: 'warning',
+                        title: 'Campos incompletos',
+                        text: 'Por favor completa todos los campos obligatorios antes de continuar.',
+                        confirmButtonText: 'Aceptar',
+                        confirmButtonColor: '#FF6B35',
+                        background: '#FFFFFF',
+                        iconColor: '#FF6B35',
+                        color: '#1A365D',
+                        customClass: {
+                            popup: 'custom-alert'
+                        }
+                    });
                 }
-                form.classList.add('was-validated')
-            }, false)
-        })
-    })()
+                form.classList.add('was-validated');
+            }, false);
+        });
+    })();
 </script>
 @endsection

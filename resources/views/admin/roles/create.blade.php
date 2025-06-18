@@ -91,12 +91,6 @@
             border: none;
         }
         
-        .btn-cancel {
-            background-color: white;
-            color: var(--primary-color);
-            border: 2px solid var(--primary-color);
-        }
-        
         .invalid-feedback {
             font-size: 0.8rem;
             font-weight: 500;
@@ -112,6 +106,76 @@
             color: #e74c3c;
             font-size: 0.9rem;
             vertical-align: super;
+        }
+
+        /* Estilo para el alert de errores */
+        .alert-error {
+            background-color: #FF6B35;
+            color: #FFFFFF;
+            border-left: 5px solid #1A365D;
+            font-size: 0.9rem;
+            margin-bottom: 1rem;
+            padding: 0.75rem 1rem;
+            border-radius: 4px;
+        }
+
+        .alert-error .alert-icon {
+            font-size: 1.2rem;
+            margin-right: 0.5rem;
+        }
+
+        .alert-error .alert-content {
+            display: flex;
+            align-items: center;
+        }
+
+        .alert-error .alert-message strong {
+            font-size: 0.95rem;
+            display: block;
+            margin-bottom: 0.25rem;
+        }
+
+        .alert-error ul {
+            margin-bottom: 0;
+            padding-left: 1.5rem;
+        }
+
+        .alert-error li {
+            font-size: 0.85rem;
+        }
+
+        .btn-close-white {
+            filter: invert(1);
+            opacity: 0.8;
+        }
+
+        /* Estilo para SweetAlert2 */
+        .swal2-popup.custom-alert {
+            border: 3px solid #1A365D;
+            font-size: 0.9rem;
+            border-radius: 6px;
+            padding: 1rem;
+        }
+
+        .swal2-title {
+            font-size: 1.1rem !important;
+            color: #1A365D !important;
+        }
+
+        .swal2-html-container {
+            font-size: 0.9rem !important;
+            color: #1A365D !important;
+        }
+
+        .swal2-confirm {
+            font-size: 0.85rem !important;
+            padding: 0.5rem 1rem !important;
+            background-color: #1A365D !important;
+        }
+
+        .swal2-icon.swal2-warning {
+            color: #FF6B35 !important;
+            border-color: #FF6B35 !important;
         }
         
         /* Responsive adjustments */
@@ -137,6 +201,37 @@
                 font-size: 0.85rem;
                 padding: 0.4rem 0.7rem;
             }
+
+            .alert-error {
+                font-size: 0.8rem;
+                padding: 0.6rem 0.8rem;
+            }
+
+            .alert-error .alert-icon {
+                font-size: 1rem;
+            }
+
+            .alert-error .alert-message strong {
+                font-size: 0.85rem;
+            }
+
+            .swal2-popup.custom-alert {
+                font-size: 0.8rem !important;
+                padding: 0.8rem !important;
+            }
+            
+            .swal2-title {
+                font-size: 1rem !important;
+            }
+            
+            .swal2-html-container {
+                font-size: 0.8rem !important;
+            }
+            
+            .swal2-confirm {
+                font-size: 0.8rem !important;
+                padding: 0.4rem 0.8rem !important;
+            }
         }
     </style>
 </head>
@@ -152,6 +247,23 @@
                     </div>
 
                     <div class="card-body">
+                        @if($errors->any())
+                            <div class="alert alert-dismissible fade show alert-error" role="alert">
+                                <div class="d-flex align-items-center">
+                                    <i class="fas fa-exclamation-circle me-2 alert-icon"></i>
+                                    <div class="alert-message">
+                                        <strong>Error en el formulario:</strong>
+                                        <ul class="mb-0 ps-3">
+                                            @foreach($errors->all() as $error)
+                                                <li>{{ $error }}</li>
+                                            @endforeach
+                                        </ul>
+                                    </div>
+                                    <button type="button" class="btn-close btn-close-white ms-auto" data-bs-dismiss="alert" aria-label="Close"></button>
+                                </div>
+                            </div>
+                        @endif
+
                         <form method="POST" action="{{ route('admin.roles.store') }}" class="needs-validation" novalidate>
                             @csrf
 
@@ -161,8 +273,8 @@
                                     {{ __('Nombre del Rol') }} <span class="required-star">*</span>
                                 </label>
                                 <input type="text" class="form-control @error('name') is-invalid @enderror" 
-                                       id="name" name="name" value="{{ old('name') }}"
-                                       placeholder="Ingrese el nombre del rol" required autofocus>
+                                    id="name" name="name" value="{{ old('name') }}"
+                                    placeholder="Ingrese el nombre del rol" required autofocus>
                                 @error('name')
                                     <span class="invalid-feedback d-block" role="alert">
                                         <i class="fas fa-exclamation-circle me-1"></i>{{ $message }}
@@ -171,14 +283,13 @@
                             </div>
 
                             <!-- Botones -->
-                            <div class="d-flex justify-content-end gap-2 mt-4">
-                                <a href="{{ route('admin.roles.index') }}" class="btn btn-cancel"> 
-                                    <i class="fas fa-times me-1"></i> CANCELAR
-                                </a>
-                                <button type="submit" class="btn btn-submit">
-                                    <i class="fas fa-save me-1"></i> GUARDAR ROL
-                                </button>
-                            </div>
+                        <div class="d-flex justify-content-end gap-3 mt-5">
+                            <a href="{{ route('admin.roles.index') }}" class="btn py-1 px-3" style="background-color: #1A365D; color: #FFFFFF; font-weight: 600; font-size: 0.9rem;">
+                                <i class="fas fa-times-circle me-1"></i> Cancelar</a>
+                                    <button type="submit" class="btn py-1 px-3" style="background-color: #2EC4B6; color: #FFFFFF; font-weight: 600; font-size: 0.9rem;">
+                                <i class="fas fa-save me-1"></i> Guardar
+                            </button>
+                    </div>
                         </form>
                     </div>
                 </div>
@@ -204,6 +315,20 @@
                         if (!form.checkValidity()) {
                             event.preventDefault()
                             event.stopPropagation()
+
+                            Swal.fire({
+                                icon: 'warning',
+                                title: 'Campos incompletos',
+                                text: 'Por favor completa todos los campos obligatorios antes de continuar.',
+                                confirmButtonText: 'Aceptar',
+                                confirmButtonColor: '#1A365D',
+                                background: '#FFFFFF',
+                                iconColor: '#FF6B35',
+                                color: '#1A365D',
+                                customClass: {
+                                    popup: 'custom-alert'
+                                }
+                            });
                         }
                         
                         form.classList.add('was-validated')
