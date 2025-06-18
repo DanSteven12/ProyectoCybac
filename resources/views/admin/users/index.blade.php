@@ -7,6 +7,17 @@
             <div class="card shadow-sm" style="border: 2px solid #1A365D;">
                 <div class="card-header py-3" style="background-color: #1A365D; color: #FFFFFF; border-bottom: 3px solid #FF6B35;">
                     <div class="d-flex justify-content-between align-items-center">
+                        <form onsubmit="event.preventDefault();" class="d-flex align-items-center" style="gap: 1rem;">
+                            <div class="input-container">
+                                <input 
+                                      id="search-live"
+                                      class="input" 
+                                      type="text" 
+                                      placeholder="Buscador............" 
+                                      autocomplete="off"
+                                      onkeyup="filtrarUsuariosEnVivo()"/>
+                              </div>
+                          </form>
                         <h2 class="mb-0" style="font-weight: 700; font-size: 2.0rem;">
                             <i class="fas fa-users me-3"></i>GESTIÓN DE USUARIOS
                         </h2>
@@ -262,17 +273,100 @@
             font-size: 1.0rem !important;
         }
     }
+<<<<<<< HEAD
     .wrap-text {
     white-space: normal;
     word-break: break-word;
     }
 
+=======
+
+    /* source(buscador) */
+        .input {
+          width: 100%;
+          max-width: 270px;
+          height: 60px;
+          padding: 12px;
+          font-size: 18px;
+          font-family: "Courier New", monospace;
+          color: #1A365D;
+          background-color: #2EC4B6;
+          border: 4px solid #1A365D;
+          border-radius: 0;
+          outline: none;
+          transition: all 0.3s ease;
+          box-shadow: 8px 8px 0 #FF6B35;
+    }
+
+      .input::placeholder {
+  color: rgba(26, 54, 93, 0.6); /* azul con transparencia */
+}
+
+.input:hover {
+  transform: translate(-4px, -4px);
+  box-shadow: 12px 12px 0 #FF6B35;
+}
+
+.input:focus {
+  background-color: #1A365D;
+  color: #fff;
+  border-color: #FF6B35;
+  animation: shake 0.5s ease-in-out;
+}
+
+.input:focus::placeholder {
+  color: #fff;
+}
+
+.input:valid {
+  animation: typing 2s steps(30, end);
+}
+
+.input:not(:placeholder-shown) {
+  font-weight: bold;
+  letter-spacing: 1px;
+  text-shadow: 0px 0px 0 #000;
+  animation: glitch 1s linear infinite;
+}
+
+.input-container {
+  position: relative;
+  width: 100%;
+  max-width: 270px;
+}
+
+@keyframes shake {
+  0% { transform: translateX(0); }
+  25% { transform: translateX(-5px) rotate(-5deg); }
+  50% { transform: translateX(5px) rotate(5deg); }
+  75% { transform: translateX(-5px) rotate(-5deg); }
+  100% { transform: translateX(0); }
+}
+
+@keyframes typing {
+  from { width: 0; }
+  to { width: 100%; }
+}
+
+@keyframes glitch {
+  0%, 10%, 27%, 35%, 52%, 80%, 100% { transform: none; opacity: 1; }
+  7% { transform: skew(-0.5deg, -0.9deg); opacity: 0.75; }
+  30% { transform: skew(0.8deg, -0.1deg); opacity: 0.75; }
+  55% { transform: skew(-1deg, 0.2deg); opacity: 0.75; }
+  75% { transform: skew(0.4deg, 1deg); opacity: 0.75; }
+}
+
+@keyframes blink {
+  50% { opacity: 0; }
+}
+
+.input:focus + .input-container::after {
+  color: #fff;
+}
+>>>>>>> main
 </style>
 
 @section('scripts')
-<!-- SweetAlert2 para diálogos personalizados -->
-<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-
 <script>
     // Función para confirmación de eliminación
     function confirmarEliminacion(event) {
@@ -301,5 +395,39 @@
             }
         });
     }
+
+    // source(buscador)
+    // Posiciona el cursor al final del texto del input al cargar
+document.addEventListener('DOMContentLoaded', function () {
+    const input = document.getElementById('search-input');
+    if (input) {
+        input.focus();
+        input.setSelectionRange(0, 0); // Cursor al inicio
+    }
+});
+
+// Filtro en vivo por ROL (columna 4, índice 3)
+function filtrarUsuariosEnVivo() {
+    const input = document.getElementById("search-live").value.toLowerCase();
+    const table = document.querySelector("table tbody");
+    const rows = table.getElementsByTagName("tr");
+
+    for (let i = 0; i < rows.length; i++) {
+        const cells = rows[i].getElementsByTagName("td");
+
+        if (cells.length >= 6) {
+            const nombre = cells[0].textContent.toLowerCase();       // Nombres
+            const apellido = cells[1].textContent.toLowerCase();     // Apellidos
+            const email = cells[2].textContent.toLowerCase();        // Email
+            const fecha = cells[5].textContent.toLowerCase();        // Fecha de nacimiento
+
+            const coincide = nombre.includes(input) || apellido.includes(input) ||
+                              email.includes(input) || fecha.includes(input);
+
+            rows[i].style.display = coincide ? "" : "none";
+        }
+    }
+}
 </script>
+
 @endsection

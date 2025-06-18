@@ -15,7 +15,7 @@ class ClassesController extends Controller
 {
     $disponibleStatusId = Status::where('type', 3)->where('name', 'Disponible')->value('id');
     $cupoLlenoStatusId = Status::where('type', 3)->where('name', 'Cupo lleno')->value('id');
-    $rechazadaStatusId = Status::where('type', 3)->where('name', 'Rechazada')->value('id'); // Asegúrate que exista
+    $canceladaStatusId = Status::where('type', 3)->where('name', 'Cancelada')->value('id'); 
 
     $classes = $disponibleStatusId
         ? Classes::withCount('registrations')
@@ -38,7 +38,7 @@ class ClassesController extends Controller
 
     // Mostrar solo clases canceladas recientemente que sigan en estado Rechazada
     $comments = Classes::with('service')
-        ->where('status_id', $rechazadaStatusId)
+        ->where('status_id', $canceladaStatusId)
         ->whereNotNull('comment')
         ->where('comment', '!=', '')
         ->orderBy('date', 'desc')

@@ -40,8 +40,6 @@
 
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 </script>
-<!-- Include Font Awesome for icons -->
-<!-- Include Bootstrap JS for tooltips -->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
 
     @yield('scripts')
