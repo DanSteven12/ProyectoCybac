@@ -24,8 +24,6 @@ class Kernel extends ConsoleKernel
     {
         $schedule->command('verificar:membresias')->daily();
         $schedule->command('check:memberships')->hourly();
-        // $schedule->command('check:memberships')->everyMinute(); // Notifica y actualiza
-        // $schedule->command('verificar:membresias')->everyMinute(); // (opcional extra)
 
 
         $schedule->command('classes:notify-cancelled')->everyMinute();
