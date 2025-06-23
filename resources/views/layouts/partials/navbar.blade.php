@@ -214,6 +214,7 @@
             <a href="{{ route('user.payments.index') }}" class="menu-card"><span>Historial de pagos</span></a>
             @if ($hasApprovedMembership)
     <a href="{{ route('user.classes.index') }}" class="menu-card"><span>Reserva tus Clases</span></a>
+    <a href="{{ route('user.classes.history') }}" class="menu-card"><span>Ver historial de Clases</span></a>
 @endif
 
         </div>

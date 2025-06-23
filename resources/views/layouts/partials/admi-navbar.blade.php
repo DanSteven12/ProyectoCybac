@@ -354,7 +354,7 @@
                 <span>Clases</span>
             </a>
             <a href="{{ route('admin.payments.index') }}" class="menu-card">
-                <span>Pagos</span>
+                <span>Pagos</span>  
             </a>
         </div>
     </div>

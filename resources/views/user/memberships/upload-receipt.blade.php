@@ -10,14 +10,6 @@
         <input type="hidden" name="membership_id" value="{{ $membership->id }}">
         <input type="hidden" name="price" value="{{ $membership->price }}">
 
-        {{-- Se elimina el campo de fecha porque ahora se establece automáticamente con Carbon --}}
-        {{-- 
-        <div class="mb-3">
-            <label for="date" class="form-label">Fecha de pago</label>
-            <input type="date" class="form-control" name="date" required>
-        </div>
-        --}}
-
         <div class="mb-3">
             <label for="receipt" class="form-label">Comprobante de pago</label>
             <input type="file" class="form-control" name="receipt" accept=".pdf,.jpg,.jpeg,.png" required>

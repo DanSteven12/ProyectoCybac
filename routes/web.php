@@ -110,6 +110,7 @@ Route::middleware(['auth', 'can:admin'])->prefix('admin')->name('admin.')->group
     Route::resource('payments', AdminPaymentController::class)->only(['index', 'show', 'update']);
     Route::post('payments/{payment}/approve', [AdminPaymentController::class, 'approve'])->name('payments.approve');
     Route::post('payments/{payment}/reject', [AdminPaymentController::class, 'reject'])->name('payments.reject');
+    Route::get('/report', [AdminPaymentController::class, 'generateReport'])->name('payments.report'); 
 });
 
 // Dentro del grupo con middleware 'auth'
@@ -124,12 +125,15 @@ Route::middleware(['auth'])->prefix('user')->name('user.')->group(function () {
 });
 
 // Rutas que requieren membresía activa y vigente
-Route::middleware(['auth', 'check.membership'])->prefix('user')->name('user.')->group(function () {
+Route::middleware(['auth', 'check.membership'])->prefix('user')->name('user.')->group(function () { 
     Route::get('/classes', [UserClassesController::class, 'index'])->name('classes.index');
     Route::post('/classes/register/{id}', [UserClassesController::class, 'reserve'])->name('classes.register');
     Route::delete('/classes/cancel/{id}', [UserClassesController::class, 'cancelReservation'])->name('classes.cancel');
     Route::post('/classes/rate/{registration}', [UserClassesController::class, 'rate'])->name('classes.rate');
+    // Esta es la ruta correcta para el historial:
+    Route::get('/classes/history', [UserClassesController::class, 'history'])->name('classes.history');
 });
+
 
 //Rutas para recuperacion de password
 // Mostrar formulario para solicitar enlace

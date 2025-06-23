@@ -273,13 +273,11 @@
             font-size: 1.0rem !important;
         }
     }
-<<<<<<< HEAD
     .wrap-text {
     white-space: normal;
     word-break: break-word;
     }
 
-=======
 
     /* source(buscador) */
         .input {
@@ -363,7 +361,6 @@
 .input:focus + .input-container::after {
   color: #fff;
 }
->>>>>>> main
 </style>
 
 @section('scripts')

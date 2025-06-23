@@ -29,12 +29,14 @@ class ClassesController extends Controller
 
     $userId = auth()->id();
 
-    $upcomingRegistrations = Registration::with('class.service', 'class.instructor')
-        ->where('user_id', $userId)
-        ->whereHas('class', function ($query) {
-            $query->where('date', '>=', now()->startOfDay());
-        })
-        ->get();
+    $upcomingRegistrations = Registration::with('class.service', 'class.instructor', 'class.status')
+    ->where('user_id', $userId)
+    ->whereHas('class', function ($query) use ($canceladaStatusId) {
+        $query->where('date', '>=', now()->startOfDay())
+              ->where('status_id', '!=', $canceladaStatusId);
+    })
+    ->get();
+
 
     // Mostrar solo clases canceladas recientemente que sigan en estado Rechazada
     $comments = Classes::with('service')
@@ -133,5 +135,17 @@ class ClassesController extends Controller
 
         return back()->with('success', 'Inscripción cancelada exitosamente.');
     }
+    public function history()
+{
+    $userId = auth()->id();
+
+    $reservas = Registration::with(['class.service', 'class.instructor', 'class.status'])
+                ->where('user_id', $userId)
+                ->orderByDesc('created_at')
+                ->get();
+
+    return view('user.classes.history', compact('reservas'));
+}
+
 }
 
