@@ -17,17 +17,17 @@
                 </div>
 
                 @if(session('success'))
-                    <div class="alert alert-dismissible fade show m-4" role="alert" 
+                    <div class="alert alert-dismissible fade show m-4 auto-dismiss" role="alert" 
                             style="background-color: #2EC4B6; color: #FFFFFF; border-left: 5px solid #1A365D; font-size: 1.4rem;">
                         <div class="d-flex align-items-center">
                             <i class="fas fa-check-circle me-3 fs-4"></i>
                             <strong style="font-size: 1.4rem !important;">{{ session('success') }}</strong>
-                        <button type="button" class="btn-close btn-close-white ms-auto fs-5" data-bs-dismiss="alert" aria-label="Close"></button>
-                    </div>
+                            <button type="button" class="btn-close btn-close-white ms-auto fs-5" data-bs-dismiss="alert" aria-label="Close"></button>
+                        </div>
                     </div>
                 @endif
 
-
+                <div class="card-body p-0">
                     <div class="table-responsive">  
                         <table class="table table-hover align-middle mb-0">
                             <thead style="background-color: #1A365D; color: #FFFFFF;">
@@ -46,8 +46,19 @@
                                         <td class="text-center" style="font-size: 1.3rem; font-weight: 600; color: #1A365D; padding: 12px 16px;">
                                             {{ $membership->name }}
                                         </td>
-                                        <td class="text-center" style="font-size: 1.3rem; font-weight: 600; color: #1A365D; padding: 12px 16px;">
-                                            {{ $membership->description }}
+                                        <td class="text-center" style="font-size: 1.3rem; color: #1A365D; padding: 12px 16px;">
+                                            <div class="description-container" style="max-width: 300px; margin: 0 auto;">
+                                                <div class="short-description">
+                                                    {{ Str::limit($membership->description, 50) }}
+                                                    @if(strlen($membership->description) > 50)
+                                                        <a href="#" class="show-more" style="color: #1A365D; font-weight: 600;">... Ver más</a>
+                                                    @endif
+                                                </div>
+                                                <div class="full-description d-none">
+                                                    {{ $membership->description }}
+                                                    <a href="#" class="show-less" style="color: #1A365D; font-weight: 600;"> Ver menos</a>
+                                                </div>
+                                            </div>
                                         </td>
                                         <td class="text-center" style="font-size: 1.3rem; font-weight: 600; color: #1A365D; padding: 12px 16px;">
                                             ${{ number_format($membership->price, 2) }}
@@ -137,15 +148,13 @@
         transition: all 0.3s ease !important;
         box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
     }
-    /*Estilo del alert*/    
-    .btn-eliminar {
-        background-color: #FF6B35 !important;
-        color: #FFFFFF !important;
-        font-size: 1.3rem !important; /* Aumentado de 1.1rem */
-        font-weight: 500 !important;
-        min-width: 100px !important;
-        border: none !important;
-        transition: all 0.3s ease !important;
+
+    .description-container {
+        position: relative;
+    }
+    
+    .short-description, .full-description {
+        word-break: break-word;
     }
 
     .swal2-actions {
@@ -187,19 +196,6 @@
         font-weight: 500 !important;
     }
 
-    .pagination .page-item.active .page-link {
-        background-color: #1A365D;
-        border-color: #1A365D;
-        font-size: 1.1rem;
-        padding: 0.5rem 0.9rem;
-    }
-
-    .pagination .page-link {
-        color: #1A365D;
-        font-size: 1.1rem;
-        padding: 0.5rem 0.9rem;
-    }
-
     .badge {
         padding: 0.5em 0.9em;
         font-size: 1.1rem;
@@ -226,11 +222,45 @@
         .btn-group .btn {
             width: 100%;
         }
+        
+        .description-container {
+            max-width: 200px !important;
+        }
     }
 </style>
 
 <script>
-    document.addEventListener('DOMContentLoaded', function () {
+    // Auto-dismiss alerts after 3 seconds
+    document.addEventListener('DOMContentLoaded', function() {
+        const alerts = document.querySelectorAll('.auto-dismiss');
+        
+        alerts.forEach(alert => {
+            setTimeout(() => {
+                const bsAlert = new bootstrap.Alert(alert);
+                bsAlert.close();
+            }, 3000);
+        });
+        
+        // Toggle description visibility
+        document.querySelectorAll('.show-more').forEach(button => {
+            button.addEventListener('click', function(e) {
+                e.preventDefault();
+                const container = this.closest('.description-container');
+                container.querySelector('.short-description').classList.add('d-none');
+                container.querySelector('.full-description').classList.remove('d-none');
+            });
+        });
+        
+        document.querySelectorAll('.show-less').forEach(button => {
+            button.addEventListener('click', function(e) {
+                e.preventDefault();
+                const container = this.closest('.description-container');
+                container.querySelector('.full-description').classList.add('d-none');
+                container.querySelector('.short-description').classList.remove('d-none');
+            });
+        });
+
+        // Delete confirmation
         const botonesEliminar = document.querySelectorAll('.btn-eliminar');
         botonesEliminar.forEach(boton => {
             boton.addEventListener('click', function (event) {

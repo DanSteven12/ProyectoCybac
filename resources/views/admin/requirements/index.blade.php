@@ -16,18 +16,16 @@
                     </div>
                 </div>
 
-                <div class="card-body p-0">
-                    @if (session('success'))
-                        <div class="alert alert-dismissible fade show m-4" role="alert" 
-                            style="background-color: #2EC4B6; color: #FFFFFF; border-left: 5px solid #1A365D; font-size: 1.4rem;">
-                            <div class="d-flex align-items-center">
-                                <i class="fas fa-check-circle me-3 fs-4"></i>
-                                <strong style="font-size: 1.4rem !important;">{{ session('success') }}</strong>
-                                <button type="button" class="btn-close btn-close-white ms-auto fs-5" data-bs-dismiss="alert" aria-label="Close"></button>
-                            </div>
-                        </div>
-                    @endif
-
+                        <div class="card-body p-0">
+                            @if (session('success'))
+                                <div class="alert alert-dismissible fade show m-4 auto-dismiss" role="alert" style="background-color: #2EC4B6; color: #FFFFFF; border-left: 5px solid #1A365D; font-size: 1.4rem;">
+                                    <div class="d-flex align-items-center">
+                                        <i class="fas fa-check-circle me-3 fs-4"></i>
+                                            <strong style="font-size: 1.4rem !important;">{{ session('success') }}</strong>
+                                        <button type="button" class="btn-close btn-close-white ms-auto fs-5" data-bs-dismiss="alert" aria-label="Close"></button>
+                                    </div>
+                                </div>
+                            @endif
                     <div class="table-responsive">  
                         <table class="table table-hover align-middle mb-0">
                             <thead style="background-color: #1A365D; color: #FFFFFF;">
@@ -59,13 +57,13 @@
                                                 <div class="icon-circle me-3" style="background-color: rgba(26, 54, 93, 0.1); width: 50px; height: 50px; border-radius: 50%; display: flex; align-items: center; justify-content: center;">
                                                     <i class="fas fa-clipboard-list fs-4" style="color: #1A365D;"></i>
                                                 </div>
-                                                <div style="text-align: center;">
-                                                    <div style="font-weight: 600; margin-bottom: 8px;">{{ $requirement->name }}</div>
-                                                    <small class="text-muted" style="font-size: 1.3rem; display: block;">Detalles del requisito</small>
+                                                <div style="text-align: center; width: 200px; display: flex; flex-direction: column; align-items: center;">
+                                                    <div style="font-weight: 600; margin-bottom: 8px; width: 100%; word-break: break-word; white-space: normal;">{{ $requirement->name }}</div>
+                                                        <small class="text-muted" style="font-size: 1.3rem;">Detalles del requisito</small>
+                                                    </div>
                                                 </div>
-                                            </div>
-                                        </td>
-                                        
+                                            </td>
+
                                         <!-- Columna Acciones (centrado) width: 30% para más espacio-->
                                         <td class="text-center" style="padding: 12px 16px;">
                                             <div class="btn-group" role="group">
@@ -134,7 +132,7 @@
         transition: all 0.3s ease !important;
         box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
     }
-    /*Estilo del alert*/    
+    /Estilo del alert/    
     .btn-eliminar {
         background-color: #FF6B35 !important;
         color: #FFFFFF !important;
@@ -249,6 +247,17 @@
 </style>
 
 <script>
+    // Auto-dismiss alerts after 3 seconds
+    document.addEventListener('DOMContentLoaded', function() {
+        const alerts = document.querySelectorAll('.auto-dismiss');
+        
+        alerts.forEach(alert => {
+            setTimeout(() => {
+                const bsAlert = new bootstrap.Alert(alert);
+                bsAlert.close();
+            }, 3000); // 3000 milisegundos = 3 segundos
+        });
+    });
     document.addEventListener('DOMContentLoaded', function () {
         const botonesEliminar = document.querySelectorAll('.btn-eliminar');
         botonesEliminar.forEach(boton => {

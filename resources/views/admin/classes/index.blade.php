@@ -18,8 +18,8 @@
 
                 <div class="card-body p-0">
                     @if(session('success'))
-                        <div class="alert alert-dismissible fade show m-3" role="alert" 
-                             style="background-color: #2EC4B6; color: #FFFFFF; border-left: 5px solid #1A365D; font-size: 1.2rem;">
+                        <div class="alert alert-dismissible fade show m-3 auto-dismiss" role="alert" 
+                             style="background-color: #2EC4B6; color: #FFFFFF; border-left: 5px solid #1A365D; font-size: 1.4rem;">
                             <div class="d-flex align-items-center">
                                 <i class="fas fa-check-circle me-2 fs-4"></i>
                                 <strong>{{ session('success') }}</strong>
@@ -65,7 +65,20 @@
                                         <td class="text-center" style="font-size: 1.3rem;">{{ $class->max_capacity }}</td>
                                         <td class="text-center" style="font-size: 1.3rem;">{{ $class->registrations->count() }} / {{ $class->max_capacity }}</td>
                                         <td class="text-center" style="font-size: 1.3rem;">{{ $class->room }}</td>
-                                        <td class="text-center" style="font-size: 1.4rem;">{{ $class->description }}</td>
+                                        <td class="text-center" style="font-size: 1.3rem; color: #1A365D; padding: 12px 16px;">
+                                            <div class="description-container" style="max-width: 300px; margin: 0 auto;">
+                                                <div class="short-description">
+                                                    {{ Str::limit($class->description, 50) }}
+                                                    @if(strlen($class->description) > 50)
+                                                        <a href="#" class="show-more" style="color: #1A365D; font-weight: 600;">... Ver más</a>
+                                                    @endif
+                                                </div>
+                                                <div class="full-description d-none">
+                                                    {{ $class->description }}
+                                                    <a href="#" class="show-less" style="color: #1A365D; font-weight: 600;"> Ver menos</a>
+                                                </div>
+                                            </div>
+                                        </td>
                                         <td class="text-center">
                                             @php
                                             $status = strtolower($class->status->name ?? 'N/A');
@@ -178,7 +191,7 @@
         transition: all 0.3s ease !important;
         box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
     }
-    /*Estilo del alert*/    
+    /Estilo del alert/    
     .btn-eliminar {
         background-color: #FF6B35 !important;
         color: #FFFFFF !important;
@@ -290,6 +303,36 @@
 @section('scripts')
 <script>
     document.addEventListener('DOMContentLoaded', function () {
+        // Auto-dismiss alerts after 5 seconds
+        const alerts = document.querySelectorAll('.auto-dismiss');
+        
+        alerts.forEach(alert => {
+            setTimeout(() => {
+                const bsAlert = new bootstrap.Alert(alert);
+                bsAlert.close();
+            }, 3000); // 3000 milisegundos = 3 segundos
+        });
+
+        // Funcionalidad para "Ver más" / "Ver menos"
+        document.querySelectorAll('.show-more').forEach(link => {
+            link.addEventListener('click', function(e) {
+                e.preventDefault();
+                const container = this.closest('.description-container');
+                container.querySelector('.short-description').classList.add('d-none');
+                container.querySelector('.full-description').classList.remove('d-none');
+            });
+        });
+
+        document.querySelectorAll('.show-less').forEach(link => {
+            link.addEventListener('click', function(e) {
+                e.preventDefault();
+                const container = this.closest('.description-container');
+                container.querySelector('.full-description').classList.add('d-none');
+                container.querySelector('.short-description').classList.remove('d-none');
+            });
+        });
+
+        // Tu código existente para los botones de eliminar...
         const botonesEliminar = document.querySelectorAll('.btn-eliminar');
 
         botonesEliminar.forEach(boton => {

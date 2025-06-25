@@ -166,5 +166,4 @@ class ClassesController extends Controller
             return view('admin.classes.registrations', compact('class', 'inscritos', 'faltantes', 'classStatuses'));
         }
 
-
 }

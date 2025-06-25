@@ -18,11 +18,10 @@
 
                 <div class="card-body p-0">
                     @if (session('success'))
-                        <div class="alert alert-dismissible fade show m-4" role="alert" 
-                             style="background-color: #2EC4B6; color: #FFFFFF; border-left: 5px solid #1A365D; font-size: 1.3rem;">
+                        <div class="alert alert-dismissible fade show m-4 auto-dismiss" role="alert" style="background-color: #2EC4B6; color: #FFFFFF; border-left: 5px solid #1A365D; font-size: 1.3rem;">
                             <div class="d-flex align-items-center">
                                 <i class="fas fa-check-circle me-3 fs-4"></i>
-                                <strong class="fs-5">{{ session('success') }}</strong>
+                                    <strong class="fs-5">{{ session('success') }}</strong>
                                 <button type="button" class="btn-close btn-close-white ms-auto fs-5" data-bs-dismiss="alert" aria-label="Close"></button>
                             </div>
                         </div>
@@ -53,7 +52,7 @@
                                     <td class="pe-5 text-end">
                                         <div class="btn-group" role="group">
                                             <a href="{{ route('admin.roles.edit', $role) }}" class="btn py-2 px-3 mx-1" 
-                                               style="background-color: #2EC4B6; color: #FFFFFF; font-size: 1.3rem; font-weight: 500; min-width: 100px;">
+                                            style="background-color: #2EC4B6; color: #FFFFFF; font-size: 1.3rem; font-weight: 500; min-width: 100px;">
                                                 <i class="fas fa-edit me-2"></i> EDITAR
                                             </a>
                                             <form action="{{ route('admin.roles.destroy', $role) }}" method="POST" class="d-inline">
@@ -231,6 +230,18 @@
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
 <script>
+    // Auto-dismiss alerts after 3 seconds
+    document.addEventListener('DOMContentLoaded', function() {
+        const alerts = document.querySelectorAll('.auto-dismiss');
+        
+        alerts.forEach(alert => {
+            setTimeout(() => {
+                const bsAlert = new bootstrap.Alert(alert);
+                bsAlert.close();
+            }, 3000); // 3000 milisegundos = 3 segundos
+        });
+    });
+
     // Función para confirmación de eliminación
     function confirmarEliminacion(event) {
         event.preventDefault();
@@ -239,10 +250,10 @@
         Swal.fire({
             title: '¿Eliminar Rol?',
             html: `<div style="text-align: center;">
-                     <i class="fas fa-exclamation-triangle" style="color: #FF6B35; font-size: 3rem; margin-bottom: 1rem;"></i>
-                     <p>¿Está seguro que desea eliminar este rol permanentemente?</p>
-                     <p style="font-weight: 600;">Esta acción no se puede deshacer.</p>
-                   </div>`,
+                    <i class="fas fa-exclamation-triangle" style="color: #FF6B35; font-size: 3rem; margin-bottom: 1rem;"></i>
+                    <p>¿Está seguro que desea eliminar este rol permanentemente?</p>
+                    <p style="font-weight: 600;">Esta acción no se puede deshacer.</p>
+                </div>`,
             icon: 'warning',
             showCancelButton: true,
             confirmButtonText: '<i class="fas fa-trash-alt me-2"></i> Eliminar',

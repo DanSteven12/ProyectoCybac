@@ -27,7 +27,7 @@
                         @if($isCanceled)
                             <span class="badge bg-danger">Cancelada</span>
                         @elseif($statusName)
-                            <span class="badge bg-success">Asistida / Finalizada</span>
+                            <span class="badge bg-success">Asistida</span>
                         @else
                             <span class="text-muted fst-italic">Estado no disponible</span>
                         @endif

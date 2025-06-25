@@ -62,7 +62,7 @@
                                     <td style="font-size: 1.4rem; color: #1A365D; font-weight: 500;">{{ $user->last_name }}</td>
                                     <td style="font-size: 1.4rem; color: #1A365D; font-weight: 500;">{{ $user->email }}</td>
                                     <td style="font-size: 1.4rem; color: #1A365D; font-weight: 500;">{{ $user->getRoleNames()->first() ?? 'N/A' }}</td>
-                                    <td style="font-size: 1.4rem; color: #1A365D; font-weight: 500;">{{ $user->statuses->name ?? 'N/A' }}</td>
+                                    <td style="font-size: 1.4rem; color: #1A365D; font-weight: 500;">{{ $user->status->name ?? 'N/A' }}</td>
                                     <td style="font-size: 1.4rem; color: #1A365D; font-weight: 500;">
                                         {{ \Carbon\Carbon::parse($user->birth_date)->translatedFormat('d \d\e F \d\e Y') }}
                                     </td>  

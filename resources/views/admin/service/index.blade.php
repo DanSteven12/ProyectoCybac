@@ -18,11 +18,10 @@
 
                 <div class="card-body p-0">
                     @if (session('success'))
-                        <div class="alert alert-dismissible fade show m-4" role="alert" 
-                            style="background-color: #2EC4B6; color: #FFFFFF; border-left: 5px solid #1A365D; font-size: 1.4rem;">
+                        <div class="alert alert-dismissible fade show m-4 auto-dismiss" role="alert" style="background-color: #2EC4B6; color: #FFFFFF; border-left: 5px solid #1A365D; font-size: 1.4rem;">
                             <div class="d-flex align-items-center">
                                 <i class="fas fa-check-circle me-3 fs-4"></i>
-                                <strong style="font-size: 1.4rem !important;">{{ session('success') }}</strong>
+                                    <strong style="font-size: 1.4rem !important;">{{ session('success') }}</strong>
                                 <button type="button" class="btn-close btn-close-white ms-auto fs-5" data-bs-dismiss="alert" aria-label="Close"></button>
                             </div>
                         </div>
@@ -40,51 +39,52 @@
                             <tbody>
                                 @foreach($services as $service)
                                     <tr style="border-bottom: 2px solid #F4F4F4;">
-                                <!-- Columna Nombre (centrado conservado) -->
-                                    <td class="text-center" style="font-size: 1.4rem; color: #1A365D; padding: 16px; width: 35%;">
-                                    <div class="d-flex justify-content-center align-items-start">
-                                <div class="icon-circle me-3" style="background-color: rgba(26, 54, 93, 0.1); width: 50px; height: 50px; border-radius: 50%; display: flex; align-items: center; justify-content: center;">
-                                    <i class="fas fa-heart-pulse fs-4" style="color: #FF6B35;"></i>
-                                </div>
-                                <div style="text-align: center;">
-                                    <div style="font-weight: 600; margin-bottom: 8px;">{{ $service->name }}</div>
-                                    <small class="text-muted" style="font-size: 1.3rem; display: block;">ÚLTIMA ACTUALIZACIÓN: {{ \Carbon\Carbon::parse($service->updated_at)->translatedFormat('d \d\e F \d\e Y') }}</small>
-                                </div>
-                            </div>
-                        </td>
-            
-                        <!-- Columna Descripción (centrado conservado) -->
-                            <td class="text-center" style="font-size: 1.4rem; color: #1A365D; padding: 16px; width: 35%;">
-                                <div class="d-flex justify-content-center align-items-start">
-                            <div class="icon-circle me-3" style="background-color: rgba(26, 54, 93, 0.1); width: 50px; height: 50px; border-radius: 50%; display: flex; align-items: center; justify-content: center;">
-                                <i class="fas fa-info-circle fs-4" style="color: #1A365D;"></i>
-                            </div>
-                            <div style="text-align: center;">
-                                <div style="font-weight: 600; margin-bottom: 8px;">{{ $service->description }}</div>
-                                <small class="text-muted" style="font-size: 1.3rem; display: block;">Detalles del servicio</small>
-                                </div>
-                            </div>
-                        </td>
-            <!-- Columna Acciones (se mantiene IDÉNTICO) -->
-            <td class="text-center" style="padding: 12px 16px;">
-                <div class="btn-group" role="group">
-                    <a href="{{ route('admin.services.edit', $service->id) }}" class="btn py-2 px-3 mx-1" 
-                    style="background-color: #2EC4B6; color: #FFFFFF; font-size: 1.3rem; font-weight: 500; border-radius: 6px; transition: all 0.2s ease;">
-                        <i class="fas fa-edit me-2"></i> EDITAR
-                    </a>
-                    <form action="{{ route('admin.services.destroy', $service->id) }}" method="POST" class="d-inline form-eliminar">
-                        @csrf
-                        @method('DELETE')
-                        <button type="submit" class="btn py-2 px-3 mx-1 btn-eliminar" 
-                                style="background-color: #FF6B35; color: #FFFFFF; font-size: 1.3rem; font-weight: 500; border-radius: 6px; transition: all 0.3s ease; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);">
-                            <i class="fas fa-trash-alt me-2"></i> ELIMINAR
-                        </button>
-                    </form>
-                </div>
-            </td>
-        </tr>
-    @endforeach
-</tbody>    
+                                        <!-- Columna Nombre (centrado conservado con mejoras) -->
+                                        <td class="text-center" style="font-size: 1.4rem; color: #1A365D; padding: 16px; width: 35%;">
+                                            <div class="d-flex justify-content-center align-items-start">
+                                                <div class="icon-circle me-3" style="background-color: rgba(26, 54, 93, 0.1); width: 50px; height: 50px; border-radius: 50%; display: flex; align-items: center; justify-content: center; flex-shrink: 0;">
+                                                    <i class="fas fa-heart-pulse fs-4" style="color: #FF6B35;"></i>
+                                                </div>
+                                                <div style="text-align: center; max-width: calc(100% - 70px);">
+                                                    <div style="font-weight: 600; margin-bottom: 8px; word-break: break-word; white-space: normal;">{{ $service->name }}</div>
+                                                    <small class="text-muted" style="font-size: 1.3rem; display: block;">ÚLTIMA ACTUALIZACIÓN: {{ \Carbon\Carbon::parse($service->updated_at)->translatedFormat('d \d\e F \d\e Y') }}</small>
+                                                </div>
+                                            </div>
+                                        </td>
+                                        
+                                        <!-- Columna Descripción (modificada para que coincida con el primer código) -->
+                                        <td class="text-center" style="font-size: 1.4rem; color: #1A365D; padding: 16px; width: 35%;">
+                                            <div class="d-flex justify-content-center align-items-start">
+                                                <div class="icon-circle me-3" style="background-color: rgba(26, 54, 93, 0.1); width: 50px; height: 50px; border-radius: 50%; display: flex; align-items: center; justify-content: center;">
+                                                    <i class="fas fa-clipboard-list fs-4" style="color: #1A365D;"></i>
+                                                </div>
+                                                <div style="text-align: center; width: 200px; display: flex; flex-direction: column; align-items: center;">
+                                                    <div style="font-weight: 600; margin-bottom: 8px; width: 100%; word-break: break-word; white-space: normal;">{{ $service->description }}</div>
+                                                    <small class="text-muted" style="font-size: 1.3rem;">Detalles del servicio</small>
+                                                </div>
+                                            </div>
+                                        </td>
+
+                                        <!-- Columna Acciones (se mantiene IDÉNTICO) -->
+                                        <td class="text-center" style="padding: 12px 16px;">
+                                            <div class="btn-group" role="group">
+                                                <a href="{{ route('admin.services.edit', $service->id) }}" class="btn py-2 px-3 mx-1" 
+                                                style="background-color: #2EC4B6; color: #FFFFFF; font-size: 1.3rem; font-weight: 500; border-radius: 6px; transition: all 0.2s ease;">
+                                                    <i class="fas fa-edit me-2"></i> EDITAR
+                                                </a>
+                                                <form action="{{ route('admin.services.destroy', $service->id) }}" method="POST" class="d-inline form-eliminar">
+                                                    @csrf
+                                                    @method('DELETE')
+                                                    <button type="submit" class="btn py-2 px-3 mx-1 btn-eliminar" 
+                                                            style="background-color: #FF6B35; color: #FFFFFF; font-size: 1.3rem; font-weight: 500; border-radius: 6px; transition: all 0.3s ease; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);">
+                                                        <i class="fas fa-trash-alt me-2"></i> ELIMINAR
+                                                    </button>
+                                                </form>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                @endforeach
+                            </tbody>    
                         </table>
                     </div>
 
@@ -133,7 +133,7 @@
         transition: all 0.3s ease !important;
         box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
     }
-    /*Estilo del alert*/    
+    /Estilo del alert/    
     .btn-eliminar {
         background-color: #FF6B35 !important;
         color: #FFFFFF !important;
@@ -248,6 +248,18 @@
 </style>
 
 <script>
+    // Auto-dismiss alerts after 3 seconds
+    document.addEventListener('DOMContentLoaded', function() {
+        const alerts = document.querySelectorAll('.auto-dismiss');
+        
+        alerts.forEach(alert => {
+            setTimeout(() => {
+                const bsAlert = new bootstrap.Alert(alert);
+                bsAlert.close();
+            }, 3000); // 3000 milisegundos = 3 segundos
+        });
+    });
+    
     document.addEventListener('DOMContentLoaded', function () {
         const botonesEliminar = document.querySelectorAll('.btn-eliminar');
         botonesEliminar.forEach(boton => {

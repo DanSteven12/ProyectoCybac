@@ -19,7 +19,7 @@
                 {{ $class->service?->name ?? 'Servicio no disponible' }}
             </span>
             <small class="text-muted d-block mt-1" style="color: #1A365D !important; font-size: 1.4rem;">
-                {{ \Carbon\Carbon::parse($class->date)->format('d/m/Y') }} -
+                {{ \Carbon\Carbon::parse($class->date)->translatedFormat('d \d\e F \d\e Y') }}
                 {{ \Carbon\Carbon::parse($class->time)->format('h:i A') }}
             </small>
         </h2>
@@ -144,7 +144,7 @@
                                 {{ $registration->user?->email ?? 'Correo no disponible' }}
                             </td>
                             <td style="color: #1A365D; font-size: 1.3rem; padding: 12px 15px; vertical-align: middle;">
-                                {{ \Carbon\Carbon::parse($registration->created_at)->format('d/m/Y H:i') }}
+                                {{ \Carbon\Carbon::parse($registration->created_at)->translatedFormat('d \d\e F \d\e Y') }}
                             </td>
                         </tr>
                     @endforeach
