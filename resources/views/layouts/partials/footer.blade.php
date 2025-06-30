@@ -13,7 +13,6 @@
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             border-top-left-radius: 20px;
             border-top-right-radius: 20px;
-            margin-top: auto;
         }
 
         .footer-container {
@@ -295,99 +294,108 @@
     <div class="footer-container">
         <div class="footer-grid">
             <div class="footer-brand">
-                <div class="footer-logo">
-                    <i class="fas fa-dumbbell logo-icon-footer"></i>
-                    <span>Fit & <span class="highlight">Flow</span></span>
-                </div>
-                <p class="footer-description">
-                    Transformamos vidas a través del fitness, ofreciendo instalaciones de primera clase y programas personalizados para alcanzar tus metas.
-                </p>
-                
-                <div class="footer-contact">
-                    <div class="contact-item">
-                        <i class="fas fa-map-marker-alt contact-icon"></i>
-                        <span>Plaza La Gloria, Tuxtla Gutiérrez</span>
-                    </div>
-                    <div class="contact-item">
-                        <i class="fas fa-phone-alt contact-icon"></i>
-                        <span>(961) 270 3210</span>
-                    </div>
-                    <div class="contact-item">
-                        <i class="fas fa-envelope contact-icon"></i>
-                        <span>fitnflow@gmail.com</span>
-                    </div>
-                </div>
-                
-                <div class="social-links">
-                    <a href="#" class="social-link">
-                        <i class="fab fa-facebook-f"></i>
-                    </a>
-                    <a href="#" class="social-link">
-                        <i class="fab fa-instagram"></i>
-                    </a>
-                    <a href="#" class="social-link">
-                        <i class="fab fa-twitter"></i>
-                    </a>
-                    <a href="#" class="social-link">
-                        <i class="fab fa-youtube"></i>
-                    </a>
-                </div>
+                <!-- FOOTER PROFESIONAL Y RESPONSIVO -->
+    <div style="max-width: 1300px; margin: 0 auto; display: flex; flex-wrap: wrap; gap: 50px; justify-content: space-between;">
+
+        {{-- LOGO Y DESCRIPCIÓN --}}
+        <div style="flex: 1 1 280px; min-width: 250px;">
+            <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 16px;">
+                <i class="fas fa-dumbbell" style="font-size: 32px; color: #ff6b35;"></i>
+                <span style="font-size: 26px; font-weight: bold;">Fit & <span style="color: #ff6b35;">Flow</span></span>
             </div>
-            
-            <div class="footer-section">
-                <h3>Enlaces Rápidos</h3>
-                <ul class="footer-links">
-                    <li><a href="#"><i class="fas fa-chevron-right"></i> Inicio</a></li>
-                    <li><a href="#"><i class="fas fa-chevron-right"></i> Clases</a></li>
-                    <li><a href="#"><i class="fas fa-chevron-right"></i> Horarios</a></li>
-                    <li><a href="#"><i class="fas fa-chevron-right"></i> Entrenadores</a></li>
-                    <li><a href="#"><i class="fas fa-chevron-right"></i> Membresías</a></li>
-                    <li><a href="#"><i class="fas fa-chevron-right"></i> Blog</a></li>
-                </ul>
-            </div>
-            
-            <div class="footer-section">
-                <h3>Actividades</h3>
-                <ul class="footer-links">
-                    <li><a href="#"><i class="fas fa-chevron-right"></i> Baile</a></li>
-                    <li><a href="#"><i class="fas fa-chevron-right"></i> Natación</a></li>
-                    <li><a href="#"><i class="fas fa-chevron-right"></i> Yoga</a></li>
-                </ul>
-            </div>
-            
-            <div class="footer-section">
-                <h3>Horario de Atención</h3>
-                <table class="schedule-table">
-                    <tr>
-                        <td>Lunes - Viernes</td>
-                        <td>6:00 AM - 10:00 PM</td>
-                    </tr>
-                    <tr>
-                        <td>Sábados</td>
-                        <td>8:00 AM - 8:00 PM</td>
-                    </tr>
-                    <tr>
-                        <td>Domingos</td>
-                        <td>8:00 AM - 2:00 PM</td>
-                    </tr>
-                    <tr>
-                        <td>Festivos</td>
-                        <td>Cerrado</td>
-                    </tr>
-                </table>
+            <p style="font-size: 15px; color: #cbd5e1; line-height: 1.7;">
+                Transformamos vidas a través del fitness, ofreciendo instalaciones de primera clase y programas personalizados para alcanzar tus metas.
+            </p>
+            {{-- REDES SOCIALES --}}
+            <div style="margin-top: 20px; display: flex; gap: 16px;">
+                <a href="#" style="color: #cbd5e1; font-size: 18px;"><i class="fab fa-facebook-f"></i></a>
+                <a href="#" style="color: #cbd5e1; font-size: 18px;"><i class="fab fa-instagram"></i></a>
+                <a href="#" style="color: #cbd5e1; font-size: 18px;"><i class="fab fa-twitter"></i></a>
+                <a href="#" style="color: #cbd5e1; font-size: 18px;"><i class="fab fa-youtube"></i></a>
             </div>
         </div>
-        
-        <div class="footer-bottom">
-            <div class="copyright">
-                © 2025 Fit & Flow. Todos los derechos reservados.
+
+        {{-- CONTACTO --}}
+        <div style="flex: 1 1 250px; min-width: 220px;">
+            <h3 style="font-size: 18px; margin-bottom: 16px; font-weight: bold;">Contacto</h3>
+            <div style="margin-bottom: 12px; display: flex; align-items: start; gap: 10px;">
+                <i class="fas fa-map-marker-alt" style="color: #ff6b35; margin-top: 3px;"></i>
+                <p style="margin: 0; font-size: 14px; line-height: 1.6;">{{ $centerInfo->address ?? 'No disponible' }}</p>
             </div>
-            <div class="legal-links">
-                <a href="#">Aviso de Privacidad</a>
-                <a href="#">Términos de Servicio</a>
-                <a href="#">Política de Cookies</a>
+            <div style="margin-bottom: 12px; display: flex; align-items: center; gap: 10px;">
+                <i class="fas fa-phone-alt" style="color: #ff6b35;"></i>
+                <p style="margin: 0; font-size: 14px;">{{ $centerInfo->phone ?? 'No disponible' }}</p>
+            </div>
+            <div style="display: flex; align-items: center; gap: 10px;">
+                <i class="fas fa-envelope" style="color: #ff6b35;"></i>
+                <p style="margin: 0; font-size: 14px;">{{ $centerInfo->email ?? 'No disponible' }}</p>
             </div>
         </div>
+
+        {{-- SERVICIOS EN COLUMNAS --}}
+        <div style="flex: 1 1 300px; min-width: 260px;">
+            <h3 style="font-size: 18px; margin-bottom: 16px; font-weight: bold;">Servicios</h3>
+            @php
+                $columns = $services->take(12)->chunk(6); // 3 columnas de 4
+            @endphp
+            <div style="display: flex; gap: 30px;">
+                @foreach($columns as $column)
+                    <ul style="list-style: none; padding: 0; margin: 0;">
+                        @foreach($column as $service)
+                            <li style="margin-bottom: 10px;">
+                                <a href="#service-{{ $service->id }}" style="text-decoration: none; color: #cbd5e1; font-size: 14px;">
+                                    <i class="fas fa-chevron-right" style="margin-right: 6px; color: #ff6b35;"></i>
+                                    {{ $service->name }}
+                                </a>
+                            </li>
+                        @endforeach
+                    </ul>
+                @endforeach
+            </div>
+        </div>
+
+        {{-- HORARIO DE ATENCIÓN --}}
+        <div style="flex: 1 1 250px; min-width: 220px;">
+    <h3 style="font-size: 18px; margin-bottom: 16px; font-weight: bold;">
+        <i class="fas fa-clock" style="margin-right: 8px; color: #ff6b35;"></i>
+        Horario de Atención
+    </h3>
+
+    @if (!empty($centerInfo) && $centerInfo->schedule)
+        <div style="background-color: #143a66; border-radius: 8px; padding: 12px 16px;">
+            <ul style="list-style-type: disc; padding-left: 20px; margin: 0; color: #e2e8f0; font-size: 14px; line-height: 1.8;">
+                @foreach(explode("\n", $centerInfo->schedule) as $line)
+                    @if(trim($line) !== '')
+                        <li>{{ $line }}</li>
+                    @endif
+                @endforeach
+            </ul>
+        </div>
+    @else
+        <p style="color: #94a3b8; font-size: 14px;">Horario no disponible.</p>
+    @endif
+</div>
+
+
+    </div>
+
+    {{-- COPYRIGHT --}}
+    <div style="border-top: 1px solid #1e2f43; margin-top: 40px; padding-top: 20px; text-align: center; color: #94a3b8; font-size: 13px;">
+        © 2025 Fit & Flow. Todos los derechos reservados.
+    </div>
+</footer>
+
+<!-- MEDIA QUERY PARA RESPONSIVE -->
+<style>
+    @media (max-width: 768px) {
+        footer > div {
+            flex-direction: column !important;
+            gap: 40px !important;
+        }
+    }
+</style>
+
+
     </div>
 </footer>
 </body>

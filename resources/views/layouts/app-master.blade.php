@@ -14,11 +14,11 @@
         body {
             display: flex;
             flex-direction: column;
+            min-height: 100vh;
         }
 
-        .main-wrapper {
-            flex: 1; /* Esto hace que empuje el footer al fondo */
-            min-height: 100vh;
+        main {
+            flex: 1;
         }
     </style>
 </head>
@@ -27,9 +27,9 @@
     @include('layouts.partials.navbar')
 
     <!-- Contenido principal -->
-    <div class="main-wrapper">
+    <main>
         @yield('content')
-    </div>
+    </main>
 
     <!-- Footer -->
     @include('layouts.partials.footer')

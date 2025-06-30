@@ -678,13 +678,13 @@
             <a href="{{ route('admin.payments.index') }}" class="menu-card">
                 <span><i class="fas fa-credit-card"></i> Pagos</span>  
             </a>
-            <a href="" class="menu-card">
+            <a href="{{ route('admin.services_home.index')}}" class="menu-card">
                 <span><i class="fas fa-concierge-bell"></i> Servicios del Home</span>
             </a>
-            <a href="" class="menu-card">
+            <a href="{{ route('admin.center-information.index')}}" class="menu-card">
                 <span><i class="fas fa-info-circle"></i> Información Home</span>
             </a>
-            <a href="" class="menu-card">
+            <a href="{{ route('admin.carousel.index')}}" class="menu-card">
                 <span><i class="fas fa-images"></i> Carrusel Home</span>
             </a>
         </div>

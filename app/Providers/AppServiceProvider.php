@@ -8,6 +8,8 @@ use Illuminate\Support\Facades\View;
 use Illuminate\Support\Facades\Auth;
 use Carbon\Carbon;
 use App\Models\Payment;
+use App\Models\CenterInformation;
+use App\Models\ServicesHome;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -24,11 +26,20 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        Carbon::setLocale('es');
-
         Relation::morphMap([
         'status' => \App\Models\Status::class, // Usa el nombre singular
     ]);
+
+    // Pasar servicios y la información del centro a todas las vistas
+    view()->composer('*', function ($view) {
+        $view->with('services', ServicesHome::take(12)->get());
+    });
+
+    // CMS: Información del Centro disponible en todas las vistas
+    View::composer('*', function ($view) {
+        $centerInfo = CenterInformation::first();
+        $view->with('centerInfo', $centerInfo);
+    });
 
         Relation::morphMap([
         'users' => \App\Models\User::class,

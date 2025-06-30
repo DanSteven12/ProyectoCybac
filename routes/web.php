@@ -1,5 +1,8 @@
 <?php
-
+use App\Http\Controllers\User\DashboardController;
+use App\Http\Controllers\Admin\CarouselSlideController;
+use App\Http\Controllers\Admin\ServicesHomeController;
+use App\Http\Controllers\Admin\CenterInformationController;
 use App\Http\Controllers\Admin\RoleController;
 use App\Http\Controllers\Admin\ServiceController; 
 use App\Http\Controllers\LoginController;
@@ -145,3 +148,25 @@ Route::get('/reset-password/{token}', [NewPasswordController::class, 'create'])-
 // Guardar nueva contraseña
 Route::post('/reset-password', [NewPasswordController::class, 'store'])->name('password.update');
 
+
+Route::middleware(['auth'])->prefix('admin')->name('admin.')->group(function () {
+    // Página de servicios para la home (CMS)
+    Route::resource('services_home', ServicesHomeController::class);
+    // Información del centro (CMS)
+    Route::resource('center-information', CenterInformationController::class)
+        ->except(['show', 'destroy']);
+});
+
+
+Route::middleware(['auth'])->prefix('admin')->name('admin.')->group(function () {
+    Route::resource('carousel', CarouselSlideController::class);
+    Route::post('carousel/settings', [CarouselSlideController::class, 'updateSettings'])->name('carousel.updateSettings');
+});
+
+Route::middleware('auth')->prefix('admin')->name('admin.')->group(function () {
+    Route::resource('carousel', CarouselSlideController::class);
+});
+
+Route::middleware(['auth'])->prefix('user')->name('user.')->group(function () {
+    Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
+});
