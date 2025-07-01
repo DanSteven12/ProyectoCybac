@@ -53,4 +53,14 @@ class CenterInformationController extends Controller
 
         return redirect()->route('admin.center-information.index')->with('success', 'Información actualizada correctamente.');
     }
+
+public function destroy($id)
+{
+    $info = CenterInformation::findOrFail($id);
+    $info->delete();
+    
+    return redirect()->route('admin.center-information.index')
+        ->with('deleted', 'La información del centro ha sido eliminada correctamente.');
+}
+
 }

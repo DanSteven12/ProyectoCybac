@@ -154,7 +154,7 @@ Route::middleware(['auth'])->prefix('admin')->name('admin.')->group(function () 
     Route::resource('services_home', ServicesHomeController::class);
     // Información del centro (CMS)
     Route::resource('center-information', CenterInformationController::class)
-        ->except(['show', 'destroy']);
+        ->except(['show']);
 });
 
 

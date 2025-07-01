@@ -78,4 +78,6 @@ class ServicesHomeController extends Controller
 
         return redirect()->route('admin.services_home.index')->with('success', 'Service deleted');
     }
+
+    
 }

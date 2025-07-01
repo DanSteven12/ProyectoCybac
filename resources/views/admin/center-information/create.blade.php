@@ -1,33 +1,132 @@
-@extends('layouts.admi-app-master')
+
+    @extends('layouts.admi-app-master')
 
 @section('content')
-<div class="container mx-auto px-6 py-8 bg-white rounded-xl shadow-md">
-    <h2 class="text-2xl font-bold mb-6 text-gray-800">Agregar Información del Centro</h2>
+<div class="container-fluid px-4 mt-5">
+    <div class="row justify-content-center">
+        <div class="col-12 col-xxl-8">
+            <div class="card shadow-sm" style="border: 2px solid #1A365D;">
+                <div class="card-header py-3" style="background-color: #1A365D; color: #FFFFFF; border-bottom: 3px solid #FF6B35;">
+                    <h2 class="mb-0" style="font-weight: 700; font-size: 1.8rem;">
+                        <i class="fas fa-plus-circle me-2"></i>AGREGAR INFORMACIÓN DEL CENTRO
+                    </h2>
+                </div>
 
-    <form action="{{ route('admin.center-information.store') }}" method="POST">
-        @csrf
+                <div class="card-body p-4">
+                    <form action="{{ route('admin.center-information.store') }}" method="POST">
+                        @csrf
 
-        <div class="mb-4">
-            <label for="schedule" class="block font-medium text-gray-700">Horario</label>
-            <textarea name="schedule" id="schedule" rows="3" class="w-full border-gray-300 rounded-lg shadow-sm">{{ old('schedule') }}</textarea>
+                        <div class="mb-4">
+                            <label for="schedule" class="block mb-2" style="font-size: 1.3rem; color: #1A365D; font-weight: 600;">
+                                <i class="fas fa-clock me-2"></i>Horario
+                            </label>
+                            <textarea name="schedule" id="schedule" rows="4" 
+                                      class="w-full p-3 border-2 rounded-lg" 
+                                      style="border-color: #1A365D; font-size: 1.2rem; color: #1A365D; min-height: 100px;">{{ old('schedule') }}</textarea>
+                            @error('schedule')
+                                <p class="mt-1" style="color: #FF6B35; font-size: 1.1rem;">{{ $message }}</p>
+                            @enderror
+                        </div>
+
+                        <div class="mb-4">
+                            <label for="phone" class="block mb-2" style="font-size: 1.3rem; color: #1A365D; font-weight: 600;">
+                                <i class="fas fa-phone me-2"></i>Teléfono
+                            </label>
+                            <input type="text" name="phone" id="phone" value="{{ old('phone') }}" 
+                                   class="w-full p-3 border-2 rounded-lg" 
+                                   style="border-color: #1A365D; font-size: 1.2rem; color: #1A365D;">
+                            @error('phone')
+                                <p class="mt-1" style="color: #FF6B35; font-size: 1.1rem;">{{ $message }}</p>
+                            @enderror
+                        </div>
+
+                        <div class="mb-4">
+                            <label for="email" class="block mb-2" style="font-size: 1.3rem; color: #1A365D; font-weight: 600;">
+                                <i class="fas fa-envelope me-2"></i>Email
+                            </label>
+                            <input type="email" name="email" id="email" value="{{ old('email') }}" 
+                                   class="w-full p-3 border-2 rounded-lg" 
+                                   style="border-color: #1A365D; font-size: 1.2rem; color: #1A365D;">
+                            @error('email')
+                                <p class="mt-1" style="color: #FF6B35; font-size: 1.1rem;">{{ $message }}</p>
+                            @enderror
+                        </div>
+
+                        <div class="mb-4">
+                            <label for="address" class="block mb-2" style="font-size: 1.3rem; color: #1A365D; font-weight: 600;">
+                                <i class="fas fa-map-marker-alt me-2"></i>Dirección
+                            </label>
+                            <input type="text" name="address" id="address" value="{{ old('address') }}" 
+                                   class="w-full p-3 border-2 rounded-lg" 
+                                   style="border-color: #1A365D; font-size: 1.2rem; color: #1A365D;">
+                            @error('address')
+                                <p class="mt-1" style="color: #FF6B35; font-size: 1.1rem;">{{ $message }}</p>
+                            @enderror
+                        </div>
+
+                        <div class="d-flex justify-content-end mt-5">
+                            <a href="{{ route('admin.center-information.index') }}" class="btn py-2 px-4 me-3" 
+                               style="background-color: #1A365D; color: #FFFFFF; font-weight: 600; font-size: 1.2rem;">
+                                <i class="fas fa-times me-2"></i> CANCELAR
+                            </a>
+                            <button type="submit" class="btn py-2 px-4" 
+                                    style="background-color: #2EC4B6; color: #FFFFFF; font-weight: 600; font-size: 1.2rem;">
+                                <i class="fas fa-save me-2"></i> GUARDAR
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
         </div>
-
-        <div class="mb-4">
-            <label for="phone" class="block font-medium text-gray-700">Teléfono</label>
-            <input type="text" name="phone" id="phone" value="{{ old('phone') }}" class="w-full border-gray-300 rounded-lg shadow-sm">
-        </div>
-
-        <div class="mb-4">
-            <label for="email" class="block font-medium text-gray-700">Email</label>
-            <input type="email" name="email" id="email" value="{{ old('email') }}" class="w-full border-gray-300 rounded-lg shadow-sm">
-        </div>
-
-        <div class="mb-6">
-            <label for="address" class="block font-medium text-gray-700">Dirección</label>
-            <input type="text" name="address" id="address" value="{{ old('address') }}" class="w-full border-gray-300 rounded-lg shadow-sm">
-        </div>
-
-        <button type="submit" class="bg-green-600 text-white px-6 py-2 rounded hover:bg-green-700">Guardar</button>
-    </form>
+    </div>
 </div>
+
+<style>
+    .card {
+        border-radius: 10px;
+        overflow: hidden;
+    }
+    
+    .btn {
+        padding: 0.5rem 1rem;
+        border-radius: 6px;
+        transition: all 0.3s ease;
+    }
+    
+    .btn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+    
+    input, textarea {
+        width: 100% !important;
+        padding: 0.75rem !important;
+        font-size: 1.2rem !important;
+    }
+    
+    textarea {
+        min-height: 100px;
+    }
+    
+    /* Ajustes para móviles */
+    @media (max-width: 992px) {
+        .card-header h2 {
+            font-size: 1.4rem !important;
+        }
+        
+        .btn {
+            padding: 0.5rem 1rem !important;
+            font-size: 1.1rem !important;
+        }
+        
+        label {
+            font-size: 1.2rem !important;
+        }
+        
+        input, textarea {
+            font-size: 1.1rem !important;
+            padding: 0.6rem !important;
+        }
+    }
+</style>
 @endsection

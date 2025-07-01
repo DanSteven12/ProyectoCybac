@@ -29,11 +29,22 @@
 
                 <div class="card-body p-0">
                     @if (session('success'))
-                        <div class="alert alert-dismissible fade show m-4" role="alert" 
+                        <div class="alert alert-dismissible fade show m-4 auto-dismiss-alert" role="alert" 
                             style="background-color: #2EC4B6; color: #FFFFFF; border-left: 5px solid #1A365D; font-size: 1.3rem;">
                             <div class="d-flex align-items-center">
                                 <i class="fas fa-check-circle me-3 fs-4"></i>
                                 <strong class="fs-5">{{ session('success') }}</strong>
+                                <button type="button" class="btn-close btn-close-white ms-auto fs-5" data-bs-dismiss="alert" aria-label="Close"></button>
+                            </div>
+                        </div>
+                    @endif
+
+                    @if (session('deleted'))
+                        <div class="alert alert-dismissible fade show m-4 auto-dismiss-alert" role="alert" 
+                            style="background-color: #FF6B35; color: #FFFFFF; border-left: 5px solid #1A365D; font-size: 1.3rem;">
+                            <div class="d-flex align-items-center">
+                                <i class="fas fa-trash-alt me-3 fs-4"></i>
+                                <strong class="fs-5">{{ session('deleted') }}</strong>
                                 <button type="button" class="btn-close btn-close-white ms-auto fs-5" data-bs-dismiss="alert" aria-label="Close"></button>
                             </div>
                         </div>
@@ -45,8 +56,8 @@
                                 <tr style="background-color: #1A365D; color: #FFFFFF;">
                                     <th class="ps-4 py-3" style="font-weight: 600; font-size: 1.4rem;">Nombre</th>
                                     <th class="py-3" style="font-weight: 600; font-size: 1.4rem;">Descripción</th>
-                                    <th class="py-3" style="font-weight: 600; font-size: 1.4rem;">URL de Imagen</th>
-                                    <th class="pe-4 py-3 text-center" style="font-weight: 600; font-size: 1.4rem; width: 15%;">Acciones</th>
+                                    <th class="py-3" style="font-weight: 600; font-size: 1.4rem;">Imagen</th>
+                                    <th class="pe-4 py-3 text-center" style="font-weight: 600; font-size: 1.4rem; width: 20%;">Acciones</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -54,12 +65,16 @@
                                 <tr style="border-bottom: 2px solid #F4F4F4;">
                                     <td class="ps-4" style="font-size: 1.4rem; color: #1A365D; font-weight: 500;">{{ $service->name }}</td>
                                     <td class="wrap-text" style="font-size: 1.4rem; color: #1A365D; font-weight: 500;">{{ $service->description }}</td>
-                                    <td class="wrap-text" style="font-size: 1.4rem; color: #1A365D; font-weight: 500;">
+                                    <td class="text-center">
+                                        @if($service->image_url)
                                         <a href="{{ asset('storage/'.$service->image_url) }}" target="_blank" 
                                             class="btn py-1 px-3" 
                                             style="background-color: #2EC4B6; color: #FFFFFF; font-size: 1.2rem;">
-                                                <i class="fas fa-expand me-1"></i> Ver Completa
+                                                <i class="fas fa-expand me-1"></i> Ver Imagen
                                         </a>
+                                        @else
+                                        <span class="text-muted">Sin imagen</span>
+                                        @endif
                                     </td>
                                     <td class="pe-4 text-center">
                                         <div class="d-flex justify-content-center">
@@ -67,6 +82,14 @@
                                             style="background-color: #2EC4B6; color: #FFFFFF; font-size: 1.3rem; font-weight: 500;">
                                                 <i class="fas fa-edit me-1"></i>EDITAR
                                             </a>
+                                            <form action="{{ route('admin.services_home.destroy', $service->id) }}" method="POST" class="d-inline">
+                                                @csrf
+                                                @method('DELETE')
+                                                <button type="button" class="btn py-1 px-2 mx-1 btn-delete" 
+                                                        style="background-color: #FF6B35; color: #FFFFFF; font-size: 1.3rem; font-weight: 500;">
+                                                    <i class="fas fa-trash-alt me-1"></i>ELIMINAR
+                                                </button>
+                                            </form>
                                         </div>
                                     </td>
                                 </tr>
@@ -84,7 +107,6 @@
                         </table>
                     </div>
 
-                    <!-- Contador con fuente más grande -->
                     <div class="card-footer py-4" style="background-color: #F4F4F4; border-top: 2px solid #1A365D;">
                         <div class="d-flex justify-content-between align-items-center">
                             <div class="text-muted" style="font-size: 1.3rem; font-weight: 500;">
@@ -92,8 +114,6 @@
                             </div>
                         </div>
                     </div>
-
-                    <!-- Eliminé la sección de paginación para mantener el funcionamiento original -->
                 </div>
             </div>
         </div>
@@ -139,6 +159,46 @@
     .wrap-text {
         white-space: normal;
         word-break: break-word;
+    }
+
+    /* Estilo del alert de confirmación */
+    .swal2-actions {
+        gap: 1.5rem !important;
+        margin-top: 1.5rem !important;
+    }
+    
+    .swal2-confirm, .swal2-cancel {
+        padding: 0.6rem 1.5rem !important;
+        margin: 0 !important;
+    }
+
+    .swal2-popup { 
+        border-radius: 10px !important;
+        border: 2px solid #1A365D !important;
+        font-size: 1.3rem !important;
+    }
+    
+    .swal2-title {
+        color: #1A365D !important;
+        font-size: 1.7rem !important;
+        font-weight: 700 !important;
+    }
+
+    .swal2-icon.swal2-warning {
+        color: #FF6B35 !important;
+        border-color: #FF6B35 !important;
+    }
+
+    .swal2-confirm {
+        background-color: #FF6B35 !important;
+        font-size: 1.3rem !important;
+        font-weight: 500 !important;
+    }
+
+    .swal2-cancel {
+        background-color: #2EC4B6 !important;
+        font-size: 1.3rem !important;
+        font-weight: 500 !important;
     }
 
     /* Ajustes para móviles */
@@ -224,32 +284,79 @@
         75% { transform: translateX(-5px) rotate(-5deg); }
         100% { transform: translateX(0); }
     }
+
+    .btn-delete {
+        transition: all 0.3s ease !important;
+    }
+    
+    .btn-delete:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
 </style>
 
 @section('scripts')
 <script>
-    // Filtro en vivo para servicios
-    function filtrarServiciosEnVivo() {
-        const input = document.getElementById("search-live").value.toLowerCase();
-        const table = document.querySelector("table tbody");
-        const rows = table.getElementsByTagName("tr");
+    // Auto-dismiss alerts after 3 seconds
+    document.addEventListener('DOMContentLoaded', function() {
+        // Auto-dismiss alerts
+        const alerts = document.querySelectorAll('.auto-dismiss-alert');
+        alerts.forEach(alert => {
+            setTimeout(() => {
+                const bsAlert = new bootstrap.Alert(alert);
+                bsAlert.close();
+            }, 3000);
+        });
 
-        for (let i = 0; i < rows.length; i++) {
-            const cells = rows[i].getElementsByTagName("td");
+        // Filtro en vivo para servicios
+        function filtrarServiciosEnVivo() {
+            const input = document.getElementById("search-live").value.toLowerCase();
+            const table = document.querySelector("table tbody");
+            const rows = table.getElementsByTagName("tr");
 
-            if (cells.length >= 3) {
-                const nombre = cells[0].textContent.toLowerCase();       // Nombre
-                const descripcion = cells[1].textContent.toLowerCase();   // Descripción
-                const url = cells[2].textContent.toLowerCase();          // URL
+            for (let i = 0; i < rows.length; i++) {
+                const cells = rows[i].getElementsByTagName("td");
 
-                const coincide = nombre.includes(input) || 
-                                descripcion.includes(input) || 
-                                url.includes(input);
-
-                rows[i].style.display = coincide ? "" : "none";
+                if (cells.length >= 3) {
+                    const nombre = cells[0].textContent.toLowerCase();
+                    const descripcion = cells[1].textContent.toLowerCase();
+                    const coincide = nombre.includes(input) || descripcion.includes(input);
+                    rows[i].style.display = coincide ? "" : "none";
+                }
             }
         }
-    }
+
+        // Confirmación para eliminar
+        document.querySelectorAll('.btn-delete').forEach(button => {
+            button.addEventListener('click', function(e) {
+                e.preventDefault();
+                const form = this.closest('form');
+                
+                Swal.fire({
+                    title: '¿Eliminar Servicio?',
+                    html: `<div style="text-align: center;">
+                            <i class="fas fa-exclamation-triangle" style="color: #FF6B35; font-size: 3rem; margin-bottom: 1rem;"></i>
+                            <p>¿Está seguro que desea eliminar este servicio permanentemente?</p>
+                            <p style="font-weight: 600;">Esta acción no se puede deshacer.</p>
+                        </div>`,
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonText: '<i class="fas fa-trash-alt me-2"></i> Eliminar',
+                    cancelButtonText: '<i class="fas fa-times me-2"></i> Cancelar',
+                    buttonsStyling: false,
+                    customClass: {
+                        confirmButton: 'btn btn-delete',
+                        cancelButton: 'btn',
+                        popup: 'swal2-popup-custom'
+                    }
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        form.submit();
+                    }
+                });
+            });
+        });
+    });
 </script>
 @endsection
 @endsection
