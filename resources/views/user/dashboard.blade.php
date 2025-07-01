@@ -19,80 +19,71 @@
         overflow: hidden;
     }
 
-    /* Paleta de colores */
+    /* Paleta de colores profesional */
     :root {
         --azul-marino: #1A365D;
         --naranja-brillante: #FF6B35;
         --verde-esmeralda: #2EC4B6;
         --blanco: #FFFFFF;
         --azul-oscuro: #0f2a4a;
+        --neon-glow: #2EC4B6;
+        --sombra-azul: rgba(26, 54, 93, 0.2);
+        --sombra-naranja: rgba(255, 107, 53, 0.2);
+        --degradado-hero: linear-gradient(135deg, var(--azul-marino) 0%, var(--azul-oscuro) 100%);
+        --degradado-botones: linear-gradient(to right, var(--naranja-brillante) 0%, var(--verde-esmeralda) 100%);
     }
 
-    /* Fondo general para eliminar espacios blancos */
+    /* Estilos generales */
     body {
         min-height: 100vh;
         margin: 0;
         padding: 0;
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        background-color: #f8fafc;
+        color: #333;
+        line-height: 1.6;
     }
 
-    /* Espacio superior ajustado */
+    /* Header spacer con degradado profesional */
     .header-spacer {
-        height: 60px;
-        background: linear-gradient(135deg, var(--azul-marino), var(--azul-oscuro));
+        height: 80px;
+        background: var(--degradado-hero);
+        box-shadow: 0 4px 12px var(--sombra-azul);
     }
 
-    /* Contenedor del carrusel con bordes ampliados */
     .carousel-container-3d {
-        position: relative;
-        perspective: 1200px;
-        margin: 40px auto;
-        height: 450px;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        background: linear-gradient(
-            135deg,
-            var(--azul-marino) 40%,
-            var(--azul-oscuro) 60%,
-            var(--naranja-brillante) 90%
-        );
-        border-radius: 20px;
-        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
-        padding: 20px;
-        overflow: hidden;
-        z-index: 1;
-    }
+    position: relative;
+    perspective: 1200px;
+    margin: 40px auto;
+    height: 450px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: linear-gradient(
+        45deg,
+        var(--verde-esmeralda),
+        var(--naranja-brillante),
+        var(--azul-marino),
+        var(--verde-esmeralda)
+    );
+    border-radius: 0; /* Esquinas cuadradas */
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+    padding: 20px;
+    z-index: 1; /* Cambiado de -1 a 1 para que esté sobre el fondo */
+    animation: borderGlow 8s linear infinite;
+    background-size: 300% 300%; /* Para la animación del gradiente */
+    filter: url('#glow'); /* Efecto de iluminación SVG */
+}
 
-    /* Efecto de borde animado con SVG */
-    .carousel-container-3d::before {
-        content: '';
-        position: absolute;
-        top: -5px;
-        left: -5px;
-        right: -5px;
-        bottom: -5px;
-        background: linear-gradient(
-            45deg,
-            var(--verde-esmeralda),
-            var(--naranja-brillante),
-            var(--azul-marino),
-            var(--verde-esmeralda)
-        );
-        background-size: 300% 300%;
-        border-radius: 25px;
-        z-index: -1;
-        animation: borderGlow 8s linear infinite;
-        filter: url('#glow');
-        opacity: 0.9;
-    }
 
-    /* Animación para el gradiente del borde */
+
+    /* Animación para el gradiente del borde - VERSIÓN ORIGINAL */
     @keyframes borderGlow {
         0% { background-position: 0% 50%; }
         100% { background-position: 300% 50%; }
     }
 
-    /* Contenedor 3D */
+    /* Contenedor 3D - VERSIÓN ORIGINAL */
     .card-3d {
         width: 100%;
         height: 100%;
@@ -105,7 +96,7 @@
         @endif
     }
 
-    /* Tarjetas */
+    /* Tarjetas - VERSIÓN ORIGINAL */
     .slide-card {
         position: absolute;
         top: 50%;
@@ -130,31 +121,35 @@
         box-shadow: 0 12px 25px rgba(0,0,0,0.3);
     }
 
+    /* MEJORA: Ajuste de imágenes en el carrusel */
     .slide-card img {
         width: 100%;
         height: 260px;
         object-fit: contain;
         background-color: #fff;
+        padding: 15px; /* Añadido espacio interno */
+        max-width: 100%; /* Asegura que no se desborde */
+        max-height: 100%; /* Asegura que no se desborde */
         @if($brightness)
             animation: pulseBrightness 4s ease-in-out infinite;
         @endif
     }
 
-    /* MODIFICACIÓN ÚNICA: Ajuste de posición del texto */
+    /* Descripción de la tarjeta - VERSIÓN ORIGINAL */
     .slide-description {
         background: var(--naranja-brillante);
         color: var(--blanco);
-        text-align: left; /* Alineación izquierda */
+        text-align: left;
         font-size: 0.95rem;
-        padding: 8px 8px 8px 5px; /* Reducción del padding izquierdo */
+        padding: 8px 8px 8px 5px;
         height: 60px;
         display: flex;
         align-items: center;
-        justify-content: flex-start; /* Contenido pegado a la izquierda */
+        justify-content: flex-start;
         font-weight: 600;
     }
 
-    /* Animaciones */
+    /* Animaciones - VERSIÓN ORIGINAL */
     @keyframes autoRotate {
         from { transform: rotateY(0deg); }
         to { transform: rotateY(360deg); }
@@ -171,7 +166,7 @@
         50% { filter: brightness(1.4); }
     }
 
-    /* Estilos apilados */
+    /* Estilos apilados - VERSIÓN ORIGINAL */
     .slide-card.stacked-current {
         transform: translate(-50%, -50%) scale(1);
         z-index: 5;
@@ -193,189 +188,266 @@
         z-index: 0;
     }
 
-    /* Estilos para el resto del contenido */
-    @media (max-width: 769px) {
-        .content-wrapper {
-            gap: 15px;
-        }
-
-        .map-container {
-            height: 300px;
-        }
-
-        .activity-content {
-            flex-direction: column !important;
-            align-items: flex-start;
-        }
-
-        .activity img,
-        .description {
-            width: 100% !important;
-        }
-
-        .three-column-services {
-            flex-direction: column;
-        }
-        
-        .carousel-container-3d {
-            height: 380px;
-            margin: 20px auto 10px auto;
-        }
-        
-        .slide-card {
-            width: 180px;
-            height: 280px;
-        }
-        
-        .slide-card img {
-            height: 220px;
-        }
-    }
-
+    /* Estilos para el layout principal */
     .container {
-        max-width: 1200px;
+        max-width: 1300px;
         margin: 0 auto;
-        padding: 20px;
+        padding: 30px;
     }
 
     .content-wrapper {
         display: flex;
         flex-wrap: wrap;
-        gap: 15px;
-        margin-top: 20px;
+        gap: 30px;
+        margin-top: 40px;
     }
 
+    /* Sección del mapa - Diseño mejorado */
     .map-section {
         flex: 2;
-        min-width: 0; /* Añadido para prevenir problemas de desbordamiento */
+        min-width: 0;
     }
 
     .map-header {
-        margin-bottom: 25px;
+        margin-bottom: 30px;
+        text-align: center;
+    }
+
+    .map-header h2 {
+        color: var(--azul-marino);
+        font-size: 2rem;
+        margin-bottom: 10px;
+        position: relative;
+        display: inline-block;
+    }
+
+    .map-header h2::after {
+        content: '';
+        position: absolute;
+        bottom: -10px;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 80px;
+        height: 3px;
+        background: var(--naranja-brillante);
+        font-size: 10rem;
     }
 
     .map-container {
         width: 100%;
-        height: 400px;
+        height: 450px;
         position: relative;
-        border-radius: 12px;
+        border-radius: 15px;
         overflow: hidden;
-        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
-        margin-bottom: 15px;
+        box-shadow: 0 10px 25px var(--sombra-azul);
+        margin-bottom: 25px;
+        border: 1px solid rgba(255, 255, 255, 0.3);
     }
 
     .map-iframe {
         width: 100%;
         height: 100%;
         border: none;
+        filter: grayscale(20%) contrast(110%);
     }
 
+    /* Botón de direcciones con efecto hover */
     .directions-button {
         display: inline-block;
-        background-color: var(--verde-esmeralda);
+        background: var(--degradado-botones);
         color: white;
-        padding: 12px 20px;
-        font-size: 1rem;
-        border-radius: 8px;
+        padding: 14px 28px;
+        font-size: 1.1rem;
+        font-weight: 600;
+        border-radius: 10px;
         cursor: pointer;
         border: none;
-        transition: background-color 0.3s ease;
-        width: 100%; /* Hacer el botón más ancho en móviles */
-        max-width: 300px; /* Limitar el ancho máximo */
-        margin: 0 auto; /* Centrar el botón */
+        transition: all 0.3s ease;
+        box-shadow: 0 5px 15px var(--sombra-naranja);
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        position: relative;
+        overflow: hidden;
     }
 
     .directions-button:hover {
-        background-color: #26a99f;
+        transform: translateY(-3px);
+        box-shadow: 0 8px 20px var(--sombra-naranja);
     }
 
+    .directions-button::after {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(to right, var(--verde-esmeralda) 0%, var(--naranja-brillante) 100%);
+        opacity: 0;
+        transition: opacity 0.3s ease;
+        
+    }
+
+
+    /* Sección de información - Tarjetas modernas */
     .info-section {
         flex: 1;
         background-color: white;
-        padding: 25px;
-        border-radius: 12px;
-        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
-        min-width: 0; /* Añadido para prevenir problemas de desbordamiento */
+        padding: 30px;
+        border-radius: 15px;
+        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08);
+        min-width: 0;
+        border: 1px solid rgba(0, 0, 0, 0.05);
     }
 
     .info-section h2 {
         color: var(--azul-marino);
-        font-size: 1.5rem;
-        border-bottom: 2px solid #eaeaea;
-        padding-bottom: 10px;
+        font-size: 2.5rem;
+        border-bottom: 2px solid var(--verde-esmeralda);
+        padding-bottom: 15px;
+        margin-bottom: 30px;
+        text-align: center;
     }
 
     .info-card {
-        background-color: #F4F4F4;
-        padding: 15px;
-        border-radius: 8px;
-        border-left: 40px solid var(--naranja-brillante);
-        margin-bottom: 15px;
+        background-color: white;
+        padding: 20px;
+        border-radius: 10px;
+        border-left: 5px solid var(--naranja-brillante);
+        margin-bottom: 25px;
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+        transition: transform 0.3s ease;
+    }
+
+    .info-card:hover {
+        transform: translateY(-5px);
     }
 
     .info-card h3 {
         margin-top: 0;
-        color: var(--naranja-brillante);
+        color: var(--azul-marino);
+        font-size: 1.8rem;
+        margin-bottom: 15px;
+        position: relative;
+        padding-bottom: 8px;
+    }
+
+    .info-card h3::after {
+        content: '';
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        width: 50px;
+        height: 2px;
+        background: var(--naranja-brillante);
+    }
+
+    .info-card h4 {
+        margin: 12px 0 5px 0;
+        color: var(--azul-oscuro);
+        font-size: 1.3rem;
+    }
+
+    .info-card p, .info-card a {
+        color: #555;
+        font-size: 1.5rem;
+        line-height: 1.6;
     }
 
     .info-card a {
         text-decoration: none;
-        color: #333;
         display: block;
-        padding: 6px 0;
+        padding: 8px 0;
+        transition: color 0.3s ease;
     }
 
     .info-card a:hover {
         color: var(--naranja-brillante);
     }
 
-    .services-buttons {
-        margin-top: 60px;
-    }
+    /* Servicios en tres columnas - Versión mejorada */
+.three-column-services {
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 20px; /* Aumenté el gap para mejor separación */
+}
 
-    .services-buttons h3 {
-        color: var(--azul-marino);
-        font-size: 1.75rem;
-        margin-bottom: 20px;
-    }
+.three-column-services ul {
+    flex: 1;
+    min-width: 160px; /* Un poco más ancho */
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+}
 
-    .service-button {
-        display: block;
-        padding: 10px 14px;
-        background-color: #ffffff;
-        color: #333;
-        text-decoration: none;
-        border-radius: 6px;
-        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
-        margin-bottom: 12px;
-        transition: background-color 0.3s ease, color 0.3s ease;
-    }
+.three-column-services li {
+    margin-bottom: 15px; /* Más espacio entre items */
+    position: relative;
+    padding-left: 25px; /* Más espacio para el bullet */
+    line-height: 1.5; /* Mejor interlineado */
+}
 
-    .service-button:hover {
-        background-color: var(--naranja-brillante);
-        color: white;
-    }
+.three-column-services li::before {
+    content: '•';
+    color: var(--verde-esmeralda);
+    font-size: 1.8rem; /* Bullet más grande (antes 1.5rem) */
+    position: absolute;
+    left: 0;
+    top: -7px; /* Ajuste de posición por el tamaño */
+}
 
+.three-column-services a {
+    color: var(--azul-oscuro);
+    text-decoration: none;
+    transition: all 0.3s ease;
+    display: block;
+    padding: 6px 0; /* Más padding vertical */
+    font-size: 1.1rem; /* Tamaño aumentado (antes no tenía definido) */
+    font-weight: 500; /* Peso medio para mejor legibilidad */
+}
+
+.three-column-services a:hover {
+    color: var(--naranja-brillante);
+    transform: translateX(8px); /* Efecto hover más notorio */
+}
+
+/* Ajustes responsivos */
+@media (max-width: 768px) {
+    .three-column-services a {
+        font-size: 1rem; /* Tamaño ligeramente menor en móviles */
+    }
+    
+    .three-column-services li::before {
+        font-size: 1.6rem;
+        top: -5px;
+    }
+}
+
+@media (max-width: 576px) {
     .three-column-services {
-        display: flex;
-        justify-content: space-between;
-        flex-wrap: wrap;
         gap: 15px;
     }
+    
+    .three-column-services ul {
+        min-width: 140px;
+    }
+}
 
+    /* MEJORA: Sección de actividades/servicios con imágenes ajustadas */
     .activities-section {
-        margin-top: 50px;
+        margin-top: 70px;
     }
 
     .activity {
-        margin-bottom: 50px;
+        margin-bottom: 70px;
     }
 
     .activity-content {
         display: flex;
         align-items: center;
         justify-content: space-between;
-        gap: 30px;
+        gap: 40px;
         flex-wrap: wrap;
     }
 
@@ -387,42 +459,75 @@
         flex-direction: row-reverse;
     }
 
+    /* MEJORA PRINCIPAL: Ajuste de imágenes en el dashboard */
     .activity img {
         width: 50%;
-        max-width: 600px;
+        max-width: 400px; /* Reducido de 600px para mejor proporción */
         height: auto;
-        border-radius: 12px;
-        box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+        max-height: 300px; /* Limita la altura máxima */
+        object-fit: contain; /* Mantiene la proporción sin recortar */
+        border-radius: 15px;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+        transition: transform 0.5s ease, box-shadow 0.5s ease;
+        margin: 0 auto; /* Centra la imagen */
+        display: block; /* Asegura que los márgenes funcionen */
+    }
+
+    .activity img:hover {
+        transform: scale(1.02);
+        box-shadow: 0 15px 40px rgba(0, 0, 0, 0.2);
     }
 
     .description {
         width: 45%;
-        background-color: #ffffff;
-        padding: 20px;
-        border-radius: 12px;
-        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
-        border-left: 5px solid var(--azul-marino);
-        transition: transform 0.3s ease;
-        word-wrap: break-word;
+        background-color: white;
+        padding: 30px;
+        border-radius: 15px;
+        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08);
+        border-left: 5px solid var(--naranja-brillante);
+        transition: transform 0.5s ease;
     }
 
     .description:hover {
-        transform: translateY(-5px);
+        transform: translateY(-10px);
     }
 
     .description h3 {
         color: var(--azul-marino);
-        font-size: 2rem;
-        margin-bottom: 12px;
+        font-size: 2.2rem;
+        margin-bottom: 20px;
+        position: relative;
+    }
+
+    .description h3::after {
+        content: '';
+        position: absolute;
+        bottom: -10px;
+        left: 0;
+        width: 60px;
+        height: 3px;
+        background: var(--verde-esmeralda);
     }
 
     .description p {
-        font-size: 1.15rem;
-        color: #444;
+        font-size: 1.3rem;
+        color: #555;
         line-height: 1.8;
+        margin-top: 20px;
     }
 
-    /* Media queries adicionales para mejor responsividad */
+    /* Media queries para responsividad */
+    @media (max-width: 1200px) {
+        .container {
+            padding: 25px;
+        }
+        
+        /* Ajustes para imágenes en pantallas grandes */
+        .activity img {
+            max-width: 350px;
+        }
+    }
+
     @media (max-width: 992px) {
         .content-wrapper {
             flex-direction: column;
@@ -435,27 +540,118 @@
         }
         
         .map-container {
+            height: 400px;
+        }
+        
+        .activity-content {
+            gap: 30px;
+        }
+        
+        .activity img,
+        .description {
+            width: 100% !important;
+            max-width: 100% !important;
+        }
+        
+        /* Ajuste específico para imágenes en tablet */
+        .activity img {
+            max-height: 350px;
+        }
+    }
+
+    @media (max-width: 768px) {
+        .header-spacer {
+            height: 60px;
+        }
+        
+        .carousel-container-3d {
+            height: 380px;
+            margin: 30px auto;
+            padding: 15px;
+        }
+        
+        .slide-card {
+            width: 180px;
+            height: 280px;
+        }
+        
+        .slide-card img {
+            height: 220px;
+        }
+        
+        .map-container {
             height: 350px;
+        }
+        
+        .info-section {
+            padding: 25px;
+        }
+        
+        .description {
+            padding: 25px;
+        }
+        
+        .description h3 {
+            font-size: 1.8rem;
+        }
+        
+        /* Ajuste para imágenes en móviles */
+        .activity img {
+            max-height: 250px;
         }
     }
 
     @media (max-width: 576px) {
+        .container {
+            padding: 15px;
+        }
+        
+        .carousel-container-3d {
+            height: 320px;
+            margin: 20px auto;
+        }
+        
+        .slide-card {
+            width: 160px;
+            height: 240px;
+        }
+        
+        .slide-card img {
+            height: 180px;
+        }
+        
         .map-container {
             height: 250px;
         }
         
         .directions-button {
-            padding: 10px 15px;
-            font-size: 0.9rem;
-        }
-        
-        .info-section {
-            padding: 15px;
+            padding: 12px 20px;
+            font-size: 1rem;
         }
         
         .info-card {
-            padding: 10px;
-            border-left-width: 30px;
+            padding: 15px;
+        }
+        
+        .three-column-services {
+            flex-direction: column;
+        }
+        
+        .description {
+            padding: 20px;
+        }
+        
+        .description h3 {
+            font-size: 1.6rem;
+        }
+        
+        .description p {
+            font-size: 1rem;
+        }
+        
+        /* Ajuste final para imágenes en móviles pequeños */
+        .activity img {
+            max-height: 200px;
         }
     }
 </style>
@@ -543,103 +739,106 @@ Settings: {{ $settings ? 'OK' : 'NO SETTINGS' }}
 @endif
 
 <!-- Resto del contenido existente -->
-<div class="content-wrapper">
-    <!-- MAPA -->
-    <div class="map-section">
-        <div class="map-header">
-            <center><h2>Nuestra ubicación</h2></center>
+<div class="container">
+    <div class="content-wrapper">
+        <!-- MAPA -->
+        <div class="map-section">
+            <div class="map-header">
+                <h2>Nuestra ubicación</h2>
+                <p>Encuéntranos fácilmente en Plaza La Gloria</p>
+            </div>
+            <div class="map-container">
+                <iframe
+                    class="map-iframe"
+                    src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3820.346830757997!2d-93.17619122508016!3d16.759411484024596!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x85ecd9ec7cc2372d%3A0xaa879f1e51acb17a!2sPlaza%20la%20gloria!5e0!3m2!1ses!2smx!4v1749506336739!5m2!1ses!2smx"
+                    allowfullscreen=""
+                    loading="lazy"
+                    referrerpolicy="no-referrer-when-downgrade"
+                ></iframe>
+            </div>
+            <center>
+                <button id="getDirectionsBtn" class="directions-button">Cómo llegar desde tu ubicación</button>
+            </center>
         </div>
-        <div class="map-container">
-            <iframe
-                class="map-iframe"
-                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3820.346830757997!2d-93.17619122508016!3d16.759411484024596!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x85ecd9ec7cc2372d%3A0xaa879f1e51acb17a!2sPlaza%20la%20gloria!5e0!3m2!1ses!2smx!4v1749506336739!5m2!1ses!2smx"
-                allowfullscreen=""
-                loading="lazy"
-                referrerpolicy="no-referrer-when-downgrade"
-            ></iframe>
-        </div>
-        <center>
-            <button id="getDirectionsBtn" class="directions-button">Cómo llegar desde tu ubicación</button>
-        </center>
-    </div>
 
-    <!-- INFORMACIÓN DEL CENTRO -->
-    <section class="info-section">
-        <center><h2>Información del Centro</h2></center>
+        <!-- INFORMACIÓN DEL CENTRO -->
+        <section class="info-section">
+            <h2>Información del Centro</h2>
 
-        @if($centerInfo)
-            <div class="info-card">
-                <h3>Horarios</h3>
-                <ul class="ps-3">
-                    @foreach(explode("\n", $centerInfo->schedule ?? '') as $line)
-                    @if(trim($line) !== '')
-                    <p>{{ $line }}</p>
-                    @endif
-                    @endforeach
-                </ul>
-            </div>
-
-            <div class="info-card">
-                <h3>Contacto</h3>
-                <h4><strong>Teléfono:</strong> {{ $centerInfo->phone }}</h4>
-                <h4><strong>Email:</strong> {{ $centerInfo->email }}</h4>
-                <h4><strong>Dirección:</strong> {{ $centerInfo->address }}</h4>
-            </div>
-        @else
-            <div class="info-card">
-                <p>No hay información disponible del centro.</p>
-            </div>
-        @endif
-
-        <!-- SERVICIOS COMO VIÑETAS EN TRES COLUMNAS -->
-        @if(isset($services) && $services->count() > 0)
-            <div class="info-card">
-                <h3>Nuestros Servicios</h3>
-                <div class="three-column-services">
-                    @php
-                        $chunks = $services->take(12)->chunk(4);
-                    @endphp
-                    @foreach($chunks as $column)
-                        <ul style="flex: 1; list-style-type: disc; padding-left: 20px;">
-                            @foreach($column as $service)
-                                <li>
-                               <a href="#service-{{ $service->id }}" style="text-decoration: none; color: inherit;">
-                                        {{ $service->name }}
-                                    </a>
-                                </li>
-                            @endforeach
-                        </ul>
-                    @endforeach
+            @if($centerInfo)
+                <div class="info-card">
+                    <h3>Horarios</h3>
+                    <ul class="ps-3">
+                        @foreach(explode("\n", $centerInfo->schedule ?? '') as $line)
+                        @if(trim($line) !== '')
+                        <p>{{ $line }}</p>
+                        @endif
+                        @endforeach
+                    </ul>
                 </div>
-            </div>
-        @else
-            <div class="info-card">
-                <p>No hay servicios registrados.</p>
-            </div>
-        @endif
-    </section>
-</div>
 
-<!-- DETALLES DE SERVICIOS -->
-@if(isset($services) && $services->count() > 0)
-    <div class="activities-section">
-        @foreach($services as $index => $service)
-            <div class="activity" id="service-{{ $service->id }}">
-                <div class="activity-content {{ $index % 2 == 0 ? 'left' : 'right' }}">
-                    @if($service->image_url)
-                        <img src="{{ asset('storage/' . str_replace('public/', '', $service->image_url)) }}" alt="{{ $service->name }}">
-                    @endif
-                    <div class="description">
-                        <h3>{{ $service->name }}</h3>
-                        <p>{{ $service->description }}</p>
+                <div class="info-card">
+                    <h3>Contacto</h3>
+                    <h4><strong>Teléfono:</strong> {{ $centerInfo->phone }}</h4>
+                    <h4><strong>Email:</strong> {{ $centerInfo->email }}</h4>
+                    <h4><strong>Dirección:</strong> {{ $centerInfo->address }}</h4>
+                </div>
+            @else
+                <div class="info-card">
+                    <p>No hay información disponible del centro.</p>
+                </div>
+            @endif
+
+            <!-- SERVICIOS COMO VIÑETAS EN TRES COLUMNAS -->
+            @if(isset($services) && $services->count() > 0)
+                <div class="info-card">
+                    <h3>Nuestros Servicios</h3>
+                    <div class="three-column-services">
+                        @php
+                            $chunks = $services->take(12)->chunk(4);
+                        @endphp
+                        @foreach($chunks as $column)
+                            <ul>
+                                @foreach($column as $service)
+                                    <li>
+                                   <a href="#service-{{ $service->id }}">
+                                            {{ $service->name }}
+                                        </a>
+                                    </li>
+                                @endforeach
+                            </ul>
+                        @endforeach
                     </div>
                 </div>
-            </div>
-        @endforeach
+            @else
+                <div class="info-card">
+                    <p>No hay servicios registrados.</p>
+                </div>
+            @endif
+        </section>
     </div>
-@else
-    <p class="text-center text-gray-500 mt-8">No hay servicios para mostrar.</p>
-@endif
+
+    <!-- DETALLES DE SERVICIOS -->
+    @if(isset($services) && $services->count() > 0)
+        <div class="activities-section">
+            @foreach($services as $index => $service)
+                <div class="activity" id="service-{{ $service->id }}">
+                    <div class="activity-content {{ $index % 2 == 0 ? 'left' : 'right' }}">
+                        @if($service->image_url)
+                            <img src="{{ asset('storage/' . str_replace('public/', '', $service->image_url)) }}" alt="{{ $service->name }}">
+                        @endif
+                        <div class="description">
+                            <h3>{{ $service->name }}</h3>
+                            <p>{{ $service->description }}</p>
+                        </div>
+                    </div>
+                </div>
+            @endforeach
+        </div>
+    @else
+        <p class="text-center text-gray-500 mt-8">No hay servicios para mostrar.</p>
+    @endif
+</div>
 
 {{-- Scripts --}}
 <script>
