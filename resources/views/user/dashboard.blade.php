@@ -12,6 +12,10 @@
 
 <style>
 
+
+
+
+
     /* Filtro SVG para el efecto de resplandor */
     svg.svg-filters {
         position: absolute;
@@ -262,17 +266,6 @@
         background: var(--naranja-brillante);
         font-size: 10rem;
     }
-
-    .map-container {
-    width: 100%;
-    height: 520px;
-    position: relative;
-    border-radius: 15px;
-    overflow: hidden;
-    box-shadow: 0 10px 25px var(--sombra-azul);
-    margin-bottom: 25px;
-    border: 1px solid rgba(255, 255, 255, 0.3);
-}
 
     .map-iframe {
         width: 100%;
@@ -628,6 +621,10 @@
             height: 140px;
         }
     }
+        
+        .map-container {
+            height: 500px;
+        }
         
         .directions-button {
             padding: 12px 20px;
@@ -997,7 +994,7 @@ Settings: {{ $settings ? 'OK' : 'NO SETTINGS' }}
                     const lat = position.coords.latitude;
                     const lng = position.coords.longitude;
                     const destination = encodeURIComponent('Plaza La Gloria, Tuxtla Gutiérrez, Chiapas');
-                    const mapsUrl = `https://www.google.com/maps/dir/?api=1&origin=${lat},${lng}&destination=${destination}&travelmode=driving`;
+                    const mapsUrl = https://www.google.com/maps/dir/?api=1&origin=${lat},${lng}&destination=${destination}&travelmode=driving;
                     window.open(mapsUrl, '_blank');
                 },
                 function () {
