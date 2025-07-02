@@ -11,6 +11,7 @@
 @endphp
 
 <style>
+
     /* Filtro SVG para el efecto de resplandor */
     svg.svg-filters {
         position: absolute;
@@ -51,39 +52,64 @@
         box-shadow: 0 4px 12px var(--sombra-azul);
     }
 
+    .carousel-section {
+        padding: 60px 0;
+        background: linear-gradient(
+            45deg,
+            var(--verde-esmeralda),
+            var(--naranja-brillante),
+            var(--azul-marino),
+            var(--verde-esmeralda)
+        );
+        background-size: 300% 300%;
+        animation: borderGlow 8s linear infinite;
+        margin-bottom: 40px;
+        overflow: hidden; /* Añadido para evitar desbordamiento */
+    }
+
     .carousel-container-3d {
-    position: relative;
-    perspective: 1200px;
-    margin: 40px auto;
-    height: 450px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    background: linear-gradient(
-        45deg,
-        var(--verde-esmeralda),
-        var(--naranja-brillante),
-        var(--azul-marino),
-        var(--verde-esmeralda)
-    );
-    border-radius: 0; /* Esquinas cuadradas */
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
-    padding: 20px;
-    z-index: 1; /* Cambiado de -1 a 1 para que esté sobre el fondo */
-    animation: borderGlow 8s linear infinite;
-    background-size: 300% 300%; /* Para la animación del gradiente */
-    filter: url('#glow'); /* Efecto de iluminación SVG */
-}
+        position: relative;
+        perspective: 1200px;
+        margin: 0 auto;
+        height: 500px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        border-radius: 0;
+        z-index: 1;
+        filter: url('#glow');
+        max-width: 1300px; /* Mantenemos el ancho original */
+        padding: 0 20px;
+    }
 
+    /* Tarjetas - Versión ajustada para 10 cards */
+    .slide-card {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        width: 220px; /* Mantenemos el ancho original */
+        height: 320px; /* Mantenemos el alto original */
+        transform-origin: center center;
+        border-radius: 12px;
+        overflow: hidden;
+        background-color: var(--blanco);
+        border: 2px solid var(--verde-esmeralda);
+        box-shadow: 0 5px 20px rgba(0,0,0,0.25);
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-start;
+        transition: transform 0.4s ease, box-shadow 0.4s ease;
+        opacity: 1;
+        cursor: pointer;
+    }
 
-
-    /* Animación para el gradiente del borde - VERSIÓN ORIGINAL */
+    /* Animación para el gradiente del borde */
     @keyframes borderGlow {
         0% { background-position: 0% 50%; }
         100% { background-position: 300% 50%; }
     }
 
-    /* Contenedor 3D - VERSIÓN ORIGINAL */
+    /* Contenedor 3D */
     .card-3d {
         width: 100%;
         height: 100%;
@@ -96,13 +122,13 @@
         @endif
     }
 
-    /* Tarjetas - VERSIÓN ORIGINAL */
+    /* Tarjetas - Versión mejorada para 10 cards */
     .slide-card {
         position: absolute;
         top: 50%;
         left: 50%;
-        width: 220px;
-        height: 320px;
+        width: 240px;
+        height: 260px;
         transform-origin: center center;
         border-radius: 12px;
         overflow: hidden;
@@ -114,6 +140,7 @@
         justify-content: flex-start;
         transition: transform 0.4s ease, box-shadow 0.4s ease;
         opacity: 1;
+        cursor: pointer;
     }
 
     .slide-card:hover {
@@ -121,35 +148,38 @@
         box-shadow: 0 12px 25px rgba(0,0,0,0.3);
     }
 
-    /* MEJORA: Ajuste de imágenes en el carrusel */
     .slide-card img {
-        width: 100%;
-        height: 260px;
-        object-fit: contain;
-        background-color: #fff;
-        padding: 15px; /* Añadido espacio interno */
-        max-width: 100%; /* Asegura que no se desborde */
-        max-height: 100%; /* Asegura que no se desborde */
-        @if($brightness)
-            animation: pulseBrightness 4s ease-in-out infinite;
-        @endif
-    }
+    width: 100%;
+    height: 180px; /* altura razonable para que la descripción se vea bien */
+    object-fit: cover; /* mantiene proporción recortando si es necesario */
+    background-color: #fff;
+    padding: 0;
+    max-width: 100%;
+    display: block;
+    @if($brightness)
+        animation: pulseBrightness 4s ease-in-out infinite;
+    @endif
+}
 
-    /* Descripción de la tarjeta - VERSIÓN ORIGINAL */
+
+
+    /* Descripción de la tarjeta */
     .slide-description {
-        background: var(--naranja-brillante);
-        color: var(--blanco);
-        text-align: left;
-        font-size: 0.95rem;
-        padding: 8px 8px 8px 5px;
-        height: 60px;
-        display: flex;
-        align-items: center;
-        justify-content: flex-start;
-        font-weight: 600;
-    }
+    background: var(--naranja-brillante);
+    color: var(--blanco);
+    text-align: left;
+    font-size: 1rem;
+    padding: 12px 10px;
+    height: 80px;
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    font-weight: 600;
+    line-height: 1.4;
+}
 
-    /* Animaciones - VERSIÓN ORIGINAL */
+
+    /* Animaciones */
     @keyframes autoRotate {
         from { transform: rotateY(0deg); }
         to { transform: rotateY(360deg); }
@@ -166,7 +196,7 @@
         50% { filter: brightness(1.4); }
     }
 
-    /* Estilos apilados - VERSIÓN ORIGINAL */
+    /* Estilos apilados */
     .slide-card.stacked-current {
         transform: translate(-50%, -50%) scale(1);
         z-index: 5;
@@ -234,15 +264,15 @@
     }
 
     .map-container {
-        width: 100%;
-        height: 450px;
-        position: relative;
-        border-radius: 15px;
-        overflow: hidden;
-        box-shadow: 0 10px 25px var(--sombra-azul);
-        margin-bottom: 25px;
-        border: 1px solid rgba(255, 255, 255, 0.3);
-    }
+    width: 100%;
+    height: 520px;
+    position: relative;
+    border-radius: 15px;
+    overflow: hidden;
+    box-shadow: 0 10px 25px var(--sombra-azul);
+    margin-bottom: 25px;
+    border: 1px solid rgba(255, 255, 255, 0.3);
+}
 
     .map-iframe {
         width: 100%;
@@ -285,9 +315,7 @@
         background: linear-gradient(to right, var(--verde-esmeralda) 0%, var(--naranja-brillante) 100%);
         opacity: 0;
         transition: opacity 0.3s ease;
-        
     }
-
 
     /* Sección de información - Tarjetas modernas */
     .info-section {
@@ -366,73 +394,51 @@
     }
 
     /* Servicios en tres columnas - Versión mejorada */
-.three-column-services {
-    display: flex;
-    justify-content: space-between;
-    flex-wrap: wrap;
-    gap: 20px; /* Aumenté el gap para mejor separación */
-}
-
-.three-column-services ul {
-    flex: 1;
-    min-width: 160px; /* Un poco más ancho */
-    list-style-type: none;
-    padding: 0;
-    margin: 0;
-}
-
-.three-column-services li {
-    margin-bottom: 15px; /* Más espacio entre items */
-    position: relative;
-    padding-left: 25px; /* Más espacio para el bullet */
-    line-height: 1.5; /* Mejor interlineado */
-}
-
-.three-column-services li::before {
-    content: '•';
-    color: var(--verde-esmeralda);
-    font-size: 1.8rem; /* Bullet más grande (antes 1.5rem) */
-    position: absolute;
-    left: 0;
-    top: -7px; /* Ajuste de posición por el tamaño */
-}
-
-.three-column-services a {
-    color: var(--azul-oscuro);
-    text-decoration: none;
-    transition: all 0.3s ease;
-    display: block;
-    padding: 6px 0; /* Más padding vertical */
-    font-size: 1.1rem; /* Tamaño aumentado (antes no tenía definido) */
-    font-weight: 500; /* Peso medio para mejor legibilidad */
-}
-
-.three-column-services a:hover {
-    color: var(--naranja-brillante);
-    transform: translateX(8px); /* Efecto hover más notorio */
-}
-
-/* Ajustes responsivos */
-@media (max-width: 768px) {
-    .three-column-services a {
-        font-size: 1rem; /* Tamaño ligeramente menor en móviles */
-    }
-    
-    .three-column-services li::before {
-        font-size: 1.6rem;
-        top: -5px;
-    }
-}
-
-@media (max-width: 576px) {
     .three-column-services {
-        gap: 15px;
+        display: flex;
+        justify-content: space-between;
+        flex-wrap: wrap;
+        gap: 20px;
     }
-    
+
     .three-column-services ul {
-        min-width: 140px;
+        flex: 1;
+        min-width: 160px;
+        list-style-type: none;
+        padding: 0;
+        margin: 0;
     }
-}
+
+    .three-column-services li {
+        margin-bottom: 15px;
+        position: relative;
+        padding-left: 25px;
+        line-height: 1.5;
+    }
+
+    .three-column-services li::before {
+        content: '•';
+        color: var(--verde-esmeralda);
+        font-size: 1.8rem;
+        position: absolute;
+        left: 0;
+        top: -7px;
+    }
+
+    .three-column-services a {
+        color: var(--azul-oscuro);
+        text-decoration: none;
+        transition: all 0.3s ease;
+        display: block;
+        padding: 6px 0;
+        font-size: 1.1rem;
+        font-weight: 500;
+    }
+
+    .three-column-services a:hover {
+        color: var(--naranja-brillante);
+        transform: translateX(8px);
+    }
 
     /* MEJORA: Sección de actividades/servicios con imágenes ajustadas */
     .activities-section {
@@ -462,15 +468,16 @@
     /* MEJORA PRINCIPAL: Ajuste de imágenes en el dashboard */
     .activity img {
         width: 50%;
-        max-width: 400px; /* Reducido de 600px para mejor proporción */
+        max-width: 400px;
         height: auto;
-        max-height: 300px; /* Limita la altura máxima */
-        object-fit: contain; /* Mantiene la proporción sin recortar */
+        max-height: 300px;
+        object-fit: contain;
         border-radius: 15px;
         box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
         transition: transform 0.5s ease, box-shadow 0.5s ease;
-        margin: 0 auto; /* Centra la imagen */
-        display: block; /* Asegura que los márgenes funcionen */
+        margin: 0 auto;
+        display: block;
+        cursor: pointer;
     }
 
     .activity img:hover {
@@ -516,58 +523,68 @@
         margin-top: 20px;
     }
 
-    /* Media queries para responsividad */
+    /* Modal para imágenes */
+    .modal {
+        display: none;
+        position: fixed;
+        z-index: 1000;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0,0,0,0.9);
+        overflow: auto;
+    }
+
+    .modal-content {
+        margin: auto;
+        display: block;
+        width: 80%;
+        max-width: 800px;
+        max-height: 80vh;
+        object-fit: contain;
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+    }
+
+    .close {
+        position: absolute;
+        top: 20px;
+        right: 35px;
+        color: #f1f1f1;
+        font-size: 40px;
+        font-weight: bold;
+        transition: 0.3s;
+        cursor: pointer;
+    }
+
+    .close:hover {
+        color: var(--naranja-brillante);
+    }
+
+    /* Media queries ajustados */
     @media (max-width: 1200px) {
-        .container {
-            padding: 25px;
+        .carousel-container-3d {
+            height: 450px;
+            max-width: 1100px;
         }
         
-        /* Ajustes para imágenes en pantallas grandes */
-        .activity img {
-            max-width: 350px;
+        .slide-card {
+            width: 200px;
+            height: 300px;
+        }
+        
+        .slide-card img {
+            height: 240px;
         }
     }
 
     @media (max-width: 992px) {
-        .content-wrapper {
-            flex-direction: column;
-        }
-        
-        .map-section, 
-        .info-section {
-            flex: none;
-            width: 100%;
-        }
-        
-        .map-container {
-            height: 400px;
-        }
-        
-        .activity-content {
-            gap: 30px;
-        }
-        
-        .activity img,
-        .description {
-            width: 100% !important;
-            max-width: 100% !important;
-        }
-        
-        /* Ajuste específico para imágenes en tablet */
-        .activity img {
-            max-height: 350px;
-        }
-    }
-
-    @media (max-width: 768px) {
-        .header-spacer {
-            height: 60px;
-        }
-        
         .carousel-container-3d {
-            height: 380px;
-            margin: 30px auto;
-            padding: 15px;
+            height: 400px;
+            max-width: 900px;
         }
         
         .slide-card {
@@ -578,37 +595,12 @@
         .slide-card img {
             height: 220px;
         }
-        
-        .map-container {
-            height: 350px;
-        }
-        
-        .info-section {
-            padding: 25px;
-        }
-        
-        .description {
-            padding: 25px;
-        }
-        
-        .description h3 {
-            font-size: 1.8rem;
-        }
-        
-        /* Ajuste para imágenes en móviles */
-        .activity img {
-            max-height: 250px;
-        }
     }
 
-    @media (max-width: 576px) {
-        .container {
-            padding: 15px;
-        }
-        
+    @media (max-width: 768px) {
         .carousel-container-3d {
-            height: 320px;
-            margin: 20px auto;
+            height: 380px;
+            max-width: 700px;
         }
         
         .slide-card {
@@ -619,10 +611,23 @@
         .slide-card img {
             height: 180px;
         }
-        
-        .map-container {
-            height: 250px;
+    }
+
+    @media (max-width: 576px) {
+        .carousel-container-3d {
+            height: 320px;
+            max-width: 500px;
         }
+        
+        .slide-card {
+            width: 140px;
+            height: 200px;
+        }
+        
+        .slide-card img {
+            height: 140px;
+        }
+    }
         
         .directions-button {
             padding: 12px 20px;
@@ -638,21 +643,154 @@
         }
         
         .description {
-            padding: 20px;
+            padding: 36px;
         }
         
         .description h3 {
-            font-size: 1.6rem;
+            font-size: 2.4rem;
         }
         
         .description p {
-            font-size: 1rem;
+            font-size: 1.5rem;
         }
         
-        /* Ajuste final para imágenes en móviles pequeños */
         .activity img {
-            max-height: 200px;
+            max-width: 480px;
+            max-height: 340px;
         }
+
+        @media (max-width: 768px) {
+    .carousel-container-3d {
+        height: 380px;
+        max-width: 700px;
+    }
+
+    .slide-card {
+        width: 160px;
+        height: 240px;
+    }
+
+    .slide-card img {
+        height: 180px;
+    }
+
+    .content-wrapper {
+        flex-direction: column;
+    }
+
+    .info-section,
+    .map-section {
+        width: 100%;
+        margin-top: 20px;
+    }
+
+    .activity-content.left,
+    .activity-content.right {
+        flex-direction: column !important;
+        align-items: center;
+    }
+
+    .activity img,
+    .description {
+        width: 100%;
+        max-width: 100%;
+    }
+
+    .description {
+        padding: 20px;
+    }
+
+    .description h3 {
+        font-size: 1.8rem;
+    }
+
+    .description p {
+        font-size: 1.2rem;
+    }
+
+    .three-column-services {
+        flex-direction: column;
+    }
+
+    .info-section h2 {
+        font-size: 2rem;
+    }
+
+    .map-header h2 {
+        font-size: 1.6rem;
+    }
+
+    .directions-button {
+        width: 100%;
+        font-size: 1rem;
+        padding: 12px;
+    }
+
+    .info-card h3 {
+        font-size: 1.6rem;
+    }
+
+    .info-card p,
+    .info-card a {
+        font-size: 1.2rem;
+    }
+}
+
+@media (max-width: 576px) {
+    .carousel-container-3d {
+        height: 320px;
+        max-width: 500px;
+    }
+
+    .slide-card {
+        width: 140px;
+        height: 200px;
+    }
+
+    .slide-card img {
+        height: 140px;
+    }
+
+    .description {
+        padding: 16px;
+    }
+
+    .description h3 {
+        font-size: 1.6rem;
+    }
+
+    .description p {
+        font-size: 1rem;
+    }
+
+    .activity img {
+        max-width: 100%;
+        max-height: 280px;
+    }
+
+    .info-section h2 {
+        font-size: 1.8rem;
+    }
+
+    .map-header h2 {
+        font-size: 1.4rem;
+    }
+
+    .directions-button {
+        padding: 10px;
+        font-size: 0.9rem;
+    }
+
+    .info-card h3 {
+        font-size: 1.4rem;
+    }
+
+    .info-card p,
+    .info-card a {
+        font-size: 1rem;
+    }
+}
+
     }
 </style>
 
@@ -666,6 +804,12 @@
     </defs>
 </svg>
 
+<!-- Modal para imágenes -->
+<div id="imageModal" class="modal">
+    <span class="close">&times;</span>
+    <img class="modal-content" id="modalImage">
+</div>
+
 {{-- DEBUG TEMPORAL --}}
 <pre>
 Slides: {{ $slides->count() }}
@@ -676,33 +820,36 @@ Settings: {{ $settings ? 'OK' : 'NO SETTINGS' }}
     @php
         $count = $slides->count();
         $angle = 360 / $count;
+        // Ajustamos el radio basado en el número de slides para mejor distribución
+        $dynamicRadius = $count > 8 ? $radius + 50 : $radius;
     @endphp
 
     <div class="header-spacer"></div>
 
-    <div class="carousel-container-3d">
-        <div class="card-3d">
-            @foreach($slides as $index => $slide)
-                @php
-                    $rotation = $angle * $index;
-                    $transform = match($style) {
-                        'ring' => "rotateY({$rotation}deg) translateZ({$radius}px)",
-                        'flat' => "translateX(" . ($index * 240) . "px)",
-                        default => ''
-                    };
-                    $zIndex = $style === 'stacked' ? $count - $index : 1;
-                @endphp
-                <div class="slide-card {{ $style === 'stacked' ? '' : '' }}"
-                     style="transform: {{ $style !== 'stacked' ? 'translate(-50%, -50%) ' . $transform : '' }};
-                            z-index: {{ $zIndex }};">
-                    <a href="{{ $slide->link_url ?? '#' }}" target="_blank">
+    <div class="carousel-section">
+        <div class="carousel-container-3d">
+            <div class="card-3d">
+                @foreach($slides as $index => $slide)
+                    @php
+                        $rotation = $angle * $index;
+                        $transform = match($style) {
+                            'ring' => "rotateY({$rotation}deg) translateZ({$dynamicRadius}px)",
+                            'flat' => "translateX(" . ($index * 240) . "px)",
+                            default => ''
+                        };
+                        $zIndex = $style === 'stacked' ? $count - $index : 1;
+                    @endphp
+                    <div class="slide-card {{ $style === 'stacked' ? '' : '' }}"
+                         style="transform: {{ $style !== 'stacked' ? 'translate(-50%, -50%) ' . $transform : '' }};
+                                z-index: {{ $zIndex }};"
+                         onclick="openModal('{{ asset('storage/' . $slide->image_path) }}')">
                         <img src="{{ asset('storage/' . $slide->image_path) }}" alt="Slide Image">
-                    </a>
-                    @if($slide->description)
-                        <div class="slide-description">{{ $slide->description }}</div>
-                    @endif
-                </div>
-            @endforeach
+                        @if($slide->description)
+                            <div class="slide-description">{{ $slide->description }}</div>
+                        @endif
+                    </div>
+                @endforeach
+            </div>
         </div>
     </div>
 
@@ -801,7 +948,7 @@ Settings: {{ $settings ? 'OK' : 'NO SETTINGS' }}
                             <ul>
                                 @foreach($column as $service)
                                     <li>
-                                   <a href="#service-{{ $service->id }}">
+                                        <a href="#service-{{ $service->id }}">
                                             {{ $service->name }}
                                         </a>
                                     </li>
@@ -825,7 +972,7 @@ Settings: {{ $settings ? 'OK' : 'NO SETTINGS' }}
                 <div class="activity" id="service-{{ $service->id }}">
                     <div class="activity-content {{ $index % 2 == 0 ? 'left' : 'right' }}">
                         @if($service->image_url)
-                            <img src="{{ asset('storage/' . str_replace('public/', '', $service->image_url)) }}" alt="{{ $service->name }}">
+                            <img src="{{ asset('storage/' . str_replace('public/', '', $service->image_url)) }}" alt="{{ $service->name }}" onclick="openModal('{{ asset('storage/' . str_replace('public/', '', $service->image_url)) }}')">
                         @endif
                         <div class="description">
                             <h3>{{ $service->name }}</h3>
@@ -891,5 +1038,24 @@ Settings: {{ $settings ? 'OK' : 'NO SETTINGS' }}
     }
 
     setInterval(() => moveSlide(1), 6000); // Auto-slide cada 6 segundos
+
+    // MODAL PARA IMÁGENES
+    function openModal(imageSrc) {
+        const modal = document.getElementById('imageModal');
+        const modalImg = document.getElementById('modalImage');
+        modal.style.display = "block";
+        modalImg.src = imageSrc;
+    }
+
+    document.querySelector('.close').addEventListener('click', function() {
+        document.getElementById('imageModal').style.display = "none";
+    });
+
+    window.addEventListener('click', function(event) {
+        const modal = document.getElementById('imageModal');
+        if (event.target == modal) {
+            modal.style.display = "none";
+        }
+    });
 </script>
 @endsection

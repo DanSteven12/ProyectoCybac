@@ -19,19 +19,26 @@
 
     <!-- Estilos para footer fijo abajo -->
     <style>
-        html, body {
+       html, body {
             height: 100%;
             margin: 0;
         }
-
+        
         body {
             display: flex;
             flex-direction: column;
         }
-
-        .main-wrapper {
-            flex: 1;
-            min-height: 100vh;
+        
+        .content-wrapper {
+            flex: 1 0 auto;
+            padding-bottom: 450px; /* Espacio para el footer */
+        }
+        
+        .footer {
+            flex-shrink: 0;
+            background-color: #1A365D;
+            color: white;
+            padding: 20px 0;
         }
     </style>
 
@@ -39,15 +46,12 @@
 </head>
 <body>
 
-    <!-- Navbar -->
     @include('layouts.partials.admi-navbar')
-
-    <!-- Contenido principal -->
-    <div class="main-wrapper">
+    
+    <div class="content-wrapper">
         @yield('content')
     </div>
-
-    <!-- Footer -->
+    
     @include('layouts.partials.footer')
 
     <!-- Scripts JS -->

@@ -44,10 +44,15 @@
 
                         <!-- Descripción -->
                         <div class="mb-4">
-                            <label for="description" class="form-label" style="font-size: 1.4rem; font-weight: 600; color: #1A365D;">Descripción</label>
-                            <input type="text" name="description" id="description" 
-                                class="form-control" style="font-size: 1.3rem; padding: 0.8rem; border: 2px solid #1A365D;"
-                                value="{{ old('description', $carousel->description) }}">
+                            <label for="description" class="form-label" style="font-size: 1.4rem; font-weight: 600; color: #1A365D;">
+                                Descripción <span class="text-muted" style="font-size: 1rem;">(máximo 255 caracteres)</span>
+                            </label>
+                            <textarea name="description" id="description" maxlength="255"
+                                class="form-control"
+                                style="font-size: 1.3rem; padding: 0.8rem; border: 2px solid #1A365D; min-height: 100px;">{{ old('description', $carousel->description) }}</textarea>
+                            <div class="mt-1" style="font-size: 1.1rem; color: #1A365D;">
+                                Letras usadas: <span id="char-count">0</span>/255
+                            </div>
                         </div>
 
                         <!-- Imagen -->
@@ -69,23 +74,27 @@
                                 value="{{ old('link_url', $carousel->link_url) }}">
                         </div>
 
-                        <!-- Orden -->
-                        <div class="mb-4">
-                            <label for="display_order" class="form-label" style="font-size: 1.4rem; font-weight: 600; color: #1A365D;">Orden</label>
-                            <input type="number" name="display_order" id="display_order" 
-                                class="form-control" style="font-size: 1.3rem; padding: 0.8rem; border: 2px solid #1A365D;"
-                                min="0" value="{{ old('display_order', $carousel->display_order) }}">
-                        </div>
+                        <!-- Orden (solo lectura) -->
+<div class="mb-4">
+    <label for="display_order" class="form-label" style="font-size: 1.2rem; font-weight: 600; color: #1A365D;">Orden</label>
+    <input type="number" name="display_order" id="display_order" 
+        class="form-control orden-input"
+        style="font-size: 1.1rem; padding: 0.4rem 0.8rem; border: 2px solid #1A365D; background-color: #e9ecef; cursor: not-allowed; max-width: 200px;"
+        min="0" value="{{ old('display_order', $carousel->display_order) }}" readonly>
+</div>
+
 
                         <!-- Estado -->
-                        <div class="mb-4">
-                            <label for="is_active" class="form-label" style="font-size: 1.4rem; font-weight: 600; color: #1A365D;">Estado</label>
-                            <select name="is_active" id="is_active" 
-                                class="form-select" style="font-size: 1.3rem; padding: 0.8rem; border: 2px solid #1A365D;">
-                                <option value="1" @if ($carousel->is_active) selected @endif>Activo</option>
-                                <option value="0" @if (!$carousel->is_active) selected @endif>Inactivo</option>
-                            </select>
-                        </div>
+<div class="mb-4">
+    <label for="is_active" class="form-label" style="font-size: 1.2rem; font-weight: 600; color: #1A365D;">Estado</label>
+    <select name="is_active" id="is_active" 
+        class="form-select estado-select"
+        style="font-size: 1.1rem; padding: 0.4rem 0.8rem; border: 2px solid #1A365D; max-width: 200px;">
+        <option value="1" @if ($carousel->is_active) selected @endif>Activo</option>
+        <option value="0" @if (!$carousel->is_active) selected @endif>Inactivo</option>
+    </select>
+</div>
+
 
                         <!-- Botones -->
                         <div class="d-flex justify-content-end mt-5">
@@ -106,6 +115,29 @@
 </div>
 
 <style>
+
+
+    .orden-input {
+    font-size: 1.1rem !important;
+    padding: 0.4rem 0.8rem !important;
+    max-width: 200px;
+    border-radius: 6px;
+    transition: all 0.3s ease;
+}
+
+    .estado-select {
+    font-size: 1.1rem !important;
+    padding: 0.4rem 0.8rem !important;
+    max-width: 200px;
+    border-radius: 6px;
+    transition: all 0.3s ease;
+}
+
+.estado-select:focus {
+    border-color: #FF6B35 !important;
+    box-shadow: 0 0 0 0.25rem rgba(255, 107, 53, 0.25) !important;
+}
+
     .card {
         border-radius: 10px;
         overflow: hidden;
@@ -195,16 +227,24 @@
 
 @section('scripts')
 <script>
-    // Auto-dismiss alerts after 3 seconds
-    document.addEventListener('DOMContentLoaded', function() {
-        const alerts = document.querySelectorAll('.auto-dismiss-alert');
-        alerts.forEach(alert => {
-            setTimeout(() => {
-                const bsAlert = new bootstrap.Alert(alert);
-                bsAlert.close();
-            }, 3000);
-        });
-    });
+    const descriptionInput = document.getElementById('description');
+    const charCount = document.getElementById('char-count');
+
+    function countLetters(text) {
+        // Eliminar todo lo que no sea letra (a-z, A-Z, letras acentuadas, ñ, Ñ)
+        // Usamos expresión regular unicode para letras con acentos y ñ
+        // \p{L} = cualquier letra unicode
+        const lettersOnly = text.match(/\p{L}/gu) || [];
+        return lettersOnly.length;
+    }
+
+    function updateCount() {
+        const text = descriptionInput.value;
+        const letters = countLetters(text);
+        charCount.textContent = letters;
+    }
+
+    descriptionInput.addEventListener('input', updateCount);
+    updateCount(); // inicializar contador con el texto actual
 </script>
-@endsection
 @endsection

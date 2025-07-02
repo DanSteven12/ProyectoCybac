@@ -12,15 +12,17 @@ class CarouselSlideController extends Controller
 {
     public function index()
     {
-        $slides = CarouselSlide::orderBy('display_order')->get();
-        $settings = CarouselSetting::first();
-        return view('admin.carousel.index', compact('slides', 'settings'));
+    $slides = CarouselSlide::orderBy('display_order')->paginate(10);
+    $settings = CarouselSetting::first();
+    return view('admin.carousel.index', compact('slides', 'settings'));
     }
 
     public function create()
-    {
-        return view('admin.carousel.create');
-    }
+{
+    $nextOrder = CarouselSlide::max('display_order') + 1 ?? 1;
+    return view('admin.carousel.create', compact('nextOrder'));
+}
+
 
     public function store(Request $request)
 {
@@ -32,8 +34,19 @@ class CarouselSlideController extends Controller
         'is_active'     => 'required|boolean',
     ]);
 
+    // ✅ Verificar manualmente si ya existe ese número de orden
+    $orderExists = CarouselSlide::where('display_order', $validated['display_order'])->exists();
+
+    if ($orderExists) {
+        return back()
+            ->withErrors(['display_order' => 'Ya existe un slide con este orden. Elige otro número.'])
+            ->withInput();
+    }
+
+    // ✅ Guardar imagen
     $path = $request->file('image')->store('slides', 'public');
 
+    // ✅ Crear slide
     $slide = new CarouselSlide();
     $slide->description    = $validated['description'] ?? null;
     $slide->image_path     = $path;
@@ -45,6 +58,7 @@ class CarouselSlideController extends Controller
 
     return redirect()->route('admin.carousel.index')->with('success', 'Slide guardado correctamente.');
 }
+
 
 
 

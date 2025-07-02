@@ -38,13 +38,20 @@
                     <form action="{{ route('admin.carousel.store') }}" method="POST" enctype="multipart/form-data" class="space-y-5">
                         @csrf
 
-                        <!-- Descripción -->
-                        <div class="mb-4">
-                            <label for="description" class="form-label" style="font-size: 1.4rem; font-weight: 600; color: #1A365D;">Descripción</label>
-                            <input type="text" name="description" id="description" 
-                                class="form-control" style="font-size: 1.3rem; padding: 0.8rem; border: 2px solid #1A365D;"
-                                value="{{ old('description') }}">
-                        </div>
+                        <!-- Descripción con contador -->
+<div class="mb-4">
+    <label for="description" class="form-label" style="font-size: 1.4rem; font-weight: 600; color: #1A365D;">
+        Descripción <span class="text-muted" style="font-size: 1rem;">(máximo 255 caracteres)</span>
+    </label>
+    <textarea name="description" id="description" maxlength="255"
+        class="form-control"
+        style="font-size: 1.3rem; padding: 0.8rem; border: 2px solid #1A365D; min-height: 100px;">{{ old('description') }}</textarea>
+    <div class="mt-1" style="font-size: 1.1rem; color: #1A365D;">
+        Letras usadas: <span id="char-count">0</span>/255
+    </div>
+</div>
+
+
 
                         <!-- Imagen -->
                         <div class="mb-4">
@@ -62,13 +69,21 @@
                                 value="{{ old('link_url') }}" placeholder="https://ejemplo.com">
                         </div>
 
-                        <!-- Orden -->
-                        <div class="mb-4">
-                            <label for="display_order" class="form-label" style="font-size: 1.4rem; font-weight: 600; color: #1A365D;">Orden <span class="text-danger">*</span></label>
-                            <input type="number" name="display_order" id="display_order" min="0" required
-                                class="form-control" style="font-size: 1.3rem; padding: 0.8rem; border: 2px solid #1A365D;"
-                                value="{{ old('display_order') }}">
-                        </div>
+                        <!-- Orden de Aparición -->
+<div class="mb-4">
+    <label for="display_order" class="form-label" style="font-size: 1.4rem; font-weight: 600; color: #1A365D;">
+        <i class=""></i>Orden de aparición
+    </label>
+    <input type="number" name="display_order" id="display_order"
+           class="form-control"
+           style="font-size: 1.3rem; padding: 0.8rem; border: 2px solid #1A365D; background-color: #e9ecef;"
+           value="{{ old('display_order', $nextOrder ?? '') }}"
+           readonly>
+    @error('display_order')
+        <div class="text-danger mt-1">{{ $message }}</div>
+    @enderror
+</div>
+
 
                         <!-- Estado -->
                         <div class="mb-4">
@@ -157,13 +172,11 @@
     document.getElementById('image').addEventListener('change', function(e) {
         const file = e.target.files[0];
         if (file) {
-            // Validar tamaño máximo (5MB)
             if (file.size > 5 * 1024 * 1024) {
                 alert('El archivo es demasiado grande. El tamaño máximo permitido es 5MB.');
                 e.target.value = '';
             }
-            
-            // Validar tipo de archivo
+
             const validTypes = ['image/jpeg', 'image/png', 'image/gif'];
             if (!validTypes.includes(file.type)) {
                 alert('Formato de archivo no válido. Solo se permiten imágenes JPG, PNG o GIF.');
@@ -171,6 +184,20 @@
             }
         }
     });
+
+    // Contador de caracteres para descripción
+    const descriptionInput = document.getElementById('description');
+    const charCount = document.getElementById('char-count');
+
+    if (descriptionInput && charCount) {
+        const updateCount = () => {
+            charCount.textContent = descriptionInput.value.length;
+        };
+        descriptionInput.addEventListener('input', updateCount);
+        updateCount(); // inicial
+    }
 </script>
 @endsection
+
+
 @endsection

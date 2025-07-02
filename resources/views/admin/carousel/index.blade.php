@@ -1,7 +1,7 @@
 @extends('layouts.admi-app-master')
 
 @section('content')
-<div class="container-fluid px-4 mt-5">
+<div class="container-fluid px-4 mt-5 mb-5">
     <div class="row justify-content-center">
         <div class="col-12 col-xxl-10">
             <!-- Card Principal -->
@@ -108,6 +108,50 @@
                             </tbody>
                         </table>
                     </div>
+
+                    <!-- Paginación -->
+                    @if($slides->hasPages())
+                    <div class="d-flex justify-content-center mt-4 mb-4">
+                        <nav aria-label="Page navigation">
+                            <ul class="pagination pagination-lg">
+                                {{-- Previous Page Link --}}
+                                @if($slides->onFirstPage())
+                                    <li class="page-item disabled">
+                                        <span class="page-link" style="color: #6c757d; font-size: 1.3rem;">&laquo;</span>
+                                    </li>
+                                @else
+                                    <li class="page-item">
+                                        <a class="page-link" href="{{ $slides->previousPageUrl() }}" style="color: #1A365D; font-size: 1.3rem;">&laquo;</a>
+                                    </li>
+                                @endif
+
+                                {{-- Pagination Elements --}}
+                                @foreach($slides->getUrlRange(1, $slides->lastPage()) as $page => $url)
+                                    @if($page == $slides->currentPage())
+                                        <li class="page-item active">
+                                            <span class="page-link" style="background-color: #1A365D; border-color: #1A365D; font-size: 1.3rem;">{{ $page }}</span>
+                                        </li>
+                                    @else
+                                        <li class="page-item">
+                                            <a class="page-link" href="{{ $url }}" style="color: #1A365D; font-size: 1.3rem;">{{ $page }}</a>
+                                        </li>
+                                    @endif
+                                @endforeach
+
+                                {{-- Next Page Link --}}
+                                @if($slides->hasMorePages())
+                                    <li class="page-item">
+                                        <a class="page-link" href="{{ $slides->nextPageUrl() }}" style="color: #1A365D; font-size: 1.3rem;">&raquo;</a>
+                                    </li>
+                                @else
+                                    <li class="page-item disabled">
+                                        <span class="page-link" style="color: #6c757d; font-size: 1.3rem;">&raquo;</span>
+                                    </li>
+                                @endif
+                            </ul>
+                        </nav>
+                    </div>
+                    @endif
 
                     <!-- Configuración del Carrusel -->
                     <div class="p-4" style="background-color: #F4F4F4; border-top: 2px solid #1A365D;">
