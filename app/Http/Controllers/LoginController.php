@@ -32,30 +32,31 @@ class LoginController extends Controller
     }
 
     protected function authenticatedRedirect()
-{
-    $user = Auth::user();
+    {
+        $user = Auth::user();
 
-    if (!$user->roles || $user->roles->isEmpty()) {
-        Auth::logout();
-        return redirect()->route('login')->withErrors(['error' => 'Tu cuenta no tiene un rol asignado']);
+        // Validar si tiene un rol asignado por 'rol_id'
+        if (!$user->role) {
+            Auth::logout();
+            return redirect()->route('login')->withErrors(['error' => 'Tu cuenta no tiene un rol asignado']);
+        }
+
+        // Redireccionar según el rol
+        if ($user->hasRole(Role::ADMIN)) {
+            return redirect()->intended(route('admin.dashboard'));
+        }
+
+        if ($user->hasRole(Role::INSTRUCTOR)) {
+            return redirect()->intended(route('instructor.dashboard'));
+        }
+
+        if ($user->hasRole(Role::USUARIO)) {
+            return redirect()->intended(route('user.dashboard'));
+        }
+
+        // Si el rol no es reconocido
+        return redirect()->intended('/');
     }
-
-    if ($user->hasRole(Role::ADMIN)) {
-        return redirect()->intended(route('admin.dashboard'));
-    }
-
-    if ($user->hasRole(Role::INSTRUCTOR)) {
-        return redirect()->intended(route('instructor.dashboard'));
-    }
-
-    if ($user->hasRole(Role::USUARIO)) {
-        return redirect()->intended(route('user.dashboard'));
-    }
-
-    // Por si no tiene ninguno de esos roles:
-    return redirect()->intended('/');
-}
-
 
     public function logout(Request $request)
     {

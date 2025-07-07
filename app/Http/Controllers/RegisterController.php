@@ -18,45 +18,51 @@ class RegisterController extends Controller
     }
 
     public function register(Request $request)
-    {
-        $request->validate([
-            'names' => ['required', 'string', 'max:255'],
-            'last_name' => ['required', 'string', 'max:255'],
-            'birth_date' => ['required', 'date'],
-            'gender' => ['required', 'string', 'max:255'],
-            'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
-            'password' => ['required', 'confirmed', Rules\Password::defaults()],
-        ]);
+{
+    // 1) Validación
+    $data = $request->validate([
+        'names'           => ['required', 'string', 'max:255'],
+        'last_name'       => ['required', 'string', 'max:255'],
+        'birth_date'      => ['required', 'date'],
+        'gender'          => ['required', 'string', 'max:255'],
+        'email'           => ['required', 'string', 'email', 'max:255', 'unique:users'],
+        'password'        => ['required', 'confirmed', Rules\Password::defaults()],
+        'specialty'       => ['nullable', 'string', 'max:255'],
+        'certification'   => ['nullable', 'string', 'max:255'],
+    ]);
 
-        // ✅ Obtener el rol por defecto desde la tabla roles
-        $defaultRole = Role::where('name', Role::USUARIO)->firstOrFail();
+    // 2) Rol por defecto
+    $defaultRole = Role::where('slug', Role::USUARIO)->firstOrFail();
 
-        // ✅ Crear el usuario
-        $user = User::create([
-            'names' => $request->names,
-            'last_name' => $request->last_name,
-            'birth_date' => $request->birth_date,
-            'gender' => $request->gender,
-            'email' => $request->email,
-            'password' => Hash::make($request->password),
-            'status_id' => 1, // o el status que desees por defecto
-        ]);
+    // 3) Crear usuario
+    $user = User::create([
+        'names'         => $data['names'],
+        'last_name'     => $data['last_name'],
+        'birth_date'    => $data['birth_date'],
+        'gender'        => $data['gender'],
+        'email'         => $data['email'],
+        'password'      => Hash::make($data['password']),
+        'rol_id'        => $defaultRole->id,
+        'status_id'     => 1,
+        'specialty'     => $data['specialty']     ?? null,
+        'certification' => $data['certification'] ?? null,
+    ]);
 
-        // ✅ Asignar el rol usando Spatie
-        $user->assignRole($defaultRole->name);
+    // 4) Evento y login
+    event(new Registered($user));
+    Auth::login($user);
 
-        // Registrar evento de usuario registrado
-        event(new Registered($user));
-
-        // Autenticar al usuario
-        Auth::login($user);
-
-        // Redirigir a su panel correspondiente según el rol
-        return match (true) {
-            $user->hasRole(Role::ADMIN) => redirect()->intended('/admin/index'),
-            $user->hasRole(Role::INSTRUCTOR) => redirect()->intended('/instructor/index'),
-            $user->hasRole(Role::INSTRUCTOR) => redirect()->intended('/users/index'),
-            default => redirect()->intended('login'),
-        };
+    // 5) Redirección según rol
+    if ($user->hasRole(Role::ADMIN)) {
+        return redirect()->route('admin.dashboard');
     }
+
+    if ($user->hasRole(Role::INSTRUCTOR)) {
+        return redirect()->route('instructor.dashboard');
+    }
+
+    // ✅ Por defecto redirige al dashboard de usuario
+    return redirect()->route('user.dashboard');
+}
+
 }

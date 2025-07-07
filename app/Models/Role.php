@@ -2,15 +2,25 @@
 
 namespace App\Models;
 
-use Spatie\Permission\Models\Role as SpatieRole;
+use Illuminate\Database\Eloquent\Model;
 
-class Role extends SpatieRole
+class Role extends Model {
+    const ADMIN = 'admin';
+    const USUARIO = 'usuario';
+    const INSTRUCTOR = 'instructor';
+    
+    // Asegúrate que estos campos estén en fillable
+    protected $fillable = [
+        'name_rol',
+        'slug',
+        'created_at',
+        'updated_at'
+    ];
+
+
+    public function users()
 {
-    protected $fillable = ['name', 'guard_name'];
-
-    public const USUARIO = 'usuario';
-    public const ADMIN = 'admin';
-    public const INSTRUCTOR = 'instructor';
-
+    return $this->hasMany(User::class, 'rol_id');
+}
 
 }

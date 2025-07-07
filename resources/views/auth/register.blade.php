@@ -49,7 +49,7 @@
             width: 100%;
         }
 
-        /* ENCABEZADO ANIMADO (MANTENIENDO TU ESTILO ORIGINAL) */
+        /* ENCABEZADO ANIMADO */
         .login-header {
             background: linear-gradient(135deg, var(--azul-marino) 0%, #0f2a4a 100%);
             color: var(--blanco);
@@ -235,23 +235,34 @@
             box-shadow: 0 0 0 2px rgba(46, 196, 182, 0.2);
         }
 
+        .input-field.is-invalid {
+            border-color: #dc3545;
+        }
+
         .name-inputs-container {
             display: flex;
             gap: 1rem;
         }
 
-        .submit-btn {
+        .submit-container {
             width: 100%;
+            display: flex;
+            justify-content: center;
+            margin-top: 1rem;
+        }
+
+        .submit-btn {
             background-color: var(--naranja-brillante);
             color: var(--blanco);
             border: none;
             border-radius: 6px;
-            padding: 0.8rem;
+            padding: 0.8rem 2rem;
             font-weight: 500;
             font-size: 0.95rem;
-            margin-top: 0.5rem;
             cursor: pointer;
             transition: background-color 0.3s;
+            width: auto;
+            min-width: 200px;
         }
 
         .submit-btn:hover {
@@ -312,22 +323,24 @@
                 
                 <div class="logo-container">
                     <img src="{{ asset('images/logo.png') }}" alt="Fitnflow" class="circular-logo">
-                     <svg viewBox="0 0 800 100" xmlns="http://www.w3.org/2000/svg" class="svg-logo" style="max-width: 100%; height: auto;">
-                            <text x="50%" y="50%" dominant-baseline="middle" text-anchor="middle"
-                                font-family="Poppins, sans-serif" font-size="60" fill="none"
-                                stroke="#2EC4B6" stroke-width="2">
-                                Fitnflow
-                                <animate attributeName="stroke-dasharray" from="0, 1000" to="600, 0" dur="3s" repeatCount="indefinite" />
-                                <animate attributeName="stroke-dashoffset" from="0" to="-600" dur="3s" repeatCount="indefinite" />
-                            </text>
-                        </svg>
+                    <svg viewBox="0 0 800 100" xmlns="http://www.w3.org/2000/svg" class="svg-logo" style="max-width: 100%; height: auto;">
+                        <text x="50%" y="50%" dominant-baseline="middle" text-anchor="middle"
+                            font-family="Poppins, sans-serif" font-size="60" fill="none"
+                            stroke="#2EC4B6" stroke-width="2">
+                            Fitnflow
+                            <animate attributeName="stroke-dasharray" from="0, 1000" to="600, 0" dur="3s" repeatCount="indefinite" />
+                            <animate attributeName="stroke-dashoffset" from="0" to="-600" dur="3s" repeatCount="indefinite" />
+                        </text>
+                    </svg>
                     <p class="tagline">Regístrate para empezar tu viaje fitness</p>
                 </div>
             </div>
 
             <!-- CUERPO DEL FORMULARIO -->
             <div class="login-body">
-                <form method="POST" action="#">
+                <form method="POST" action="{{ route('register') }}">
+                    @csrf
+
                     <div class="form-horizontal-container">
                         <!-- Columna izquierda -->
                         <div class="form-column">
@@ -335,18 +348,30 @@
                             <div class="input-group">
                                 <label>1. Nombre completo</label>
                                 <div class="name-inputs-container">
-                                    <input id="names" type="text" name="names" placeholder="Nombres" required
-                                           class="input-field">
-                                    <input id="last_name" type="text" name="last_name" placeholder="Apellidos" required
-                                           class="input-field">
+                                    <input id="names" type="text" name="names" placeholder="Nombres" 
+                                           value="{{ old('names') }}" required autofocus
+                                           class="input-field @error('names') is-invalid @enderror">
+                                    <input id="last_name" type="text" name="last_name" placeholder="Apellidos" 
+                                           value="{{ old('last_name') }}" required
+                                           class="input-field @error('last_name') is-invalid @enderror">
                                 </div>
+                                @error('names')
+                                    <span class="invalid-feedback">{{ $message }}</span>
+                                @enderror
+                                @error('last_name')
+                                    <span class="invalid-feedback">{{ $message }}</span>
+                                @enderror
                             </div>
 
                             <!-- 2. Email -->
                             <div class="input-group">
                                 <label>2. Correo electrónico</label>
-                                <input id="email" type="email" name="email" placeholder="ejemplo@correo.com" required
-                                       class="input-field">
+                                <input id="email" type="email" name="email" placeholder="ejemplo@correo.com" 
+                                       value="{{ old('email') }}" required
+                                       class="input-field @error('email') is-invalid @enderror">
+                                @error('email')
+                                    <span class="invalid-feedback">{{ $message }}</span>
+                                @enderror
                             </div>
 
                             <!-- 3. Fecha de nacimiento -->
@@ -354,7 +379,11 @@
                                 <label>3. Fecha de nacimiento</label>
                                 <input type="text" id="birth_date" name="birth_date" 
                                        placeholder="Haz clic para seleccionar" readonly required
-                                       class="input-field">
+                                       value="{{ old('birth_date') }}"
+                                       class="input-field @error('birth_date') is-invalid @enderror">
+                                @error('birth_date')
+                                    <span class="invalid-feedback">{{ $message }}</span>
+                                @enderror
                             </div>
                         </div>
 
@@ -363,18 +392,25 @@
                             <!-- 4. Género -->
                             <div class="input-group">
                                 <label>4. Género</label>
-                                <select name="gender" required class="input-field">
-                                    <option value="" selected disabled>Seleccione...</option>
-                                    <option value="Masculino">Masculino</option>
-                                    <option value="Femenino">Femenino</option>
+                                <select name="gender" required class="input-field @error('gender') is-invalid @enderror">
+                                    <option value="" disabled {{ old('gender') ? '' : 'selected' }}>Seleccione...</option>
+                                    <option value="Masculino" {{ old('gender') == 'Masculino' ? 'selected' : '' }}>Masculino</option>
+                                    <option value="Femenino" {{ old('gender') == 'Femenino' ? 'selected' : '' }}>Femenino</option>
                                 </select>
+                                @error('gender')
+                                    <span class="invalid-feedback">{{ $message }}</span>
+                                @enderror
                             </div>
 
                             <!-- 5. Contraseña -->
                             <div class="input-group">
                                 <label>5. Contraseña</label>
-                                <input id="password" type="password" name="password" placeholder="Mínimo 8 caracteres" required minlength="8"
-                                       class="input-field">
+                                <input id="password" type="password" name="password" placeholder="Mínimo 8 caracteres" 
+                                       required minlength="8"
+                                       class="input-field @error('password') is-invalid @enderror">
+                                @error('password')
+                                    <span class="invalid-feedback">{{ $message }}</span>
+                                @enderror
                             </div>
 
                             <!-- 6. Confirmar contraseña -->
@@ -387,13 +423,15 @@
                         </div>
                     </div>
 
-                    <!-- Botón de submit -->
-                    <button type="submit" class="submit-btn">
-                        Completar Registro
-                    </button>
+                    <!-- Botón de submit centrado -->
+                    <div class="submit-container">
+                        <button type="submit" class="submit-btn">
+                            Completar Registro
+                        </button>
+                    </div>
 
                     <!-- Enlace login -->
-                    <a href="/login" class="register-link">
+                    <a href="{{ route('login') }}" class="register-link">
                         ¿Ya tienes una cuenta? <strong>Inicia sesión</strong>
                     </a>
                 </form>
@@ -403,47 +441,47 @@
 
     <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
     <script src="https://cdn.jsdelivr.net/npm/flatpickr/dist/l10n/es.js"></script>
-  <script>
-    document.addEventListener('DOMContentLoaded', function() {
-        // Configuración para mayores de 18 años
-        flatpickr("#birth_date", {
-            dateFormat: "Y-m-d",
-            locale: "es",
-            disableMobile: true,
-            maxDate: new Date(new Date().setFullYear(new Date().getFullYear() - 18)), // Máximo: 18 años atrás desde hoy
-            altInput: true,
-            altFormat: "d/m/Y",  // Formato visual día/mes/año
-            ariaDateFormat: "d/m/Y",
-            onChange: function(selectedDates, dateStr, instance) {
-                instance.close();
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Configuración para mayores de 18 años
+            flatpickr("#birth_date", {
+                dateFormat: "Y-m-d",
+                locale: "es",
+                disableMobile: true,
+                maxDate: new Date(new Date().setFullYear(new Date().getFullYear() - 18)), // Máximo: 18 años atrás desde hoy
+                altInput: true,
+                altFormat: "d/m/Y",  // Formato visual día/mes/año
+                ariaDateFormat: "d/m/Y",
+                onChange: function(selectedDates, dateStr, instance) {
+                    instance.close();
+                }
+            });
+
+            // Efecto de partículas
+            const particlesContainer = document.getElementById('particles-js');
+            if (particlesContainer) {
+                const particleCount = 20;
+                
+                for (let i = 0; i < particleCount; i++) {
+                    const particle = document.createElement('div');
+                    particle.classList.add('particle');
+                    
+                    const size = Math.random() * 2 + 1;
+                    particle.style.width = `${size}px`;
+                    particle.style.height = `${size}px`;
+                    
+                    particle.style.left = `${Math.random() * 100}%`;
+                    particle.style.top = `${Math.random() * 100}%`;
+                    
+                    const duration = Math.random() * 10 + 10;
+                    particle.style.animationDuration = `${duration}s`;
+                    
+                    particle.style.animationDelay = `${Math.random() * 5}s`;
+                    
+                    particlesContainer.appendChild(particle);
+                }
             }
         });
-
-        // Efecto de partículas (se mantiene igual)
-        const particlesContainer = document.getElementById('particles-js');
-        if (particlesContainer) {
-            const particleCount = 20;
-            
-            for (let i = 0; i < particleCount; i++) {
-                const particle = document.createElement('div');
-                particle.classList.add('particle');
-                
-                const size = Math.random() * 2 + 1;
-                particle.style.width = `${size}px`;
-                particle.style.height = `${size}px`;
-                
-                particle.style.left = `${Math.random() * 100}%`;
-                particle.style.top = `${Math.random() * 100}%`;
-                
-                const duration = Math.random() * 10 + 10;
-                particle.style.animationDuration = `${duration}s`;
-                
-                particle.style.animationDelay = `${Math.random() * 5}s`;
-                
-                particlesContainer.appendChild(particle);
-            }
-        }
-    });
-</script>
+    </script>
 </body>
 </html>

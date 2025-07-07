@@ -7,16 +7,16 @@ use Illuminate\Support\Facades\Schema;
 return new class extends Migration {
     public function up()
     {
-        Schema::create('requirements', function (Blueprint $table) {
+        Schema::create('services', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('service_id')->constrained('services');
             $table->string('name', 50);
+            $table->text('description');
             $table->timestamps();
         });
     }
 
     public function down()
     {
-        Schema::dropIfExists('requirements');
+        Schema::dropIfExists('services');
     }
 };

@@ -12,7 +12,7 @@ class RedirectIfAuthenticated
     {
         foreach ($guards as $guard) {
             if (Auth::guard($guard)->check()) {
-                return redirect('/users/index'); // Cambia esta ruta según tu necesidad
+                return redirect('/users/dashboard'); // Cambia esta ruta según tu necesidad
             }
         }
 

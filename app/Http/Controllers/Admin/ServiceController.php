@@ -8,26 +8,17 @@ use Illuminate\Http\Request;
 
 class ServiceController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
     public function index()
     {
         $services = Service::all();
         return view('admin.service.index', compact('services'));
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
     public function create()
     {
-        return view('admin.service.create');
+        return view('admin.service.create');  // Nota el plural 'services'
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
     public function store(Request $request)
     {
         $request->validate([
@@ -37,29 +28,20 @@ class ServiceController extends Controller
 
         Service::create($request->all());
 
-        return redirect()->route('admin.services.index')
+        return redirect()->route('admin.service.index')
                          ->with('success', 'Servicio creado correctamente.');
     }
 
-    /**
-     * Display the specified resource.
-     */
     public function show(Service $service)
     {
         return view('admin.service.show', compact('service'));
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
     public function edit(Service $service)
     {
         return view('admin.service.edit', compact('service'));
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
     public function update(Request $request, Service $service)
     {
         $request->validate([
@@ -69,18 +51,15 @@ class ServiceController extends Controller
 
         $service->update($request->all());
 
-        return redirect()->route('admin.services.index')
+        return redirect()->route('admin.service.index')
                          ->with('success', 'Servicio actualizado.');
     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
     public function destroy(Service $service)
     {
         $service->delete();
 
-        return redirect()->route('admin.services.index')
+        return redirect()->route('admin.service.index')
                          ->with('success', 'Servicio eliminado.');
     }
 }

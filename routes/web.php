@@ -35,20 +35,13 @@ Route::get('/', function () {
     return redirect()->route('login');
 });
 
-
-
 // Rutas para administrador
 Route::middleware(['auth', 'role:admin'])->prefix('admin')->name('admin.')->group(function () {
     Route::get('/dashboard', [AdminController::class, 'dashboard'])->name('dashboard');
-
      // Rutas para servicios
     Route::resource('services', ServiceController::class);
-    
     // Gestión de usuarios
     Route::resource('users', UsersController::class);
-    // // Gestión de usuarios
-
-    // Route::resource('users', UsersController::class);
 });
 
 // Rutas para instructor
@@ -71,7 +64,6 @@ Route::middleware(['auth', 'can:admin'])->prefix('admin')->name('admin.')->group
     Route::resource('roles', RoleController::class);
 });
 
-
 // Rutas de membresía
 Route::middleware(['auth'])->prefix('user')->name('user.')->group(function () {
     // Rutas resource para ver membresías
@@ -83,10 +75,8 @@ Route::post('memberships/{membership}/pay', [UserMembershipController::class, 'p
 
 Route::middleware(['auth'])->prefix('user')->name('user.')->group(function () {
     Route::resource('memberships', UserMembershipController::class)->only(['index']);
-
     // Vista para subir comprobante
     Route::get('payments/{membership}/upload', [UserMembershipController::class, 'uploadReceipt'])->name('payments.upload');
-
     // Guardar comprobante
     Route::post('payments/store', [UserMembershipController::class, 'storeReceipt'])->name('payments.store');
 });
@@ -95,19 +85,15 @@ Route::middleware(['auth', 'can:admin'])->prefix('admin')->name('admin.')->group
     Route::resource('memberships', AdminMembershipController::class);
 });
 
-
-
 Route::middleware(['auth'])->prefix('admin')->name('admin.')->group(function () {
     Route::resource('requirements', RequirementController::class);
 });
-
 
 Route::middleware(['auth', 'can:admin'])->prefix('admin')->name('admin.')->group(function () {
     Route::resource('classes', AdminClassesController::class);
     Route::get('classes/{class}/registrations', [AdminClassesController::class, 'registrations'])
         ->name('classes.registrations');
 });
-
 
 Route::middleware(['auth', 'can:admin'])->prefix('admin')->name('admin.')->group(function () {
     Route::resource('payments', AdminPaymentController::class)->only(['index', 'show', 'update']);
@@ -137,7 +123,6 @@ Route::middleware(['auth', 'check.membership'])->prefix('user')->name('user.')->
     Route::get('/classes/history', [UserClassesController::class, 'history'])->name('classes.history');
 });
 
-
 //Rutas para recuperacion de password
 // Mostrar formulario para solicitar enlace
 Route::get('/forgot-password', [PasswordResetLinkController::class, 'create'])->name('password.request');
@@ -151,6 +136,7 @@ Route::post('/reset-password', [NewPasswordController::class, 'store'])->name('p
 
 Route::middleware(['auth'])->prefix('admin')->name('admin.')->group(function () {
     // Página de servicios para la home (CMS)
+    Route::resource('service', ServiceController::class);
     Route::resource('services_home', ServicesHomeController::class);
     // Información del centro (CMS)
     Route::resource('center-information', CenterInformationController::class)

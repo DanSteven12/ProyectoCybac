@@ -9,15 +9,15 @@ class Service extends Model
 {
     use HasFactory;
 
+    protected $table = 'services';
+
     protected $fillable = [
         'name',
-        'description'
+        'description',
     ];
-
 
     public function requirements()
     {
         return $this->hasMany(Requirement::class);
     }
-
 }

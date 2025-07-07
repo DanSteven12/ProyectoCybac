@@ -283,6 +283,55 @@
             transform: translateX(0) !important;
         }
 
+        /* Botón de cierre para móviles */
+        .close-menu-btn {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            width: 40px;
+            height: 40px;
+            background: var(--naranja-brillante);
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            z-index: 1002;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
+            transition: all 0.3s ease;
+            opacity: 0;
+            visibility: hidden;
+            transform: translateY(-20px);
+        }
+
+        .overlay-active .close-menu-btn {
+            opacity: 1;
+            visibility: visible;
+            transform: translateY(0);
+        }
+
+        .close-menu-btn:hover {
+            background: #e05a2c;
+            transform: scale(1.1) translateY(0);
+        }
+
+        .close-menu-btn::before,
+        .close-menu-btn::after {
+            content: '';
+            position: absolute;
+            width: 20px;
+            height: 2px;
+            background: var(--blanco);
+        }
+
+        .close-menu-btn::before {
+            transform: rotate(45deg);
+        }
+
+        .close-menu-btn::after {
+            transform: rotate(-45deg);
+        }
+
         /* Efecto de partículas en el overlay */
         .particles-overlay {
             position: absolute;
@@ -649,6 +698,11 @@
                 grid-template-columns: 1fr;
                 gap: 1rem;
             }
+            
+            /* Mostrar el botón de cerrar solo en móviles */
+            .close-menu-btn {
+                display: flex;
+            }
         }
 
         @media (max-width: 360px) {
@@ -711,6 +765,9 @@
     
     <!-- Menú Overlay -->
     <div class="overlay" id="menuOverlay">
+        <!-- Botón de cierre para móviles -->
+        <div class="close-menu-btn" id="closeMenuBtn"></div>
+        
         <!-- Contenedor de partículas para el overlay -->
         <div class="particles-overlay" id="particlesOverlay"></div>
         
@@ -742,6 +799,7 @@
     
     <script>
         const hamburgerBtn = document.getElementById('hamburgerBtn');
+        const closeMenuBtn = document.getElementById('closeMenuBtn');
         const menuOverlay = document.getElementById('menuOverlay');
         const particlesOverlay = document.getElementById('particlesOverlay');
         const particlesNav = document.getElementById('particlesNav');
@@ -821,6 +879,7 @@
 
         // Event listeners
         hamburgerBtn.addEventListener('click', toggleMenu);
+        closeMenuBtn.addEventListener('click', toggleMenu);
         
         // Evento para las tarjetas del menú
         menuCards.forEach(card => {

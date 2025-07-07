@@ -24,7 +24,8 @@ class AuthServiceProvider extends ServiceProvider
     public function boot(): void
     {
         Gate::define('admin', function ($user) {
-        return $user->hasRole('admin'); 
-         });
+        // Verifica si el usuario tiene el rol "admin"
+            return $user->hasRole(Role::ADMIN); // Usando la constante del modelo
+        });
     }
 }

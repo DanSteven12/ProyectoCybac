@@ -1,25 +1,43 @@
 <?php
-
-// database/seeders/RoleSeeder.php
 namespace Database\Seeders;
 
+use App\Models\Role;
 use Illuminate\Database\Seeder;
-use App\Models\User;
-use Spatie\Permission\Models\Role;
 
-class RoleSeeder extends Seeder
-{
-    public function run()
-    {
-        // Crear roles
-        Role::firstOrCreate(['name' => 'admin']);
-        Role::firstOrCreate(['name' => 'usuario']);
-        Role::firstOrCreate(['name' => 'instructor']);
+class RoleSeeder extends Seeder {
+    
+public function run(): void {
+    $roles = [
+        [
+            'id' => 1, // Fuerza el ID 1
+            'name_rol' => 'Administrador',
+            'slug' => 'admin', // ¡Debe coincidir exactamente con la constante!
+            'created_at' => now(),
+            'updated_at' => now()
+        ],
+        [
+            'id' => 2, // Fuerza el ID 2
+            'name_rol' => 'Usuario',
+            'slug' => 'usuario', // Coincide con Role::USUARIO
+            'created_at' => now(),
+            'updated_at' => now()
+        ],
+        [
+            'id' => 3, // Fuerza el ID 2
+            'name_rol' => 'Instructor',
+            'slug' => 'instructor',
+            'created_at' => now(),
+            'updated_at' => now()
+        ]
 
-        // Asignar rol a un usuario específico (por ejemplo id=1)
-        $user = User::find(1);
-        if ($user) {
-            $user->assignRole('admin');  // usando Spatie
-        }
+        
+    ];
+
+    foreach ($roles as $role) {
+        Role::updateOrCreate(
+            ['slug' => $role['slug']],
+            $role
+        );
     }
+}
 }

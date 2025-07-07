@@ -12,6 +12,13 @@ return new class extends Migration {
             $table->date('birth_date');
             $table->string('gender', 255);
             $table->string('email', 255)->unique();
+
+                // Relación con roles
+            $table->unsignedBigInteger('rol_id')->default(2);
+            $table->foreign('rol_id')
+                ->references('id')
+                ->on('roles')
+                ->onDelete('restrict');
             
             // Estado del usuario
             $table->unsignedBigInteger('status_id')->default(1);

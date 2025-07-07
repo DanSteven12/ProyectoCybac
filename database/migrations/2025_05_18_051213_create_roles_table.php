@@ -7,8 +7,8 @@ return new class extends Migration {
     public function up(): void {
         Schema::create('roles', function (Blueprint $table) {
             $table->id();
-            $table->string('name')->unique();
-            $table->string('guard_name');
+            $table->string('name_rol', 50)->unique();
+            $table->string('slug', 50)->unique(); // Nuevo campo
             $table->timestamps();
         });
     }

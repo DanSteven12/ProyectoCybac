@@ -84,23 +84,27 @@
                             <!-- Columna Derecha -->
                             <div class="col-md-6">
                                 <!-- Rol -->
-                                <div class="mb-3">
-                                    <label for="role" class="form-label fw-bold" style="color: #1A365D; font-size: 1.4rem;">Rol</label>
-                                    <select class="form-select @error('role') is-invalid @enderror" id="role" name="role" 
-                                            style="border: 2px solid #1A365D; border-radius: 6px; padding: 10px 14px; font-size: 1.3rem;" required>
-                                        <option value="">Seleccione un rol</option>
+                          <div class="mb-3">
+                                <label for="rol_id" class="form-label fw-bold" style="color: #1A365D; font-size: 1.4rem;">Rol</label>
+                                    <select class="form-select @error('rol_id') is-invalid @enderror" id="rol_id" name="rol_id" 
+                                        style="border: 2px solid #1A365D; border-radius: 6px; padding: 10px 14px; font-size: 1.3rem;" required>
+                                <option value="">Seleccione un rol</option>
                                         @foreach($roles as $role)
-                                            <option value="{{ $role->name }}" {{ old('role') == $role->name ? 'selected' : '' }}>
-                                                {{ $role->name }}
-                                            </option>
-                                        @endforeach
-                                    </select>
-                                    @error('role')
-                                        <div class="invalid-feedback" style="font-size: 1.2rem;">
+                                                @if($role->name_rol !== 'Usuario' && $role->name_rol !== 'Administrador')
+                                <option value="{{ $role->id }}" {{ old('rol_id') == $role->id ? 'selected' : '' }}>
+                                        {{ $role->name_rol }}
+                            </option>
+                        @endif
+                    @endforeach
+                        </select>
+                            @error('rol_id')
+                                    <div class="invalid-feedback" style="font-size: 1.2rem;">
                                             <i class="fas fa-exclamation-circle me-2"></i>{{ $message }}
-                                        </div>
-                                    @enderror
-                                </div>
+                                    </div>
+                            @enderror
+                        </div>
+
+
 
                                 <!-- Estado -->
                             <div class="mb-3">

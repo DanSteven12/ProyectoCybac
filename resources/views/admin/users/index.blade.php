@@ -61,7 +61,7 @@
                                     <td class="ps-4" style="font-size: 1.4rem; color: #1A365D; font-weight: 500;">{{ $user->names }}</td>
                                     <td style="font-size: 1.4rem; color: #1A365D; font-weight: 500;">{{ $user->last_name }}</td>
                                     <td style="font-size: 1.4rem; color: #1A365D; font-weight: 500;">{{ $user->email }}</td>
-                                    <td style="font-size: 1.4rem; color: #1A365D; font-weight: 500;">{{ $user->getRoleNames()->first() ?? 'N/A' }}</td>
+                                    <td style="font-size: 1.4rem; color: #1A365D; font-weight: 500;">{{ $user->role->name_rol ?? 'N/A' }}</td>
                                     <td style="font-size: 1.4rem; color: #1A365D; font-weight: 500;">{{ $user->status->name ?? 'N/A' }}</td>
                                     <td style="font-size: 1.4rem; color: #1A365D; font-weight: 500;">
                                         {{ \Carbon\Carbon::parse($user->birth_date)->translatedFormat('d \d\e F \d\e Y') }}
@@ -425,6 +425,22 @@ function filtrarUsuariosEnVivo() {
         }
     }
 }
+
+    @if (session('error'))
+            Swal.fire({
+            title: '¡Error al eliminar!',
+            html: `<div style="text-align: center;">
+                    <i class="fas fa-exclamation-triangle" style="color: #FF6B35; font-size: 3rem; margin-bottom: 1rem;"></i>
+                    <p>{{ session('error') }}</p>
+                    </div>`,
+            icon: 'warning',
+            confirmButtonText: '<i class="fas fa-check-circle me-2"></i> Entendido',
+            buttonsStyling: false,
+            customClass: {
+            confirmButton: 'btn btn-eliminar',
+        }
+            });
+    @endif
 </script>
 
 @endsection

@@ -25,13 +25,19 @@ class ClassesController extends Controller
 
     // Mostrar formulario para crear una clase
     public function create()
-    {
-        $services = Service::all();
-        $instructors = User::role('instructor')->get(); // usando Spatie
-        $statuses = Status::where('type', 3)->get(); // Estados para clases
+{
+    $services = Service::all();
 
-        return view('admin.classes.create', compact('services', 'instructors', 'statuses'));
-    }
+    // Obtener solo usuarios con el rol "Instructor"
+    $instructors = User::whereHas('role', function ($query) {
+        $query->where('slug', 'instructor'); // Asegúrate que este slug exista en tu tabla roles
+    })->get();
+
+    $statuses = Status::where('type', 3)->get(); // Estados para clases
+
+    return view('admin.classes.create', compact('services', 'instructors', 'statuses'));
+}
+
 
     // Guardar nueva clase
     public function store(Request $request)
@@ -59,7 +65,9 @@ class ClassesController extends Controller
     public function edit(Classes $class)
     {
         $services = Service::all();
-        $instructors = User::role('instructor')->get(); // usando Spatie
+        $instructors = User::whereHas('role', function ($query) {
+    $query->where('slug', 'instructor'); // o usa name_rol si no tienes slug
+})->get();
         $statuses = Status::where('type', 3)->get(); // Estados para clases
 
         return view('admin.classes.edit', compact('class', 'services', 'instructors', 'statuses'));

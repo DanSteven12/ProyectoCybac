@@ -11,11 +11,6 @@
 @endphp
 
 <style>
-
-
-
-
-
     /* Filtro SVG para el efecto de resplandor */
     svg.svg-filters {
         position: absolute;
@@ -56,8 +51,17 @@
         box-shadow: 0 4px 12px var(--sombra-azul);
     }
 
+    /* Contenedor principal */
+    .container {
+        max-width: 1300px;
+        margin: 0 auto;
+        padding: 15px;
+    }
+
+    /* Estilos del carrusel */
     .carousel-section {
-        padding: 60px 0;
+        padding: 60px 0 20px;
+        margin-bottom: 0;
         background: linear-gradient(
             45deg,
             var(--verde-esmeralda),
@@ -67,8 +71,8 @@
         );
         background-size: 300% 300%;
         animation: borderGlow 8s linear infinite;
-        margin-bottom: 40px;
-        overflow: hidden; /* Añadido para evitar desbordamiento */
+        margin-bottom: 2px;
+        overflow: hidden;
     }
 
     .carousel-container-3d {
@@ -82,38 +86,10 @@
         border-radius: 0;
         z-index: 1;
         filter: url('#glow');
-        max-width: 1300px; /* Mantenemos el ancho original */
+        max-width: 1300px;
         padding: 0 20px;
     }
 
-    /* Tarjetas - Versión ajustada para 10 cards */
-    .slide-card {
-        position: absolute;
-        top: 50%;
-        left: 50%;
-        width: 220px; /* Mantenemos el ancho original */
-        height: 320px; /* Mantenemos el alto original */
-        transform-origin: center center;
-        border-radius: 12px;
-        overflow: hidden;
-        background-color: var(--blanco);
-        border: 2px solid var(--verde-esmeralda);
-        box-shadow: 0 5px 20px rgba(0,0,0,0.25);
-        display: flex;
-        flex-direction: column;
-        justify-content: flex-start;
-        transition: transform 0.4s ease, box-shadow 0.4s ease;
-        opacity: 1;
-        cursor: pointer;
-    }
-
-    /* Animación para el gradiente del borde */
-    @keyframes borderGlow {
-        0% { background-position: 0% 50%; }
-        100% { background-position: 300% 50%; }
-    }
-
-    /* Contenedor 3D */
     .card-3d {
         width: 100%;
         height: 100%;
@@ -126,7 +102,7 @@
         @endif
     }
 
-    /* Tarjetas - Versión mejorada para 10 cards */
+    /* Tarjetas del carrusel */
     .slide-card {
         position: absolute;
         top: 50%;
@@ -153,35 +129,37 @@
     }
 
     .slide-card img {
-    width: 100%;
-    height: 180px; /* altura razonable para que la descripción se vea bien */
-    object-fit: cover; /* mantiene proporción recortando si es necesario */
-    background-color: #fff;
-    padding: 0;
-    max-width: 100%;
-    display: block;
-    @if($brightness)
-        animation: pulseBrightness 4s ease-in-out infinite;
-    @endif
-}
-
-
+        width: 100%;
+        height: 180px;
+        object-fit: cover;
+        background-color: #fff;
+        padding: 0;
+        max-width: 100%;
+        display: block;
+        @if($brightness)
+            animation: pulseBrightness 4s ease-in-out infinite;
+        @endif
+    }
 
     /* Descripción de la tarjeta */
     .slide-description {
-    background: var(--naranja-brillante);
-    color: var(--blanco);
-    text-align: left;
-    font-size: 1rem;
-    padding: 12px 10px;
-    height: 80px;
-    display: flex;
-    align-items: center;
-    justify-content: flex-start;
-    font-weight: 600;
-    line-height: 1.4;
-}
-
+        background: var(--naranja-brillante);
+        color: var(--blanco);
+        text-align: left;
+        font-size: 1rem;
+        padding: 12px 10px;
+        height: 80px;
+        display: flex;
+        align-items: center;
+        justify-content: flex-start;
+        font-weight: 600;
+        line-height: 1.4;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        display: -webkit-box;
+        -webkit-line-clamp: 3;
+        -webkit-box-orient: vertical;
+    }
 
     /* Animaciones */
     @keyframes autoRotate {
@@ -198,6 +176,11 @@
     @keyframes pulseBrightness {
         0%, 100% { filter: brightness(1); }
         50% { filter: brightness(1.4); }
+    }
+
+    @keyframes borderGlow {
+        0% { background-position: 0% 50%; }
+        100% { background-position: 300% 50%; }
     }
 
     /* Estilos apilados */
@@ -223,12 +206,6 @@
     }
 
     /* Estilos para el layout principal */
-    .container {
-        max-width: 1300px;
-        margin: 0 auto;
-        padding: 30px;
-    }
-
     .content-wrapper {
         display: flex;
         flex-wrap: wrap;
@@ -264,12 +241,11 @@
         width: 80px;
         height: 3px;
         background: var(--naranja-brillante);
-        font-size: 10rem;
     }
 
     .map-iframe {
         width: 100%;
-        height: 100%;
+        height: 500px;
         border: none;
         filter: grayscale(20%) contrast(110%);
     }
@@ -291,23 +267,12 @@
         letter-spacing: 1px;
         position: relative;
         overflow: hidden;
+        margin-top: 20px;
     }
 
     .directions-button:hover {
         transform: translateY(-3px);
         box-shadow: 0 8px 20px var(--sombra-naranja);
-    }
-
-    .directions-button::after {
-        content: '';
-        position: absolute;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        background: linear-gradient(to right, var(--verde-esmeralda) 0%, var(--naranja-brillante) 100%);
-        opacity: 0;
-        transition: opacity 0.3s ease;
     }
 
     /* Sección de información - Tarjetas modernas */
@@ -332,10 +297,10 @@
 
     .info-card {
         background-color: white;
-        padding: 20px;
+        padding: 25px;
         border-radius: 10px;
         border-left: 5px solid var(--naranja-brillante);
-        margin-bottom: 25px;
+        margin-bottom: 20px;
         box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
         transition: transform 0.3s ease;
     }
@@ -371,7 +336,7 @@
 
     .info-card p, .info-card a {
         color: #555;
-        font-size: 1.5rem;
+        font-size: 1.1rem;
         line-height: 1.6;
     }
 
@@ -433,13 +398,13 @@
         transform: translateX(8px);
     }
 
-    /* MEJORA: Sección de actividades/servicios con imágenes ajustadas */
+    /* Sección de actividades/servicios con imágenes */
     .activities-section {
         margin-top: 70px;
     }
 
     .activity {
-        margin-bottom: 70px;
+        margin-bottom: 40px;
     }
 
     .activity-content {
@@ -458,12 +423,11 @@
         flex-direction: row-reverse;
     }
 
-    /* MEJORA PRINCIPAL: Ajuste de imágenes en el dashboard */
     .activity img {
         width: 50%;
-        max-width: 400px;
+        max-width: 500px;
         height: auto;
-        max-height: 300px;
+        max-height: 350px;
         object-fit: contain;
         border-radius: 15px;
         box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
@@ -510,7 +474,7 @@
     }
 
     .description p {
-        font-size: 1.3rem;
+        font-size: 1.2rem;
         color: #555;
         line-height: 1.8;
         margin-top: 20px;
@@ -557,7 +521,7 @@
         color: var(--naranja-brillante);
     }
 
-    /* Media queries ajustados */
+    /* Media queries para responsividad */
     @media (max-width: 1200px) {
         .carousel-container-3d {
             height: 450px;
@@ -566,11 +530,26 @@
         
         .slide-card {
             width: 200px;
-            height: 300px;
+            height: 240px;
         }
         
         .slide-card img {
-            height: 240px;
+            height: 160px;
+        }
+        
+        .slide-description {
+            font-size: 0.9rem;
+            height: 80px;
+            -webkit-line-clamp: 3;
+        }
+
+        .map-iframe {
+            height: 450px;
+        }
+
+        .activity img {
+            max-width: 450px;
+            max-height: 320px;
         }
     }
 
@@ -582,212 +561,230 @@
         
         .slide-card {
             width: 180px;
-            height: 280px;
-        }
-        
-        .slide-card img {
             height: 220px;
-        }
-    }
-
-    @media (max-width: 768px) {
-        .carousel-container-3d {
-            height: 380px;
-            max-width: 700px;
-        }
-        
-        .slide-card {
-            width: 160px;
-            height: 240px;
-        }
-        
-        .slide-card img {
-            height: 180px;
-        }
-    }
-
-    @media (max-width: 576px) {
-        .carousel-container-3d {
-            height: 320px;
-            max-width: 500px;
-        }
-        
-        .slide-card {
-            width: 140px;
-            height: 200px;
         }
         
         .slide-card img {
             height: 140px;
         }
+        
+        .slide-description {
+            font-size: 0.85rem;
+            height: 80px;
+            -webkit-line-clamp: 3;
+        }
+
+        .map-iframe {
+            height: 400px;
+        }
+
+        .activity img {
+            max-width: 400px;
+            max-height: 280px;
+        }
+
+        .description {
+            padding: 25px;
+        }
+
+        .description h3 {
+            font-size: 2rem;
+        }
     }
-        
-        .map-container {
-            height: 500px;
+
+    @media (max-width: 768px) {
+        .carousel-container-3d {
+            height: 350px;
+            max-width: 700px;
         }
         
-        .directions-button {
-            padding: 12px 20px;
-            font-size: 1rem;
+        .slide-card {
+            width: 160px;
+            height: 200px;
         }
         
-        .info-card {
-            padding: 15px;
+        .slide-card img {
+            height: 120px;
         }
         
+        .slide-description {
+            font-size: 0.8rem;
+            height: 80px;
+            -webkit-line-clamp: 3;
+            padding: 8px;
+        }
+
+        .content-wrapper {
+            flex-direction: column;
+        }
+
+        .info-section,
+        .map-section {
+            width: 100%;
+            margin-top: 20px;
+        }
+
+        .map-iframe {
+            height: 350px;
+        }
+
+        .activity-content.left,
+        .activity-content.right {
+            flex-direction: column !important;
+            align-items: center;
+        }
+
+        .activity img,
+        .description {
+            width: 100%;
+            max-width: 100%;
+        }
+
+        .description {
+            padding: 20px;
+        }
+
+        .description h3 {
+            font-size: 1.8rem;
+        }
+
+        .description p {
+            font-size: 1.1rem;
+        }
+
         .three-column-services {
             flex-direction: column;
         }
+
+        .info-section h2 {
+            font-size: 2rem;
+        }
+
+        .map-header h2 {
+            font-size: 1.6rem;
+        }
+
+        .directions-button {
+            width: 100%;
+            font-size: 1rem;
+            padding: 12px;
+        }
+
+        .info-card h3 {
+            font-size: 1.6rem;
+        }
+
+        .info-card p,
+        .info-card a {
+            font-size: 1rem;
+        }
+    }
+
+    @media (max-width: 576px) {
+        .carousel-container-3d {
+            height: 300px;
+            max-width: 500px;
+        }
         
+        .slide-card {
+            width: 140px;
+            height: 180px;
+        }
+        
+        .slide-card img {
+            height: 100px;
+        }
+        
+        .slide-description {
+            font-size: 0.7rem;
+            height: 80px;
+            -webkit-line-clamp: 3;
+            padding: 6px;
+        }
+
+        .map-iframe {
+            height: 300px;
+        }
+
         .description {
-            padding: 36px;
+            padding: 16px;
         }
-        
+
         .description h3 {
-            font-size: 2.4rem;
+            font-size: 1.6rem;
         }
-        
+
         .description p {
-            font-size: 1.5rem;
+            font-size: 1rem;
+        }
+
+        .activity img {
+            max-height: 250px;
+        }
+
+        .info-section h2 {
+            font-size: 1.8rem;
+        }
+
+        .map-header h2 {
+            font-size: 1.4rem;
+        }
+
+        .directions-button {
+            padding: 10px;
+            font-size: 0.9rem;
+        }
+
+        .info-card h3 {
+            font-size: 1.4rem;
+        }
+    }
+
+    @media (max-width: 480px) {
+        .carousel-container-3d {
+            height: 280px;
+            max-width: 400px;
         }
         
-        .activity img {
-            max-width: 480px;
-            max-height: 340px;
+        .slide-card {
+            width: 120px;
+            height: 160px;
+        }
+        
+        .slide-card img {
+            height: 80px;
+        }
+        
+        .slide-description {
+            font-size: 0.65rem;
+            height: 80px;
+            -webkit-line-clamp: 3;
+            padding: 4px;
         }
 
-        @media (max-width: 768px) {
-    .carousel-container-3d {
-        height: 380px;
-        max-width: 700px;
-    }
+        .map-iframe {
+            height: 250px;
+        }
 
-    .slide-card {
-        width: 160px;
-        height: 240px;
-    }
+        .container {
+            padding: 20px;
+        }
 
-    .slide-card img {
-        height: 180px;
-    }
+        .info-section {
+            padding: 20px;
+        }
 
-    .content-wrapper {
-        flex-direction: column;
-    }
+        .description h3 {
+            font-size: 1.4rem;
+        }
 
-    .info-section,
-    .map-section {
-        width: 100%;
-        margin-top: 20px;
-    }
+        .description p {
+            font-size: 0.9rem;
+        }
 
-    .activity-content.left,
-    .activity-content.right {
-        flex-direction: column !important;
-        align-items: center;
-    }
-
-    .activity img,
-    .description {
-        width: 100%;
-        max-width: 100%;
-    }
-
-    .description {
-        padding: 20px;
-    }
-
-    .description h3 {
-        font-size: 1.8rem;
-    }
-
-    .description p {
-        font-size: 1.2rem;
-    }
-
-    .three-column-services {
-        flex-direction: column;
-    }
-
-    .info-section h2 {
-        font-size: 2rem;
-    }
-
-    .map-header h2 {
-        font-size: 1.6rem;
-    }
-
-    .directions-button {
-        width: 100%;
-        font-size: 1rem;
-        padding: 12px;
-    }
-
-    .info-card h3 {
-        font-size: 1.6rem;
-    }
-
-    .info-card p,
-    .info-card a {
-        font-size: 1.2rem;
-    }
-}
-
-@media (max-width: 576px) {
-    .carousel-container-3d {
-        height: 320px;
-        max-width: 500px;
-    }
-
-    .slide-card {
-        width: 140px;
-        height: 200px;
-    }
-
-    .slide-card img {
-        height: 140px;
-    }
-
-    .description {
-        padding: 16px;
-    }
-
-    .description h3 {
-        font-size: 1.6rem;
-    }
-
-    .description p {
-        font-size: 1rem;
-    }
-
-    .activity img {
-        max-width: 100%;
-        max-height: 280px;
-    }
-
-    .info-section h2 {
-        font-size: 1.8rem;
-    }
-
-    .map-header h2 {
-        font-size: 1.4rem;
-    }
-
-    .directions-button {
-        padding: 10px;
-        font-size: 0.9rem;
-    }
-
-    .info-card h3 {
-        font-size: 1.4rem;
-    }
-
-    .info-card p,
-    .info-card a {
-        font-size: 1rem;
-    }
-}
-
+        .info-card {
+            padding: 15px;
+        }
     }
 </style>
 
@@ -806,12 +803,6 @@
     <span class="close">&times;</span>
     <img class="modal-content" id="modalImage">
 </div>
-
-{{-- DEBUG TEMPORAL --}}
-<pre>
-Slides: {{ $slides->count() }}
-Settings: {{ $settings ? 'OK' : 'NO SETTINGS' }}
-</pre>
 
 @if(isset($slides) && $slides->count())
     @php
@@ -984,7 +975,6 @@ Settings: {{ $settings ? 'OK' : 'NO SETTINGS' }}
     @endif
 </div>
 
-{{-- Scripts --}}
 <script>
     // DIRECCIONES
     document.getElementById('getDirectionsBtn').addEventListener('click', function () {
@@ -994,7 +984,7 @@ Settings: {{ $settings ? 'OK' : 'NO SETTINGS' }}
                     const lat = position.coords.latitude;
                     const lng = position.coords.longitude;
                     const destination = encodeURIComponent('Plaza La Gloria, Tuxtla Gutiérrez, Chiapas');
-                    const mapsUrl = https://www.google.com/maps/dir/?api=1&origin=${lat},${lng}&destination=${destination}&travelmode=driving;
+                    const mapsUrl = `https://www.google.com/maps/dir/?api=1&origin=${lat},${lng}&destination=${destination}&travelmode=driving`;
                     window.open(mapsUrl, '_blank');
                 },
                 function () {
@@ -1019,22 +1009,6 @@ Settings: {{ $settings ? 'OK' : 'NO SETTINGS' }}
             }
         });
     });
-
-    // CARRUSEL
-    let currentSlide = 0;
-    const slides = document.querySelectorAll('#mainCarousel .carousel-slide');
-
-    function showSlide(index) {
-        slides.forEach(slide => slide.style.display = 'none');
-        currentSlide = (index + slides.length) % slides.length;
-        slides[currentSlide].style.display = 'block';
-    }
-
-    function moveSlide(step) {
-        showSlide(currentSlide + step);
-    }
-
-    setInterval(() => moveSlide(1), 6000); // Auto-slide cada 6 segundos
 
     // MODAL PARA IMÁGENES
     function openModal(imageSrc) {
