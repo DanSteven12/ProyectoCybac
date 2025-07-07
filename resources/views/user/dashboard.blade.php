@@ -804,6 +804,9 @@
     <img class="modal-content" id="modalImage">
 </div>
 
+<!-- Mover el header-spacer fuera del condicional para que siempre se muestre -->
+<div class="header-spacer"></div>
+
 @if(isset($slides) && $slides->count())
     @php
         $count = $slides->count();
@@ -811,8 +814,6 @@
         // Ajustamos el radio basado en el número de slides para mejor distribución
         $dynamicRadius = $count > 8 ? $radius + 50 : $radius;
     @endphp
-
-    <div class="header-spacer"></div>
 
     <div class="carousel-section">
         <div class="carousel-container-3d">
@@ -880,7 +881,6 @@
         <div class="map-section">
             <div class="map-header">
                 <h2>Nuestra ubicación</h2>
-                <p>Encuéntranos fácilmente en Plaza La Gloria</p>
             </div>
             <div class="map-container">
                 <iframe
@@ -984,7 +984,7 @@
                     const lat = position.coords.latitude;
                     const lng = position.coords.longitude;
                     const destination = encodeURIComponent('Plaza La Gloria, Tuxtla Gutiérrez, Chiapas');
-                    const mapsUrl = `https://www.google.com/maps/dir/?api=1&origin=${lat},${lng}&destination=${destination}&travelmode=driving`;
+                    const mapsUrl = https://www.google.com/maps/dir/?api=1&origin=${lat},${lng}&destination=${destination}&travelmode=driving;
                     window.open(mapsUrl, '_blank');
                 },
                 function () {

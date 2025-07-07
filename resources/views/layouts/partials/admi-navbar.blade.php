@@ -714,38 +714,36 @@
            <a href="{{ route('admin.dashboard') }}" class="menu-card">
                <span><i class="fas fa-home"></i> Inicio</span>
             </a>
-            <a href="{{ route('admin.users.index') }}" class="menu-card">
-                <span><i class="fas fa-users"></i> Usuarios</span>
-            </a>
-            <a href="{{ route('admin.roles.index') }}" class="menu-card">
-                <span><i class="fas fa-user-tag"></i> Roles</span>
-            </a>
-            <a href="{{ route('admin.memberships.index') }}" class="menu-card">
-                <span><i class="fas fa-id-card"></i> Membresías</span>
-            </a>
-             <a href="{{ route('admin.service.index') }}" class="menu-card">
-                <span><i class="fas fa-dumbbell"></i> Servicios</span>
-            </a>
-             <a href="{{ route('admin.requirements.index') }}" class="menu-card">
-                <span><i class="fas fa-tasks"></i> Requerimientos</span>
-            </a>
             <a href="{{ route('admin.classes.index') }}" class="menu-card">
                 <span><i class="fas fa-chalkboard-teacher"></i> Clases</span>
             </a>
             <a href="{{ route('admin.payments.index') }}" class="menu-card">
                 <span><i class="fas fa-credit-card"></i> Pagos</span>  
             </a>
-            <a href="{{ route('admin.services_home.index')}}" class="menu-card">
-                <span><i class="fas fa-concierge-bell"></i> Servicios del Home</span>
-            </a>
-            <a href="{{ route('admin.center-information.index')}}" class="menu-card">
-                <span><i class="fas fa-info-circle"></i> Información Home</span>
+            <a href="{{ route('admin.memberships.index') }}" class="menu-card">
+                <span><i class="fas fa-id-card"></i> Membresías</span>
             </a>
             <a href="{{ route('admin.carousel.index')}}" class="menu-card">
                 <span><i class="fas fa-images"></i> Carrusel Home</span>
             </a>
+            <a href="{{ route('admin.center-information.index')}}" class="menu-card">
+                <span><i class="fas fa-info-circle"></i> Información Home</span>
+            </a>
+            <a href="{{ route('admin.services_home.index')}}" class="menu-card">
+                <span><i class="fas fa-concierge-bell"></i> Servicios del Home</span>
+            </a>
+            <a href="{{ route('admin.service.index') }}" class="menu-card">
+                <span><i class="fas fa-dumbbell"></i> Servicios</span>
+            </a>
+            <a href="{{ route('admin.requirements.index') }}" class="menu-card">
+                <span><i class="fas fa-tasks"></i> Requerimientos</span>
+            </a>
+            <a href="{{ route('admin.users.index') }}" class="menu-card">
+                <span><i class="fas fa-users"></i> Usuarios</span>
+            </a>
         </div>
     </div>
+
 
         <!-- SweetAlert2 -->
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>

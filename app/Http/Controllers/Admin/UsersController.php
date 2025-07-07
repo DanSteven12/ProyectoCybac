@@ -17,14 +17,30 @@ class UsersController extends Controller
         return view('user.dashboard');
     }
 
-    public function index()
-    {
-        $users = User::with(['role', 'status'])->paginate(10);
-        $currentDate = now()->format('d/m/Y');
-        $totalUsers = User::count();
+public function index(Request $request) 
+{
+    $query = User::with(['role', 'status']);
 
-        return view('admin.users.index', compact('users', 'currentDate', 'totalUsers'));
+    // Rol seleccionado en el filtro (por defecto 2 = usuario)
+    $roleFilter = $request->input('roleFilter', '2'); // por defecto '2' (string)
+
+    // Filtra por rol
+    $query->where('rol_id', $roleFilter);
+
+    // Filtra por búsqueda si aplica
+    if ($request->filled('search')) {
+        $query->where(function($q) use ($request) {
+            $q->where('names', 'like', '%'.$request->search.'%')
+              ->orWhere('last_name', 'like', '%'.$request->search.'%')
+              ->orWhere('email', 'like', '%'.$request->search.'%');
+        });
     }
+
+    $users = $query->paginate(10);
+
+    return view('admin.users.index', compact('users'));
+}
+
 
     public function create()
     {

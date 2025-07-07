@@ -48,21 +48,12 @@ class RegisterController extends Controller
         'certification' => $data['certification'] ?? null,
     ]);
 
-    // 4) Evento y login
+    // 4) Evento (sin login automático)
     event(new Registered($user));
-    Auth::login($user);
 
-    // 5) Redirección según rol
-    if ($user->hasRole(Role::ADMIN)) {
-        return redirect()->route('admin.dashboard');
-    }
-
-    if ($user->hasRole(Role::INSTRUCTOR)) {
-        return redirect()->route('instructor.dashboard');
-    }
-
-    // ✅ Por defecto redirige al dashboard de usuario
-    return redirect()->route('user.dashboard');
+    // 5) Redirección al login
+    return redirect()->route('login')->with('success', 'Registro completado. Por favor, inicia sesión.');
 }
+
 
 }

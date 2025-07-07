@@ -15,55 +15,67 @@ class CheckMembershipExpirations extends Command
     protected $description = 'Envía notificaciones para membresías próximas a vencer.';
 
     public function handle()
-    {
-        $hoy = Carbon::today();
+{
+    $hoy = Carbon::today();
 
-        // IDs de status necesarios
-        $statusApprovedId = Status::where('name', 'Aprobado')->where('type', 2)->value('id');
-        $statusDuePaymentId = Status::where('name', 'Vencida')->where('type', 2)->value('id');
-        $activeStatusId = Status::where('name', 'Activo')->where('type', 1)->value('id');
+    // IDs de status necesarios
+    $statusApprovedId = Status::where('name', 'Aprobado')->where('type', 2)->value('id');
+    $statusDuePaymentId = Status::where('name', 'Vencida')->where('type', 2)->value('id');
+    $activeStatusId = Status::where('name', 'Activo')->where('type', 1)->value('id');
+    $inactiveStatusId = Status::where('name', 'Inactivo')->where('type', 1)->value('id'); // <-- Estado Inactivo para usuarios
 
-        // Pagos aprobados, con membresía activa
-        $payments = Payment::with(['membership', 'user'])
-            ->where('status_id', $statusApprovedId)
-            ->whereHas('membership', function ($q) use ($activeStatusId) {
-                $q->where('status_id', $activeStatusId);
-            })
-            ->get();
+    // Pagos aprobados, con membresía activa
+    $payments = Payment::with(['membership', 'user'])
+        ->where('status_id', $statusApprovedId)
+        ->whereHas('membership', function ($q) use ($activeStatusId) {
+            $q->where('status_id', $activeStatusId);
+        })
+        ->get();
 
-        foreach ($payments as $payment) {
-            $membership = $payment->membership;
+    foreach ($payments as $payment) {
+        $membership = $payment->membership;
 
-            if (!$membership) {
-                $this->warn("❌ Sin membresía: Pago ID {$payment->id}");
-                continue;
-            }
-
-            // Fecha de expiración
-            $expirationDate = Carbon::parse($payment->date)
-                ->addDays($membership->duration)
-                ->endOfDay();
-
-            // Si ya venció
-            if (Carbon::now()->greaterThan($expirationDate)) {
-                if ($payment->status_id !== $statusDuePaymentId) {
-                    $payment->update(['status_id' => $statusDuePaymentId]);
-                    $payment->user->notify(new MembershipExpiredNotification());
-                    $this->info("⚠️ Notificación de vencida enviada a {$payment->user->email}");
-                }
-                continue;
-            }
-
-            // Días restantes
-            $remainingDays = $hoy->diffInDays($expirationDate->copy()->startOfDay(), false);
-
-            if (in_array($remainingDays, [5, 4, 3, 2, 1])) {
-                $payment->user->notify(new MembershipToExpireNotification($remainingDays));
-                $this->info("📩 Notificación enviada a {$payment->user->email} ({$remainingDays} días restantes)");
-            }
+        if (!$membership) {
+            $this->warn("❌ Sin membresía: Pago ID {$payment->id}");
+            continue;
         }
 
-        $this->info('✅ Verificación completada');
+        // Fecha de expiración
+        $expirationDate = Carbon::parse($payment->date)
+            ->addDays($membership->duration)
+            ->endOfDay();
+
+        // Si ya venció
+        if (Carbon::now()->greaterThan($expirationDate)) {
+            if ($payment->status_id !== $statusDuePaymentId) {
+                // Cambiar status del pago a Vencida
+                $payment->update(['status_id' => $statusDuePaymentId]);
+
+                // Notificar al usuario que su membresía venció
+                $payment->user->notify(new MembershipExpiredNotification());
+
+                // Cambiar status del usuario a Inactivo si no está ya inactivo
+                if ($payment->user->status_id !== $inactiveStatusId) {
+                    $payment->user->update(['status_id' => $inactiveStatusId]);
+                    $this->info("Usuario {$payment->user->email} desactivado automáticamente.");
+                }
+
+                $this->info("⚠️ Notificación de vencida enviada a {$payment->user->email}");
+            }
+            continue;
+        }
+
+        // Días restantes para notificaciones anticipadas
+        $remainingDays = $hoy->diffInDays($expirationDate->copy()->startOfDay(), false);
+
+        if (in_array($remainingDays, [5, 4, 3, 2, 1])) {
+            $payment->user->notify(new MembershipToExpireNotification($remainingDays));
+            $this->info("📩 Notificación enviada a {$payment->user->email} ({$remainingDays} días restantes)");
+        }
     }
+
+    $this->info('✅ Verificación completada');
+}
+
 }
 

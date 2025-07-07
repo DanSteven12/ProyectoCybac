@@ -45,7 +45,6 @@
     @yield('styles')
 </head>
 <body>
-
     @include('layouts.partials.admi-navbar')
     
     <div class="content-wrapper">
@@ -60,6 +59,6 @@
     <script src="{{ asset('assets/js/script.js') }}"></script>
 
     @yield('scripts')
-
 </body>
+
 </html>

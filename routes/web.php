@@ -55,14 +55,6 @@ Route::middleware(['auth', 'role:usuario'])->prefix('user')->name('user.')->grou
     Route::get('/dashboard', [UsersController::class, 'dashboard'])->name('dashboard');
 });
 
-Route::prefix('admin')->name('admin.')->group(function () {
-    Route::resource('users', UsersController::class);
-});
-Route::resource('roles', RoleController::class)->middleware(['auth', 'can:admin']);
-
-Route::middleware(['auth', 'can:admin'])->prefix('admin')->name('admin.')->group(function () {
-    Route::resource('roles', RoleController::class);
-});
 
 // Rutas de membresía
 Route::middleware(['auth'])->prefix('user')->name('user.')->group(function () {
@@ -156,3 +148,4 @@ Route::middleware('auth')->prefix('admin')->name('admin.')->group(function () {
 Route::middleware(['auth'])->prefix('user')->name('user.')->group(function () {
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
 });
+
