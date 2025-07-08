@@ -11,42 +11,51 @@ use Barryvdh\DomPDF\Facade\Pdf;
 class PaymentController extends Controller
 {
     public function index(Request $request)
-    {
-        $estado = $request->estado ?? 'pendiente';
+{
+    $estado = $request->estado ?? 'pendiente';
 
-        $statusMap = [
-            'pendiente' => 4,
-            'aprobado' => 5,
-            'rechazado' => 6,
-            'vencido' => 7
-        ];
+    $statusMap = [
+        'pendiente' => 4,
+        'aprobado' => 5,
+        'rechazado' => 6,
+        'vencido' => 7
+    ];
 
-        $query = Payment::with(['user', 'membership', 'status'])
-            ->where('status_id', $statusMap[$estado] ?? 4)
-            ->orderBy('date', 'desc');
+    $query = Payment::with(['user', 'membership', 'status'])
+        ->where('status_id', $statusMap[$estado] ?? 4)
+        ->orderBy('date', 'desc');
 
-        $payments = $query->paginate(10)->withQueryString();
-
-        // Auto-update vencidos (opcional)
-        foreach ($payments as $payment) {
-            $paymentDate = Carbon::parse($payment->date);
-            $durationDays = $payment->membership->duration ?? 30;
-            $expirationDate = $paymentDate->copy()->addDays($durationDays);
-
-            if (Carbon::now()->greaterThan($expirationDate) && $payment->status_id != 7) {
-                $payment->update([
-                    'status_id' => 7,
-                    'comment' => 'Pago marcado automáticamente como vencido.',
-                ]);
-            }
-        }
-
-        return view('admin.payments.index', compact('payments'));
+    // ✅ Filtro por búsqueda de usuario
+    if ($request->filled('search')) {
+        $query->whereHas('user', function ($q) use ($request) {
+            $q->where('names', 'like', '%' . $request->search . '%')
+              ->orWhere('last_name', 'like', '%' . $request->search . '%')
+              ->orWhere('email', 'like', '%' . $request->search . '%');
+        });
     }
+
+    $payments = $query->paginate(10)->withQueryString();
+
+    // ✅ Actualización automática a vencido
+    foreach ($payments as $payment) {
+        $paymentDate = Carbon::parse($payment->date);
+        $durationDays = $payment->membership->duration ?? 30;
+        $expirationDate = $paymentDate->copy()->addDays($durationDays);
+
+        if (Carbon::now()->greaterThan($expirationDate) && $payment->status_id != 7) {
+            $payment->update([
+                'status_id' => 7,
+                'comment' => 'Pago marcado automáticamente como vencido.',
+            ]);
+        }
+    }
+
+    return view('admin.payments.index', compact('payments'));
+}
 
     public function show(Payment $payment)
     {
-        return view('admin.payments.show', compact('payment'));
+        return view('admin. payments.show', compact('payment'));
     }
 
     public function update(Request $request, Payment $payment)

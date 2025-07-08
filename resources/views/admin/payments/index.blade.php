@@ -14,10 +14,11 @@
     </div>
 
     <!-- Filtro por estado (mejorado visualmente pero misma funcionalidad) -->
-    <form action="{{ route('admin.payments.index') }}" method="GET" class="mb-4 card shadow-sm border-0">
-        <div class="card-body">
-            <label for="estado" class="form-label fw-semibold text-primary-dark" style="font-size: 1.4rem">Filtrar por estado:</label>
-            <div class="custom-select-wrapper">
+   <form action="{{ route('admin.payments.index') }}" method="GET" class="mb-4 card shadow-sm border-0">
+    <div class="card-body">
+        <div class="row g-3 align-items-end">
+            <div class="col-md-6">
+                <label for="estado" class="form-label fw-semibold text-primary-dark" style="font-size: 1.4rem">Filtrar por estado:</label>
                 <select name="estado" id="estado" class="form-select-enhanced" style="font-size: 1.3rem" onchange="this.form.submit()">
                     <option value="pendiente" {{ request('estado', 'pendiente') == 'pendiente' ? 'selected' : '' }}>Pendiente</option>
                     <option value="aprobado" {{ request('estado') == 'aprobado' ? 'selected' : '' }}>Aprobado</option>
@@ -25,8 +26,32 @@
                     <option value="vencido" {{ request('estado') == 'vencido' ? 'selected' : '' }}>Vencido</option>
                 </select>
             </div>
+            <div class="col-md-6">
+                <label for="search" class="form-label fw-semibold text-primary-dark" style="font-size: 1.4rem">Buscar usuario:</label>
+                <input 
+                    type="text"
+                    name="search"
+                    id="search"
+                    class="form-control"
+                    placeholder="Buscar por nombre, apellido o correo..."
+                    value="{{ request('search') }}"
+                >
+            </div>
         </div>
-    </form>
+        <center>
+            <button type="submit" class="btn py-2 px-4" style="background-color: #FF6B35; color: #FFFFFF; font-weight: 600; font-size: 1.3rem;">
+        <i class="fas fa-search me-2"></i> BUSCAR
+    </button>
+
+    <a href="{{ route('admin.payments.index', ['estado' => request('estado', 'pendiente')]) }}" 
+   class="btn btn-outline-secondary py-2 px-4" 
+   style="font-weight: 600; font-size: 1.3rem;">
+    <i class="fas fa-times me-2"></i> LIMPIAR
+</a>
+</center>
+    </div>
+</form>
+
 
     <!-- Resumen de totales (sin cambios) -->
     @if(request('estado') == 'aprobado')
