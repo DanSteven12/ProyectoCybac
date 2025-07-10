@@ -748,13 +748,6 @@
         </div>
         
         <div class="header-controls">
-            <form method="POST" action="{{ route('logout') }}" id="logout-form">
-                @csrf
-                <button type="button" class="logout-button" id="logoutButton">
-                    <i class="fas fa-sign-out-alt"></i> Cerrar Sesión
-                </button>
-            </form>
-            
             <div class="hamburger-btn" id="hamburgerBtn">
                 <div class="hamburger-bar"></div>
                 <div class="hamburger-bar"></div>
@@ -763,219 +756,226 @@
         </div>
     </header>
     
-    <!-- Menú Overlay -->
     <div class="overlay" id="menuOverlay">
-        <!-- Botón de cierre para móviles -->
-        <div class="close-menu-btn" id="closeMenuBtn"></div>
-        
-        <!-- Contenedor de partículas para el overlay -->
-        <div class="particles-overlay" id="particlesOverlay"></div>
-        
-        <div class="menu-grid">
-            <a href="{{ route('user.dashboard') }}" class="menu-card">
-                <i class="fas fa-home"></i>
-                <span>Inicio</span>
-            </a>
-            <a href="{{ route('user.memberships.index') }}" class="menu-card">
-                <i class="fas fa-id-card"></i>
-                <span>Membresías</span>
-            </a>
-            <a href="{{ route('user.payments.index') }}" class="menu-card">
-                <i class="fas fa-file-invoice-dollar"></i>
-                <span>Historial de Pagos</span>
-            </a>
-            @if ($hasApprovedMembership)
-            <a href="{{ route('user.classes.index') }}" class="menu-card">
-                <i class="fas fa-calendar-check"></i>
-                <span>Reserva tus Clases</span>
-            </a>
-            <a href="{{ route('user.classes.history') }}" class="menu-card">
-                <i class="fas fa-history"></i>
-                <span>Historial de Clases</span>
-            </a>
-            @endif
-        </div>
-    </div>
+    <!-- Botón de cierre para móviles -->
+    <div class="close-menu-btn" id="closeMenuBtn"></div>
     
-    <script>
-        const hamburgerBtn = document.getElementById('hamburgerBtn');
-        const closeMenuBtn = document.getElementById('closeMenuBtn');
-        const menuOverlay = document.getElementById('menuOverlay');
-        const particlesOverlay = document.getElementById('particlesOverlay');
-        const particlesNav = document.getElementById('particlesNav');
-        const menuCards = document.querySelectorAll('.menu-card');
-        const logoutButton = document.getElementById('logoutButton');
-        const logoutForm = document.getElementById('logout-form');
+    <!-- Contenedor de partículas para el overlay -->
+    <div class="particles-overlay" id="particlesOverlay"></div>
+    
+    <div class="menu-grid">
+        <a href="{{ route('user.dashboard') }}" class="menu-card">
+            <i class="fas fa-home"></i>
+            <span>Inicio</span>
+        </a>
+        <a href="{{ route('user.memberships.index') }}" class="menu-card">
+            <i class="fas fa-id-card"></i>
+            <span>Membresías</span>
+        </a>
+        <a href="{{ route('user.payments.index') }}" class="menu-card">
+            <i class="fas fa-file-invoice-dollar"></i>
+            <span>Historial de Pagos</span>
+        </a>
+        @if ($hasApprovedMembership)
+        <a href="{{ route('user.classes.index') }}" class="menu-card">
+            <i class="fas fa-calendar-check"></i>
+            <span>Reserva tus Clases</span>
+        </a>
+        <a href="{{ route('user.classes.history') }}" class="menu-card">
+            <i class="fas fa-history"></i>
+            <span>Historial de Clases</span>
+        </a>
+        @endif
+        <a href="#" class="menu-card" id="logoutButton">
+            <i class="fas fa-sign-out-alt"></i>
+            <span>Cerrar Sesión</span>
+        </a>
+    </div>
+</div>
 
-        // Función para mostrar el alert de confirmación de cierre de sesión
-        function showLogoutConfirmation() {
-            Swal.fire({
-                title: '¿Estás seguro?',
-                html: '¿Deseas cerrar tu sesión en FITNFLOW?',
-                icon: 'warning',
-                showCancelButton: true,
-                confirmButtonText: 'Sí, cerrar sesión',
-                cancelButtonText: 'Cancelar',
-                customClass: {
-                    popup: 'logout-alert',
-                    title: 'logout-title',
-                    htmlContainer: 'logout-message',
-                    confirmButton: 'logout-confirm',
-                    cancelButton: 'logout-cancel',
-                    actions: 'logout-actions'
-                },
-                buttonsStyling: false,
-                reverseButtons: true,
-                focusCancel: true,
-                background: '#FFFFFF',
-                iconColor: '#FF6B35',
-                confirmButtonColor: '#1A365D',
-                cancelButtonColor: '#FF6B35',
-                showClass: {
-                    popup: 'swal2-noanimation',
-                    backdrop: 'swal2-noanimation'
-                }
-            }).then((result) => {
-                if (result.isConfirmed) {
-                    logoutForm.submit();
-                }
-            });
-        }
+<form method="POST" action="{{ route('logout') }}" id="logout-form" style="display: none;">
+    @csrf
+</form>
 
-        // Event listener para el botón de logout
-        logoutButton.addEventListener('click', function(e) {
-            e.preventDefault(); // Prevenimos el envío directo del formulario
-            showLogoutConfirmation();
-        });
+<script>
+    const hamburgerBtn = document.getElementById('hamburgerBtn');
+    const closeMenuBtn = document.getElementById('closeMenuBtn');
+    const menuOverlay = document.getElementById('menuOverlay');
+    const particlesOverlay = document.getElementById('particlesOverlay');
+    const particlesNav = document.getElementById('particlesNav');
+    const menuCards = document.querySelectorAll('.menu-card');
+    const logoutButton = document.getElementById('logoutButton');
+    const logoutForm = document.getElementById('logout-form');
 
-        function toggleMenu() {
-            hamburgerBtn.classList.toggle('active');
-            menuOverlay.classList.toggle('overlay-active');
-            document.body.style.overflow = menuOverlay.classList.contains('overlay-active') ? 'hidden' : 'auto';
-            
-            // Si se abre el menú, generamos las partículas y aplicamos la animación
-            if (menuOverlay.classList.contains('overlay-active')) {
-                createOverlayParticles();
-                applyZoomInAnimation();
+    // Función para mostrar el alert de confirmación de cierre de sesión
+    function showLogoutConfirmation() {
+        Swal.fire({
+            title: '¿Estás seguro?',
+            html: '¿Deseas cerrar tu sesión en FITNFLOW?',
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonText: 'Sí, cerrar sesión',
+            cancelButtonText: 'Cancelar',
+            customClass: {
+                popup: 'logout-alert',
+                title: 'logout-title',
+                htmlContainer: 'logout-message',
+                confirmButton: 'logout-confirm',
+                cancelButton: 'logout-cancel',
+                actions: 'logout-actions'
+            },
+            buttonsStyling: false,
+            reverseButtons: true,
+            focusCancel: true,
+            background: '#FFFFFF',
+            iconColor: '#FF6B35',
+            confirmButtonColor: '#1A365D',
+            cancelButtonColor: '#FF6B35',
+            showClass: {
+                popup: 'swal2-noanimation',
+                backdrop: 'swal2-noanimation'
             }
-        }
+        }).then((result) => {
+            if (result.isConfirmed) {
+                logoutForm.submit();
+            }
+        });
+    }
 
-        // Función para aplicar la animación zoomInDown a las tarjetas
-        function applyZoomInAnimation() {
-            // Primero quitamos cualquier animación previa
-            menuCards.forEach(card => {
-                card.classList.remove('animate__zoomInDown', 'animate__animated');
-            });
-            
-            // Luego aplicamos la animación a cada tarjeta con un pequeño retraso escalonado
-            menuCards.forEach((card, index) => {
-                // Forzamos un reflow para reiniciar la animación
-                void card.offsetWidth;
-                
-                card.classList.add('animate__animated', 'animate__zoomInDown');
-                card.style.animationDelay = `${index * 0.1}s`;
-            });
-        }
+    // Event listener para el botón de logout
+    logoutButton.addEventListener('click', function(e) {
+        e.preventDefault(); // Prevenimos el envío directo del formulario
+        showLogoutConfirmation();
+    });
 
-        // Event listeners
-        hamburgerBtn.addEventListener('click', toggleMenu);
-        closeMenuBtn.addEventListener('click', toggleMenu);
+    function toggleMenu() {
+        hamburgerBtn.classList.toggle('active');
+        menuOverlay.classList.toggle('overlay-active');
+        document.body.style.overflow = menuOverlay.classList.contains('overlay-active') ? 'hidden' : 'auto';
         
-        // Evento para las tarjetas del menú
+        // Si se abre el menú, generamos las partículas y aplicamos la animación
+        if (menuOverlay.classList.contains('overlay-active')) {
+            createOverlayParticles();
+            applyZoomInAnimation();
+        }
+    }
+
+    // Función para aplicar la animación zoomInDown a las tarjetas
+    function applyZoomInAnimation() {
+        // Primero quitamos cualquier animación previa
         menuCards.forEach(card => {
-            card.addEventListener('click', function(e) {
-                e.preventDefault();
-                toggleMenu();
-                
-                // Simulamos la navegación después de un pequeño retraso
-                setTimeout(() => {
-                    window.location.href = this.href;
-                }, 500);
-            });
+            card.classList.remove('animate__zoomInDown', 'animate__animated');
         });
-
-        menuOverlay.addEventListener('click', (e) => {
-            if(e.target === menuOverlay) toggleMenu();
-        });
-
-        document.addEventListener('keydown', (e) => {
-            if(e.key === 'Escape' && menuOverlay.classList.contains('overlay-active')) {
-                toggleMenu();
-            }
-        });
-
-        // Crear efecto de partículas en el navbar
-        function createNavbarParticles() {
-            const particleCount = 10;
+        
+        // Luego aplicamos la animación a cada tarjeta con un pequeño retraso escalonado
+        menuCards.forEach((card, index) => {
+            // Forzamos un reflow para reiniciar la animación
+            void card.offsetWidth;
             
-            for (let i = 0; i < particleCount; i++) {
-                const particle = document.createElement('div');
-                particle.classList.add('particle-nav');
-                
-                // Tamaño más pequeño (1-2px)
-                const size = Math.random() * 1 + 1;
-                particle.style.width = `${size}px`;
-                particle.style.height = `${size}px`;
-                
-                // Posición aleatoria en el navbar
-                particle.style.left = `${Math.random() * 100}%`;
-                particle.style.top = `${Math.random() * 100}%`;
-                
-                // Duración de animación aleatoria
-                const duration = Math.random() * 15 + 15;
-                particle.style.animationDuration = `${duration}s`;
-                
-                // Retraso inicial aleatorio
-                particle.style.animationDelay = `${Math.random() * 5}s`;
-                
-                particlesNav.appendChild(particle);
-            }
-        }
-
-        // Crear efecto de partículas en el overlay
-        function createOverlayParticles() {
-            // Limpiamos partículas existentes
-            particlesOverlay.innerHTML = '';
-            
-            const particleCount = 25;
-            
-            for (let i = 0; i < particleCount; i++) {
-                const particle = document.createElement('div');
-                particle.classList.add('particle-overlay');
-                
-                // Tamaño aleatorio entre 1px y 3px
-                const size = Math.random() * 2 + 1;
-                particle.style.width = `${size}px`;
-                particle.style.height = `${size}px`;
-                
-                // Posición aleatoria en el overlay
-                particle.style.left = `${Math.random() * 100}%`;
-                particle.style.top = `${Math.random() * 100}%`;
-                
-                // Duración de animación aleatoria
-                const duration = Math.random() * 15 + 15;
-                particle.style.animationDuration = `${duration}s`;
-                
-                // Retraso inicial aleatorio
-                particle.style.animationDelay = `${Math.random() * 5}s`;
-                
-                particlesOverlay.appendChild(particle);
-            }
-        }
-
-        // Inicializar partículas
-        document.addEventListener('DOMContentLoaded', function() {
-            createNavbarParticles();
+            card.classList.add('animate__animated', 'animate__zoomInDown');
+            card.style.animationDelay = `${index * 0.1}s`;
         });
+    }
 
-        // Ajustar altura del overlay al cambiar tamaño de pantalla
-        function adjustOverlayHeight() {
-            if (menuOverlay.classList.contains('overlay-active')) {
-                document.body.style.overflow = 'hidden';
-            }
+    // Event listeners
+    hamburgerBtn.addEventListener('click', toggleMenu);
+    closeMenuBtn.addEventListener('click', toggleMenu);
+    
+    // Evento para las tarjetas del menú (excluyendo el botón de logout)
+    document.querySelectorAll('.menu-card:not(#logoutButton)').forEach(card => {
+        card.addEventListener('click', function(e) {
+            e.preventDefault();
+            toggleMenu();
+            
+            // Simulamos la navegación después de un pequeño retraso
+            setTimeout(() => {
+                window.location.href = this.href;
+            }, 500);
+        });
+    });
+
+    menuOverlay.addEventListener('click', (e) => {
+        if(e.target === menuOverlay) toggleMenu();
+    });
+
+    document.addEventListener('keydown', (e) => {
+        if(e.key === 'Escape' && menuOverlay.classList.contains('overlay-active')) {
+            toggleMenu();
         }
+    });
 
-        window.addEventListener('resize', adjustOverlayHeight);
-    </script>
+    // Crear efecto de partículas en el navbar
+    function createNavbarParticles() {
+        const particleCount = 10;
+        
+        for (let i = 0; i < particleCount; i++) {
+            const particle = document.createElement('div');
+            particle.classList.add('particle-nav');
+            
+            // Tamaño más pequeño (1-2px)
+            const size = Math.random() * 1 + 1;
+            particle.style.width = `${size}px`;
+            particle.style.height = `${size}px`;
+            
+            // Posición aleatoria en el navbar
+            particle.style.left = `${Math.random() * 100}%`;
+            particle.style.top = `${Math.random() * 100}%`;
+            
+            // Duración de animación aleatoria
+            const duration = Math.random() * 15 + 15;
+            particle.style.animationDuration = `${duration}s`;
+            
+            // Retraso inicial aleatorio
+            particle.style.animationDelay = `${Math.random() * 5}s`;
+            
+            particlesNav.appendChild(particle);
+        }
+    }
+
+    // Crear efecto de partículas en el overlay
+    function createOverlayParticles() {
+        // Limpiamos partículas existentes
+        particlesOverlay.innerHTML = '';
+        
+        const particleCount = 25;
+        
+        for (let i = 0; i < particleCount; i++) {
+            const particle = document.createElement('div');
+            particle.classList.add('particle-overlay');
+            
+            // Tamaño aleatorio entre 1px y 3px
+            const size = Math.random() * 2 + 1;
+            particle.style.width = `${size}px`;
+            particle.style.height = `${size}px`;
+            
+            // Posición aleatoria en el overlay
+            particle.style.left = `${Math.random() * 100}%`;
+            particle.style.top = `${Math.random() * 100}%`;
+            
+            // Duración de animación aleatoria
+            const duration = Math.random() * 15 + 15;
+            particle.style.animationDuration = `${duration}s`;
+            
+            // Retraso inicial aleatorio
+            particle.style.animationDelay = `${Math.random() * 5}s`;
+            
+            particlesOverlay.appendChild(particle);
+        }
+    }
+
+    // Inicializar partículas
+    document.addEventListener('DOMContentLoaded', function() {
+        createNavbarParticles();
+    });
+
+    // Ajustar altura del overlay al cambiar tamaño de pantalla
+    function adjustOverlayHeight() {
+        if (menuOverlay.classList.contains('overlay-active')) {
+            document.body.style.overflow = 'hidden';
+        }
+    }
+
+    window.addEventListener('resize', adjustOverlayHeight);
+</script>
 </body>
 </html>

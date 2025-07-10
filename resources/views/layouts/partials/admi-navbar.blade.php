@@ -688,12 +688,6 @@
 </div>
         
         <div class="header-controls">
-            <form method="POST" action="{{ route('logout') }}" id="logout-form">
-                @csrf
-            <button class="logout-button" id="logoutButton">
-                <i class="fas fa-sign-out-alt"></i> Cerrar Sesión
-            </button>
-            </form>
             <div class="hamburger-btn" id="hamburgerBtn">
                 <div class="hamburger-bar"></div>
                 <div class="hamburger-bar"></div>
@@ -702,230 +696,233 @@
         </div>
     </header>
 
-    <!-- Menú Overlay -->
     <div class="overlay" id="menuOverlay">
-        <!-- Botón de cierre para móviles -->
-        <div class="close-menu-btn" id="closeMenuBtn"></div>
-        
-        <!-- Contenedor de partículas para el overlay -->
-        <div class="particles-overlay" id="particlesOverlay"></div>
-        
-        <div class="menu-grid">
-           <a href="{{ route('admin.dashboard') }}" class="menu-card">
-               <span><i class="fas fa-home"></i> Inicio</span>
-            </a>
-            <a href="{{ route('admin.classes.index') }}" class="menu-card">
-                <span><i class="fas fa-chalkboard-teacher"></i> Clases</span>
-            </a>
-            <a href="{{ route('admin.payments.index') }}" class="menu-card">
-                <span><i class="fas fa-credit-card"></i> Pagos</span>  
-            </a>
-            <a href="{{ route('admin.memberships.index') }}" class="menu-card">
-                <span><i class="fas fa-id-card"></i> Membresías</span>
-            </a>
-            <a href="{{ route('admin.carousel.index')}}" class="menu-card">
-                <span><i class="fas fa-images"></i> Carrusel Home</span>
-            </a>
-            <a href="{{ route('admin.center-information.index')}}" class="menu-card">
-                <span><i class="fas fa-info-circle"></i> Información Home</span>
-            </a>
-            <a href="{{ route('admin.services_home.index')}}" class="menu-card">
-                <span><i class="fas fa-concierge-bell"></i> Servicios del Home</span>
-            </a>
-            <a href="{{ route('admin.service.index') }}" class="menu-card">
-                <span><i class="fas fa-dumbbell"></i> Servicios</span>
-            </a>
-            <a href="{{ route('admin.requirements.index') }}" class="menu-card">
-                <span><i class="fas fa-tasks"></i> Requerimientos</span>
-            </a>
-            <a href="{{ route('admin.users.index') }}" class="menu-card">
-                <span><i class="fas fa-users"></i> Usuarios</span>
-            </a>
-        </div>
+    <!-- Botón de cierre para móviles -->
+    <div class="close-menu-btn" id="closeMenuBtn"></div>
+    
+    <!-- Contenedor de partículas para el overlay -->
+    <div class="particles-overlay" id="particlesOverlay"></div>
+    
+    <div class="menu-grid">
+       <a href="{{ route('admin.dashboard') }}" class="menu-card">
+           <span><i class="fas fa-home"></i> Inicio</span>
+        </a>
+        <a href="{{ route('admin.classes.index') }}" class="menu-card">
+            <span><i class="fas fa-chalkboard-teacher"></i> Clases</span>
+        </a>
+        <a href="{{ route('admin.payments.index') }}" class="menu-card">
+            <span><i class="fas fa-credit-card"></i> Pagos</span>  
+        </a>
+        <a href="{{ route('admin.memberships.index') }}" class="menu-card">
+            <span><i class="fas fa-id-card"></i> Membresías</span>
+        </a>
+        <a href="{{ route('admin.carousel.index')}}" class="menu-card">
+            <span><i class="fas fa-images"></i> Carrusel Home</span>
+        </a>
+        <a href="{{ route('admin.center-information.index')}}" class="menu-card">
+            <span><i class="fas fa-info-circle"></i> Información Home</span>
+        </a>
+        <a href="{{ route('admin.services_home.index')}}" class="menu-card">
+            <span><i class="fas fa-concierge-bell"></i> Servicios del Home</span>
+        </a>
+        <a href="{{ route('admin.requirements.index') }}" class="menu-card">
+            <span><i class="fas fa-tasks"></i> Requerimientos</span>
+        </a>
+        <a href="{{ route('admin.service.index') }}" class="menu-card">
+            <span><i class="fas fa-dumbbell"></i> Servicios</span>
+        </a>
+        <a href="{{ route('admin.users.index') }}" class="menu-card">
+            <span><i class="fas fa-users"></i> Usuarios</span>
+        </a>
+        <a href="#" class="menu-card" id="logoutButton">
+            <span><i class="fas fa-sign-out-alt"></i> Cerrar Sesión</span>
+        </a>
     </div>
+</div>
 
+<form method="POST" action="{{ route('logout') }}" id="logout-form" style="display: none;">
+    @csrf
+</form>
 
-        <!-- SweetAlert2 -->
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-    <script>
-        const hamburgerBtn = document.getElementById('hamburgerBtn');
-        const closeMenuBtn = document.getElementById('closeMenuBtn');
-        const menuOverlay = document.getElementById('menuOverlay');
-        const particlesOverlay = document.getElementById('particlesOverlay');
-        const particlesNav = document.getElementById('particlesNav');
-        const logoutButton = document.getElementById('logoutButton');
-        const logoutForm = document.getElementById('logout-form');
-        const menuCards = document.querySelectorAll('.menu-card');
+<!-- SweetAlert2 -->
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script>
+    const hamburgerBtn = document.getElementById('hamburgerBtn');
+    const closeMenuBtn = document.getElementById('closeMenuBtn');
+    const menuOverlay = document.getElementById('menuOverlay');
+    const particlesOverlay = document.getElementById('particlesOverlay');
+    const particlesNav = document.getElementById('particlesNav');
+    const logoutButton = document.getElementById('logoutButton');
+    const logoutForm = document.getElementById('logout-form');
+    const menuCards = document.querySelectorAll('.menu-card');
 
-        // Función para mostrar el alert de confirmación de cierre de sesión
-        function showLogoutConfirmation() {
-            Swal.fire({
-                title: '¿Estás seguro?',
-                html: '¿Deseas cerrar tu sesión en FITNFLOW?',
-                icon: 'warning',
-                showCancelButton: true,
-                confirmButtonText: 'Sí, cerrar sesión',
-                cancelButtonText: 'Cancelar',
-                customClass: {
-                    popup: 'logout-alert',
-                    title: 'logout-title',
-                    htmlContainer: 'logout-message',
-                    confirmButton: 'logout-confirm',
-                    cancelButton: 'logout-cancel',
-                    actions: 'logout-actions'
-                },
-                buttonsStyling: false,
-                reverseButtons: true,
-                focusCancel: true,
-                background: '#FFFFFF',
-                iconColor: '#FF6B35',
-                confirmButtonColor: '#1A365D',
-                cancelButtonColor: '#FF6B35',
-                showClass: {
-                    popup: 'swal2-noanimation',
-                    backdrop: 'swal2-noanimation'
-                }
-            }).then((result) => {
-                if (result.isConfirmed) {
-                    logoutForm.submit();
-                }
-            });
-        }
-
-        // Event listener para el botón de logout
-        logoutButton.addEventListener('click', function(e) {
-            e.preventDefault(); // Prevenimos el envío directo del formulario
-            showLogoutConfirmation();
-        });
-
-        function toggleMenu() {
-            hamburgerBtn.classList.toggle('active');
-            menuOverlay.classList.toggle('overlay-active');
-            document.body.style.overflow = menuOverlay.classList.contains('overlay-active') ? 'hidden' : 'auto';
-            
-            // Si se abre el menú, generamos las partículas y aplicamos la animación a las tarjetas
-            if (menuOverlay.classList.contains('overlay-active')) {
-                createOverlayParticles();
-                applyZoomInAnimation();
+    // Función para mostrar el alert de confirmación de cierre de sesión
+    function showLogoutConfirmation() {
+        Swal.fire({
+            title: '¿Estás seguro?',
+            html: '¿Deseas cerrar tu sesión en FITNFLOW?',
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonText: 'Sí, cerrar sesión',
+            cancelButtonText: 'Cancelar',
+            customClass: {
+                popup: 'logout-alert',
+                title: 'logout-title',
+                htmlContainer: 'logout-message',
+                confirmButton: 'logout-confirm',
+                cancelButton: 'logout-cancel',
+                actions: 'logout-actions'
+            },
+            buttonsStyling: false,
+            reverseButtons: true,
+            focusCancel: true,
+            background: '#FFFFFF',
+            iconColor: '#FF6B35',
+            confirmButtonColor: '#1A365D',
+            cancelButtonColor: '#FF6B35',
+            showClass: {
+                popup: 'swal2-noanimation',
+                backdrop: 'swal2-noanimation'
             }
-        }
+        }).then((result) => {
+            if (result.isConfirmed) {
+                logoutForm.submit();
+            }
+        });
+    }
 
-        // Función para aplicar la animación zoomInDown a las tarjetas
-        function applyZoomInAnimation() {
-            // Primero quitamos cualquier animación previa
-            menuCards.forEach(card => {
-                card.classList.remove('animate__zoomInDown', 'animate__animated');
-            });
-            
-            // Luego aplicamos la animación a cada tarjeta con un pequeño retraso escalonado
-            menuCards.forEach((card, index) => {
-                // Forzamos un reflow para reiniciar la animación
-                void card.offsetWidth;
-                
-                card.classList.add('animate__animated', 'animate__zoomInDown');
-                card.style.animationDelay = `${index * 0.1}s`;
-            });
-        }
+    // Event listener para el botón de logout
+    logoutButton.addEventListener('click', function(e) {
+        e.preventDefault(); // Prevenimos el envío directo del formulario
+        showLogoutConfirmation();
+    });
 
-        // Event listeners
-        hamburgerBtn.addEventListener('click', toggleMenu);
-        closeMenuBtn.addEventListener('click', toggleMenu);
+    function toggleMenu() {
+        hamburgerBtn.classList.toggle('active');
+        menuOverlay.classList.toggle('overlay-active');
+        document.body.style.overflow = menuOverlay.classList.contains('overlay-active') ? 'hidden' : 'auto';
         
-        // Evento para las tarjetas del menú
+        // Si se abre el menú, generamos las partículas y aplicamos la animación a las tarjetas
+        if (menuOverlay.classList.contains('overlay-active')) {
+            createOverlayParticles();
+            applyZoomInAnimation();
+        }
+    }
+
+    // Función para aplicar la animación zoomInDown a las tarjetas
+    function applyZoomInAnimation() {
+        // Primero quitamos cualquier animación previa
         menuCards.forEach(card => {
-            card.addEventListener('click', function(e) {
-                e.preventDefault();
-                toggleMenu();
-                
-                // Simulamos la navegación después de un pequeño retraso
-                setTimeout(() => {
-                    window.location.href = this.href;
-                }, 500);
-            });
+            card.classList.remove('animate__zoomInDown', 'animate__animated');
         });
-
-        menuOverlay.addEventListener('click', (e) => {
-            if(e.target === menuOverlay) toggleMenu();
-        });
-
-        document.addEventListener('keydown', (e) => {
-            if(e.key === 'Escape' && menuOverlay.classList.contains('overlay-active')) {
-                toggleMenu();
-            }
-        });
-
-        // Crear efecto de partículas en el navbar
-        function createNavbarParticles() {
-            const particleCount = 12;
+        
+        // Luego aplicamos la animación a cada tarjeta con un pequeño retraso escalonado
+        menuCards.forEach((card, index) => {
+            // Forzamos un reflow para reiniciar la animación
+            void card.offsetWidth;
             
-            for (let i = 0; i < particleCount; i++) {
-                const particle = document.createElement('div');
-                particle.classList.add('particle-nav');
-                
-                // Tamaño más pequeño (1-2px)
-                const size = Math.random() * 1 + 1;
-                particle.style.width = `${size}px`;
-                particle.style.height = `${size}px`;
-                
-                // Posición aleatoria en el navbar
-                particle.style.left = `${Math.random() * 100}%`;
-                particle.style.top = `${Math.random() * 100}%`;
-                
-                // Duración de animación aleatoria
-                const duration = Math.random() * 15 + 15;
-                particle.style.animationDuration = `${duration}s`;
-                
-                // Retraso inicial aleatorio
-                particle.style.animationDelay = `${Math.random() * 5}s`;
-                
-                particlesNav.appendChild(particle);
-            }
-        }
-
-        // Crear efecto de partículas en el overlay
-        function createOverlayParticles() {
-            // Limpiamos partículas existentes
-            particlesOverlay.innerHTML = '';
-            
-            const particleCount = 25;
-            
-            for (let i = 0; i < particleCount; i++) {
-                const particle = document.createElement('div');
-                particle.classList.add('particle-overlay');
-                
-                // Tamaño aleatorio entre 1px y 3px
-                const size = Math.random() * 2 + 1;
-                particle.style.width = `${size}px`;
-                particle.style.height = `${size}px`;
-                
-                // Posición aleatoria en el overlay
-                particle.style.left = `${Math.random() * 100}%`;
-                particle.style.top = `${Math.random() * 100}%`;
-                
-                // Duración de animación aleatoria
-                const duration = Math.random() * 15 + 15;
-                particle.style.animationDuration = `${duration}s`;
-                
-                // Retraso inicial aleatorio
-                particle.style.animationDelay = `${Math.random() * 5}s`;
-                
-                particlesOverlay.appendChild(particle);
-            }
-        }
-
-        // Inicializar partículas
-        document.addEventListener('DOMContentLoaded', function() {
-            createNavbarParticles();
+            card.classList.add('animate__animated', 'animate__zoomInDown');
+            card.style.animationDelay = `${index * 0.1}s`;
         });
+    }
 
-        // Ajustar altura del overlay al cambiar tamaño de pantalla
-        function adjustOverlayHeight() {
-            if (menuOverlay.classList.contains('overlay-active')) {
-                document.body.style.overflow = 'hidden';
-            }
+    // Event listeners
+    hamburgerBtn.addEventListener('click', toggleMenu);
+    closeMenuBtn.addEventListener('click', toggleMenu);
+    
+    // Evento para las tarjetas del menú
+    document.querySelectorAll('.menu-card:not(#logoutButton)').forEach(card => {
+        card.addEventListener('click', function(e) {
+            e.preventDefault();
+            toggleMenu();
+            
+            // Simulamos la navegación después de un pequeño retraso
+            setTimeout(() => {
+                window.location.href = this.href;
+            }, 500);
+        });
+    });
+
+    menuOverlay.addEventListener('click', (e) => {
+        if(e.target === menuOverlay) toggleMenu();
+    });
+
+    document.addEventListener('keydown', (e) => {
+        if(e.key === 'Escape' && menuOverlay.classList.contains('overlay-active')) {
+            toggleMenu();
         }
+    });
 
-        window.addEventListener('resize', adjustOverlayHeight);
-    </script>
+    // Crear efecto de partículas en el navbar
+    function createNavbarParticles() {
+        const particleCount = 12;
+        
+        for (let i = 0; i < particleCount; i++) {
+            const particle = document.createElement('div');
+            particle.classList.add('particle-nav');
+            
+            // Tamaño más pequeño (1-2px)
+            const size = Math.random() * 1 + 1;
+            particle.style.width = `${size}px`;
+            particle.style.height = `${size}px`;
+            
+            // Posición aleatoria en el navbar
+            particle.style.left = `${Math.random() * 100}%`;
+            particle.style.top = `${Math.random() * 100}%`;
+            
+            // Duración de animación aleatoria
+            const duration = Math.random() * 15 + 15;
+            particle.style.animationDuration = `${duration}s`;
+            
+            // Retraso inicial aleatorio
+            particle.style.animationDelay = `${Math.random() * 5}s`;
+            
+            particlesNav.appendChild(particle);
+        }
+    }
+
+    // Crear efecto de partículas en el overlay
+    function createOverlayParticles() {
+        // Limpiamos partículas existentes
+        particlesOverlay.innerHTML = '';
+        
+        const particleCount = 25;
+        
+        for (let i = 0; i < particleCount; i++) {
+            const particle = document.createElement('div');
+            particle.classList.add('particle-overlay');
+            
+            // Tamaño aleatorio entre 1px y 3px
+            const size = Math.random() * 2 + 1;
+            particle.style.width = `${size}px`;
+            particle.style.height = `${size}px`;
+            
+            // Posición aleatoria en el overlay
+            particle.style.left = `${Math.random() * 100}%`;
+            particle.style.top = `${Math.random() * 100}%`;
+            
+            // Duración de animación aleatoria
+            const duration = Math.random() * 15 + 15;
+            particle.style.animationDuration = `${duration}s`;
+            
+            // Retraso inicial aleatorio
+            particle.style.animationDelay = `${Math.random() * 5}s`;
+            
+            particlesOverlay.appendChild(particle);
+        }
+    }
+
+    // Inicializar partículas
+    document.addEventListener('DOMContentLoaded', function() {
+        createNavbarParticles();
+    });
+
+    // Ajustar altura del overlay al cambiar tamaño de pantalla
+    function adjustOverlayHeight() {
+        if (menuOverlay.classList.contains('overlay-active')) {
+            document.body.style.overflow = 'hidden';
+        }
+    }
+</script>
 </body>
 </html>

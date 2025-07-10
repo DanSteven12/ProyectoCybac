@@ -537,7 +537,7 @@
                                 <animate attributeName="stroke-dashoffset" from="0" to="-600" dur="3s" repeatCount="indefinite" />
                             </text>
                         </svg>
-                        <p class="tagline">Accede a tu cuenta para reservar clases</p>
+                        <p class="tagline" style="font-size: 1rem">Accede a tu cuenta para reservar clases</p>
                     </div>
                 </div>
 
