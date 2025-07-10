@@ -8,48 +8,34 @@
                 <div class="card-header py-3" style="background-color: #1A365D; color: #FFFFFF; border-bottom: 3px solid #FF6B35;">
                     <div class="d-flex justify-content-between align-items-center">
                         <div class="d-flex align-items-center" style="gap: 1rem;">
-                 <form method="GET" action="{{ route('admin.users.index') }}" class="d-flex align-items-center" style="gap: 1rem;">
-    <div class="input-container">
-        <input 
-            name="search"
-            value="{{ request('search') }}"
-            class="input" 
-            type="text" 
-            placeholder="Buscar usuarios..." 
-            autocomplete="off"/>
-    </div>
+                            <form method="GET" action="{{ route('admin.users.index') }}" class="d-flex align-items-center" style="gap: 1rem;">
+                                <div class="input-container">
+                                    <input 
+                                        name="search"
+                                        value="{{ request('search') }}"
+                                        class="input" 
+                                        type="text" 
+                                        placeholder="Buscador............" 
+                                        autocomplete="off"/>
+                                </div>
 
-    <select name="roleFilter" class="form-select" onchange="this.form.submit()">
-        <option value="2" {{ request('roleFilter', '2') == '2' ? 'selected' : '' }}>Usuarios</option>
-        <option value="3" {{ request('roleFilter') == '3' ? 'selected' : '' }}>Instructores</option>
-    </select>
-  <!-- Botón para ver administrador -->
-                              <button type="button" class="btn py-2 px-4" style="background-color: #1A365D; color: #FFFFFF; font-weight: 600; font-size: 1.3rem; border: 2px solid #FF6B35;" onclick="mostrarAdministrador()">
-                                  <i class="fas fa-user-shield me-2"></i> ADMINISTRADOR
-                              </button>
+                                <select name="roleFilter" class="form-select" onchange="this.form.submit()" style="border: 4px solid #1A365D; background-color: #F4F4F4; color: #1A365D; font-size: 1.3rem; height: 45px;">
+                                    <option value="2" {{ request('roleFilter', '2') == '2' ? 'selected' : '' }}>Usuarios</option>
+                                    <option value="3" {{ request('roleFilter') == '3' ? 'selected' : '' }}>Instructores</option>
+                                </select>
+                                
+                                <button type="button" class="btn py-2 px-4" style="background-color: #1A365D; color: #FFFFFF; font-weight: 600; font-size: 1.3rem; border: 2px solid #FF6B35;" onclick="mostrarAdministrador()">
+                                    <i class="fas fa-user-shield me-2"></i> ADMINISTRADOR
+                                </button>
 
-    <button type="submit" class="btn py-2 px-4" style="background-color: #FF6B35; color: #FFFFFF; font-weight: 600; font-size: 1.3rem;">
-        <i class="fas fa-search me-2"></i> BUSCAR
-    </button>
+                                <button type="submit" class="btn py-2 px-4" style="background-color: #FF6B35; color: #FFFFFF; font-weight: 600; font-size: 1.3rem;">
+                                    <i class="fas fa-search me-2"></i> BUSCAR
+                                </button>
 
-    <a href="{{ route('admin.users.index') }}" class="btn btn-outline-secondary py-2 px-4" style="font-weight: 600; font-size: 1.3rem;">
-        <i class="fas fa-times me-2"></i> LIMPIAR
-    </a>
-
-    @if(request('roleFilter')) 
-        | Rol: 
-        @switch(request('roleFilter'))
-            @case('2')
-                Usuario
-                @break
-            @case('3')
-                Instructor
-                @break
-            @default
-                Desconocido
-        @endswitch
-    @endif
-</form>
+                                <a href="{{ route('admin.users.index') }}" class="btn py-2 px-4" style="background-color: #2EC4B6; color: #FFFFFF; font-weight: 600; font-size: 1.3rem; border: 2px solid #1A365D;">
+                                    <i class="fas fa-times me-2"></i> LIMPIAR
+                                </a>
+                            </form>
                         </div>
 
                         <h2 class="mb-0" style="font-weight: 700; font-size: 2.0rem;">
@@ -66,7 +52,7 @@
                                     </a>
                                 @endif
                             @endauth
-                            <a href="{{ route('admin.users.create') }}" class="btn py-2 px-4" style="background-color: #FF6B35; color: #FFFFFF; font-weight: 600; font-size: 1.3rem;">
+                            <a href="{{ route(name: 'admin.users.create') }}" class="btn py-2 px-4" style="background-color: #FF6B35; color: #FFFFFF; font-weight: 600; font-size: 1.3rem;">
                                 <i class="fas fa-plus-circle me-2"></i> NUEVO USUARIO
                             </a>
                         </div>
@@ -74,7 +60,8 @@
                 </div>
 
                 @if(request('search') || request('roleFilter'))
-                <div class="alert alert-info m-4" style="background-color: #2EC4B6; color: #FFFFFF; border-left: 5px solid #1A365D;">
+                <div class="alert alert-dismissible fade show m-4" role="alert" id="autoDismissAlert"
+                    style="background-color: #2EC4B6; color: #FFFFFF; border-left: 5px solid #1A365D; font-size: 1.4rem;">
                     <div class="d-flex align-items-center">
                         <i class="fas fa-filter me-3 fs-4"></i>
                         <strong class="fs-5">
@@ -82,13 +69,14 @@
                             @if(request('search')) Búsqueda: "{{ request('search') }}" @endif
                             @if(request('roleFilter')) | Rol: {{ ucfirst(request('roleFilter')) }} @endif
                         </strong>
+                        <button type="button" class="btn-close btn-close-white ms-auto fs-5" data-bs-dismiss="alert" aria-label="Close"></button>
                     </div>
                 </div>
                 @endif
 
                 @if (session('success'))
-                    <div class="alert alert-dismissible fade show m-4" role="alert" 
-                        style="background-color: #2EC4B6; color: #FFFFFF; border-left: 5px solid #1A365D; font-size: 1.3rem;">
+                    <div class="alert alert-dismissible fade show m-4" role="alert" id="autoDismissAlert"
+                        style="background-color: #2EC4B6; color: #FFFFFF; border-left: 5px solid #1A365D; font-size: 1.4rem;">
                         <div class="d-flex align-items-center">
                             <i class="fas fa-check-circle me-3 fs-4"></i>
                             <strong class="fs-5">{{ session('success') }}</strong>
@@ -102,51 +90,60 @@
                         <table class="table table-hover align-middle mb-0" style="border-top: none; width: 100%;">
                             <thead>
                                 <tr style="background-color: #1A365D; color: #FFFFFF;">
-                                    <th class="ps-4 py-3" style="font-weight: 600; font-size: 1.4rem;">Nombres</th>
-                                    <th class="py-3" style="font-weight: 600; font-size: 1.4rem;">Apellidos</th>
-                                    <th class="py-3" style="font-weight: 600; font-size: 1.4rem;">Email</th>
-                                    <th class="py-3" style="font-weight: 600; font-size: 1.4rem;">Rol</th>
-                                    <th class="py-3" style="font-weight: 600; font-size: 1.4rem;">Estado</th>
-                                    <th class="py-3" style="font-weight: 600; font-size: 1.4rem;">Fecha Nac.</th>
-                                    <th class="py-3" style="font-weight: 600; font-size: 1.4rem;">Género</th>
-                                    <th class="py-3" style="font-weight: 600; font-size: 1.4rem;">Especialidad</th>
-                                    <th class="py-3" style="font-weight: 600; font-size: 1.4rem;">Certificación</th>
-                                    <th class="pe-4 py-3 text-center" style="font-weight: 600; font-size: 1.4rem;">Acciones</th>
+                                    <th class="ps-4 py-3" style="font-weight: 600; font-size: 1.4rem; width: 10%;">Nombres</th>
+                                    <th class="py-3" style="font-weight: 600; font-size: 1.4rem; width: 10%;">Apellidos</th>
+                                    <th class="py-3" style="font-weight: 600; font-size: 1.4rem; width: 15%;">Email</th>
+                                    <th class="py-3" style="font-weight: 600; font-size: 1.4rem; width: 8%;">Rol</th>
+                                    <th class="py-3" style="font-weight: 600; font-size: 1.4rem; width: 8%;">Estado</th>
+                                    <th class="py-3" style="font-weight: 600; font-size: 1.4rem; width: 12%;">Fecha Nac.</th>
+                                    <th class="py-3" style="font-weight: 600; font-size: 1.4rem; width: 8%;">Género</th>
+                                    <th class="py-3" style="font-weight: 600; font-size: 1.4rem; width: 10%;">Especialidad</th>
+                                    <th class="py-3" style="font-weight: 600; font-size: 1.4rem; width: 10%;">Certificación</th>
+                                    <th class="pe-4 py-3 text-center" style="font-weight: 600; font-size: 1.4rem; width: 15%;">Acciones</th>
                                 </tr>
                             </thead>
-                          <tbody>
-    @forelse($users as $user)
-        <tr style="border-bottom: 2px solid #F4F4F4; {{ $user->status && $user->status->name === 'Inactivo' ? 'background-color: #f8d7da;' : '' }}">
-            <td class="ps-4" style="font-size: 1.4rem; color: #1A365D;">{{ $user->names }}</td>
-            <td style="font-size: 1.4rem; color: #1A365D;">{{ $user->last_name }}</td>
-            <td style="font-size: 1.4rem; color: #1A365D;">{{ $user->email }}</td>
-            <td style="font-size: 1.4rem; color: #1A365D;">{{ $user->role->name_rol ?? 'N/A' }}</td>
-            <td style="font-size: 1.4rem; color: #1A365D;">
-                {{ $user->status->name ?? 'N/A' }}
-            </td>
-            <td style="font-size: 1.4rem; color: #1A365D;">
-                {{ \Carbon\Carbon::parse($user->birth_date)->translatedFormat('d \d\e F \d\e Y') }}
-            </td>
-            <td style="font-size: 1.4rem; color: #1A365D;">{{ $user->gender }}</td>
-            <td class="wrap-text" style="font-size: 1.4rem; color: #1A365D;">{{ $user->specialty ?? 'N/A' }}</td>
-            <td class="wrap-text" style="font-size: 1.4rem; color: #1A365D;">{{ $user->certification ?? 'N/A' }}</td>
-            <td class="pe-4 text-center">
-                <!-- botones de acciones -->
-            </td>
-        </tr>
-    @empty
-        <tr>
-            <td colspan="10" class="text-center py-4" style="font-size: 1.3rem;">
-                @if(request('search') || request('roleFilter'))
-                    No se encontraron usuarios con los filtros aplicados
-                @else
-                    No hay usuarios registrados
-                @endif
-            </td>
-        </tr>
-    @endforelse
-</tbody>
-
+                            <tbody>
+                                @forelse($users as $user)
+                                <tr style="border-bottom: 2px solid #F4F4F4; {{ $user->status && $user->status->name === 'Inactivo' ? 'background-color: rgba(255, 107, 53, 0.1);' : '' }}">
+                                    <td class="ps-4" style="font-size: 1.4rem; color: #1A365D; font-weight: 500;">{{ $user->names }}</td>
+                                    <td style="font-size: 1.4rem; color: #1A365D; font-weight: 500;">{{ $user->last_name }}</td>
+                                    <td style="font-size: 1.4rem; color: #1A365D; font-weight: 500;">{{ $user->email }}</td>
+                                    <td style="font-size: 1.4rem; color: #1A365D; font-weight: 500;">{{ $user->role->name_rol ?? 'N/A' }}</td>
+                                    <td style="font-size: 1.4rem; color: #1A365D; font-weight: 500;">
+                                        {{ $user->status->name ?? 'N/A' }}
+                                    </td>
+                                    <td style="font-size: 1.4rem; color: #1A365D; font-weight: 500;">
+                                        {{ \Carbon\Carbon::parse($user->birth_date)->translatedFormat('d \d\e F \d\e Y') }}
+                                    </td>
+                                    <td style="font-size: 1.4rem; color: #1A365D; font-weight: 500;">{{ $user->gender }}</td>
+                                    <td class="wrap-text" style="font-size: 1.4rem; color: #1A365D; font-weight: 500;">{{ $user->specialty ?? 'N/A' }}</td>
+                                    <td class="wrap-text" style="font-size: 1.4rem; color: #1A365D; font-weight: 500;">{{ $user->certification ?? 'N/A' }}</td>
+                                    <td class="pe-4 text-center" style="min-width: 150px;">
+                                        <div class="d-flex justify-content-center" style="gap: 5px;">
+                                            <a href="{{ route('admin.users.edit', $user) }}" class="btn py-2 px-3" 
+                                            style="background-color: #2EC4B6; color: #FFFFFF; font-size: 1.3rem; font-weight: 500; white-space: nowrap;">
+                                                <i class="fas fa-edit me-1"></i>EDITAR
+                                            </a>
+                                        </div>
+                                    </td>
+                                </tr>
+                                @empty
+                                <tr>
+                                    <td colspan="10" class="text-center py-4">
+                                        <div class="text-muted">
+                                            <i class="fas fa-users-slash fs-1" style="color: #1A365D; font-size: 3rem;"></i>
+                                            <p class="mt-2 fs-5" style="font-size: 1.4rem; font-weight: 600;">
+                                                @if(request('search') || request('roleFilter'))
+                                                    No se encontraron usuarios con los filtros aplicados
+                                                @else
+                                                    No hay usuarios registrados
+                                                @endif
+                                            </p>
+                                        </div>
+                                    </td>
+                                </tr>
+                                @endforelse
+                            </tbody>
                         </table>
                     </div>
 
@@ -167,7 +164,7 @@
                     @if($users->hasPages())
                         <div class="card-footer py-4" style="background-color: #F4F4F4; border-top: 2px solid #1A365D;">
                             <div class="d-flex justify-content-center">
-                                {{ $users->appends(request()->query())->links() }}
+                                {{ $users->appends(request()->query())->links('pagination::bootstrap-4') }}
                             </div>
                         </div>
                     @endif
@@ -178,47 +175,239 @@
 </div>
 
 <style>
-    .input-container {
-        position: relative;
-        width: 300px;
+    body {
+        font-size: 1.2rem;
+    }
+    
+    .card {
+        border-radius: 10px;
+        overflow: hidden;
+    }
+    
+    .table th {
+        padding: 12px 8px;
+        text-transform: uppercase;
+    }
+    
+    .table td {
+        padding: 12px 8px;
+        vertical-align: middle;
+    }
+    
+    .btn {
+        padding: 0.5rem 1rem;
+        border-radius: 6px;
+        transition: all 0.2s ease;
+        white-space: nowrap;
+    }
+    
+    .table-hover tbody tr:hover {
+        background-color: rgba(46, 196, 182, 0.08);
+        transform: translateY(-1px);
+    }
+    
+    .alert {
+        border-radius: 6px;
     }
 
+    .btn-eliminar {
+        background-color: #FF6B35 !important;
+        color: #FFFFFF !important;
+        font-size: 1.3rem !important;
+        font-weight: 500 !important;
+        min-width: 100px !important;
+        border: none !important;
+        transition: all 0.3s ease !important;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+    
+    .swal2-actions {
+        gap: 1.5rem !important;
+        margin-top: 1.5rem !important;
+    }
+    
+    .swal2-confirm, .swal2-cancel {
+        padding: 0.6rem 1.5rem !important;
+        margin: 0 !important;
+    }
+
+    .swal2-popup { 
+        border-radius: 10px !important;
+        border: 2px solid #1A365D !important;
+        font-size: 1.3rem !important;
+    }
+    
+    .swal2-title {
+        color: #1A365D !important;
+        font-size: 1.7rem !important;
+        font-weight: 700 !important;
+    }
+
+    .swal2-icon.swal2-warning {
+        color: #FF6B35 !important;
+        border-color: #FF6B35 !important;
+    }
+
+    .swal2-confirm {
+        background-color: #FF6B35 !important;
+        font-size: 1.3rem !important;
+        font-weight: 500 !important;
+    }
+
+    .swal2-cancel {
+        background-color: #2EC4B6 !important;
+        font-size: 1.3rem !important;
+        font-weight: 500 !important;
+    }
+
+    .pagination .page-item.active .page-link {
+        background-color: #1A365D;
+        border-color: #1A365D;
+        font-size: 1.1rem;
+        padding: 0.5rem 0.9rem;
+    }
+
+    .pagination .page-link {
+        color: #1A365D;
+        font-size: 1.1rem;
+        padding: 0.5rem 0.9rem;
+    }
+
+    .badge {
+        padding: 0.5em 0.9em;
+        font-size: 1.1rem;
+    }
+    
+    /* Estilo del buscador */
     .input {
         width: 100%;
-        height: 60px;
-        padding: 10px;
-        font-size: 1.3rem;
-        font-weight: 500;
-        border: 4px solid #1A365D;
-        background-color: #F4F4F4;
+        max-width: 270px;
+        height: 45px;
+        padding: 12px;
+        font-size: 18px;
+        font-family: "Courier New", monospace;
         color: #1A365D;
+        background-color: #2EC4B6;
+        border: 4px solid #1A365D;
+        border-radius: 0;
+        outline: none;
+        transition: all 0.3s ease;
+        box-shadow: 8px 8px 0 #FF6B35;
+    }
+
+    .input::placeholder {
+        color: rgba(26, 54, 93, 0.6); /* azul con transparencia */
+    }
+
+    .input:hover {
+        transform: translate(-4px, -4px);
+        box-shadow: 12px 12px 0 #FF6B35;
     }
 
     .input:focus {
-        outline: none;
-        border: 4px solid #FF6B35;
-        box-shadow: 0 0 5px #FF6B35;
+        background-color: #1A365D;
+        color: #fff;
+        border-color: #FF6B35;
+        animation: shake 0.5s ease-in-out;
+    }
+
+    .input:focus::placeholder {
+        color: #fff;
+    }
+
+    .input-container {
+        position: relative;
+        width: 100%;
+        max-width: 270px;
+    }
+
+    @keyframes shake {
+        0% { transform: translateX(0); }
+        25% { transform: translateX(-5px) rotate(-5deg); }
+        50% { transform: translateX(5px) rotate(5deg); }
+        75% { transform: translateX(-5px) rotate(-5deg); }
+        100% { transform: translateX(0); }
     }
 
     .wrap-text {
         white-space: normal;
-        word-wrap: break-word;
+        word-break: break-word;
         max-width: 200px;
     }
 
-    .btn-sm {
-        width: 35px;
-        height: 35px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        border-radius: 50%;
+    /* Ajustes para móviles */
+    @media (max-width: 992px) {
+        .table-responsive {
+            overflow-x: auto;
+            -webkit-overflow-scrolling: touch;
+        }
+        
+        .table th, .table td {
+            white-space: nowrap;
+            font-size: 1.0rem !important;
+            padding: 10px 6px !important;
+        }
+        
+        .btn {
+            padding: 0.4rem 0.8rem !important;
+            font-size: 1.0rem !important;
+            min-width: auto !important;
+        }
+        
+        .card-header h2 {
+            font-size: 1.4rem !important;
+        }
+        
+        .card-header .btn {
+            font-size: 1.0rem !important;
+            padding: 0.4rem 0.8rem !important;
+        }
+        
+        .card-footer div {
+            font-size: 1.0rem !important;
+        }
+        
+        .wrap-text {
+            max-width: 150px;
+        }
+        
+        .table td:last-child {
+            min-width: 120px;
+        }
     }
 </style>
 
 @section('scripts')
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script>
+    // Función para confirmación de eliminación
+    function confirmarEliminacion(event) {
+        event.preventDefault();
+        const form = event.target.closest('form');
+        
+        Swal.fire({
+            title: '¿Eliminar Usuario?',
+            html: `<div style="text-align: center;">
+                    <i class="fas fa-exclamation-triangle" style="color: #FF6B35; font-size: 3rem; margin-bottom: 1rem;"></i>
+                    <p>¿Está seguro que desea eliminar este usuario permanentemente?</p>
+                    <p style="font-weight: 600;">Esta acción no se puede deshacer.</p>
+                </div>`,
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonText: '<i class="fas fa-trash-alt me-2"></i> Eliminar',
+            cancelButtonText: '<i class="fas fa-times me-2"></i> Cancelar',
+            buttonsStyling: false,
+            customClass: {
+                confirmButton: 'btn btn-eliminar',
+                cancelButton: 'btn'
+            }
+        }).then((result) => {
+            if (result.isConfirmed) {
+                form.submit();
+            }
+        });
+    }
+
     // Función para mostrar el administrador
     function mostrarAdministrador() {
         Swal.fire({
@@ -245,85 +434,17 @@
         });
     }
 
-    // Manejar la eliminación de usuarios con SweetAlert
-    document.querySelectorAll('.btn-delete').forEach(button => {
-        button.addEventListener('click', function(e) {
-            e.preventDefault();
-            const userId = this.getAttribute('data-user-id');
-            const userName = this.getAttribute('data-user-name');
-            const form = this.closest('form');
-            
-            Swal.fire({
-                title: '¿Estás seguro?',
-                html: `<div style="text-align: center;">
-                        <i class="fas fa-exclamation-triangle" style="color: #FF6B35; font-size: 3rem; margin-bottom: 1rem;"></i>
-                        <p>Estás a punto de eliminar al usuario: <strong>${userName}</strong></p>
-                        <p style="font-weight: 600;">Esta acción no se puede deshacer</p>
-                    </div>`,
-                icon: 'warning',
-                showCancelButton: true,
-                confirmButtonText: '<i class="fas fa-trash me-2"></i> Sí, eliminar',
-                cancelButtonText: '<i class="fas fa-times me-2"></i> Cancelar',
-                buttonsStyling: false,
-                customClass: {
-                    confirmButton: 'btn btn-danger',
-                    cancelButton: 'btn btn-secondary'
-                }
-            }).then((result) => {
-                if (result.isConfirmed) {
-                    // Enviar el formulario de eliminación
-                    fetch(form.action, {
-                        method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/json',
-                            'X-CSRF-TOKEN': '{{ csrf_token() }}',
-                            'X-HTTP-Method-Override': 'DELETE'
-                        },
-                        body: JSON.stringify({})
-                    })
-                    .then(response => response.json())
-                    .then(data => {
-                        if (data.success) {
-                            // Mostrar mensaje de éxito y recargar la página
-                            Swal.fire({
-                                title: '¡Eliminado!',
-                                html: `<div style="text-align: center;">
-                                        <i class="fas fa-check-circle" style="color: #2EC4B6; font-size: 3rem; margin-bottom: 1rem;"></i>
-                                        <p>El usuario <strong>${userName}</strong> ha sido eliminado correctamente.</p>
-                                    </div>`,
-                                icon: 'success',
-                                confirmButtonText: '<i class="fas fa-check me-2"></i> Aceptar',
-                                buttonsStyling: false,
-                                customClass: {
-                                    confirmButton: 'btn btn-success'
-                                }
-                            }).then(() => {
-                                window.location.reload();
-                            });
-                        } else {
-                            // Mostrar mensaje de error si no se puede eliminar
-                            Swal.fire({
-                                title: '¡Error!',
-                                html: `<div style="text-align: center;">
-                                        <i class="fas fa-exclamation-circle" style="color: #FF6B35; font-size: 3rem; margin-bottom: 1rem;"></i>
-                                        <p>No se puede eliminar al usuario <strong>${userName}</strong> porque tiene pagos asociados.</p>
-                                        <p>Primero debe eliminar los pagos relacionados.</p>
-                                    </div>`,
-                                icon: 'error',
-                                confirmButtonText: '<i class="fas fa-check me-2"></i> Entendido',
-                                buttonsStyling: false,
-                                customClass: {
-                                    confirmButton: 'btn btn-danger'
-                                }
-                            });
-                        }
-                    })
-                    .catch(error => {
-                        console.error('Error:', error);
-                    });
-                }
+    // Auto-dismiss alert after 3 seconds
+    document.addEventListener('DOMContentLoaded', function() {
+        const alerts = document.querySelectorAll('.alert.alert-dismissible');
+        if (alerts) {
+            alerts.forEach(alert => {
+                setTimeout(function() {
+                    const bsAlert = new bootstrap.Alert(alert);
+                    bsAlert.close();
+                }, 3000); // 3000 milisegundos = 3 segundos
             });
-        });
+        }
     });
 </script>
 @endsection
