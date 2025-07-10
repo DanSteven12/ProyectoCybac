@@ -1,198 +1,297 @@
 @extends('layouts.app-master')
-
 @section('content')
 <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
 
 <div class="container-fluid py-4">
     <!-- Welcome Message -->
-    <div class="mb-4 text-center p-4 rounded-3">
-        <i class="fas fa-wallet fa-5x mb-3" style="color: #1A365D;"></i>
-        <h2 class="fw-bold" style="font-size: 1.8rem; color: #1A365D; margin-bottom: 0.5rem;">
+    <div class="mb-4 text-center p-4 rounded-3 welcome-container">
+        <i class="fas fa-wallet fa-5x mb-3 wallet-icon"></i>
+        <h2 class="welcome-title">
             ¡Bienvenido a tu Historial de Pagos!
         </h2>
-        <p style="font-size: 1.6rem; color: #1A365D; opacity: 0.8; margin-bottom: 1.8rem;">
+        <p class="welcome-subtitle">
             Revisa el estado de tus transacciones y membresías
         </p>
     </div>
 
-    <!-- Header -->
-    <div class="mb-4">
-        <h2 class="fw-bold" style="font-size: 1.6rem; color: #1A365D; margin-bottom: 0.5rem;">
+    <!-- Header and Filter -->
+    <div class="d-flex justify-content-between align-items-center mb-4 flex-wrap">
+        <h2 class="section-title">
             <i class="fas fa-history me-2"></i>Mis Pagos
         </h2>
+        
+        <div class="filter-container">
+            <div class="dropdown">
+                <button class="btn dropdown-toggle filter-dropdown" type="button" id="filterDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                    <i class="fas fa-filter me-2"></i>Filtrar por estado
+                </button>
+                <ul class="dropdown-menu" aria-labelledby="filterDropdown">
+                    <li><a class="dropdown-item filter-option active" href="#" data-filter="all"><i class="fas fa-list me-2"></i>Todos los pagos</a></li>
+                    <li><hr class="dropdown-divider"></li>
+                    <li><a class="dropdown-item filter-option" href="#" data-filter="pending"><i class="far fa-clock me-2"></i>Pendientes</a></li>
+                    <li><a class="dropdown-item filter-option" href="#" data-filter="approved"><i class="fas fa-check-circle me-2"></i>Aprobados</a></li>
+                    <li><a class="dropdown-item filter-option" href="#" data-filter="rejected"><i class="fas fa-times-circle me-2"></i>Rechazados</a></li>
+                    <li><a class="dropdown-item filter-option" href="#" data-filter="expired"><i class="fas fa-calendar-times me-2"></i>Vencidos</a></li>
+                </ul>
+            </div>
+        </div>
     </div>
 
-    <!-- Filters -->
-    <div class="mb-4 filter-buttons">
-        <button type="button" class="btn filter-btn pending" id="btn-pending" style="font-size: 1.3rem;">
-            <i class="far fa-clock me-2"></i>Pendientes
-        </button>
-        <button type="button" class="btn filter-btn approved" id="btn-approved" style="font-size: 1.3rem;">
-            <i class="fas fa-check-circle me-2"></i>Aprobados
-        </button>
-        <button type="button" class="btn filter-btn rejected" id="btn-rejected" style="font-size: 1.3rem;">
-            <i class="fas fa-times-circle me-2"></i>Rechazados
-        </button>
-        <button type="button" class="btn filter-btn expired" id="btn-expired" style="font-size: 1.3rem;">
-            <i class="fas fa-calendar-times me-2"></i>Vencidos
-        </button>
-    </div>
-
-    <!-- Tables -->
-    <div class="card mb-5 payment-card">
-        <!-- Pending Table -->
-        <div id="table-pending">
+    <!-- Tables Container -->
+    <div class="card payment-card">
+        <!-- All Payments Table -->
+        <div id="table-all">
             <div class="card-header payment-card-header">
-                <h5 class="mb-0" style="font-size: 1.5rem;"><i class="far fa-clock me-2"></i>Pagos Pendientes</h5>
+                <h5 class="mb-0"><i class="fas fa-list me-2"></i>Todos mis Pagos</h5>
             </div>
             <div class="card-body p-0">
+                @if($allPayments->count() > 0)
                 <div class="table-responsive">
                     <table class="table align-middle mb-0 payment-table">
                         <thead>
                             <tr>
-                                <th style="font-size: 1.3rem;">Membresía</th>
-                                <th style="font-size: 1.3rem;">Fecha de Pago</th>
-                                <th style="font-size: 1.3rem;">Monto</th>
-                                <th style="font-size: 1.3rem;">Estado</th>
+                                <th>Membresía</th>
+                                <th>Fecha de Pago</th>
+                                <th>Monto</th>
+                                <th>Estado</th>
+                                <th>Detalles</th>
                             </tr>
                         </thead>
                         <tbody>
-                            @forelse($paymentsPending as $payment)
+                            @foreach($allPayments as $payment)
+                            <tr class="payment-row" data-status="{{ strtolower(str_replace(' ', '_', $payment->status->name)) }}">
+                                <td>{{ $payment->membership->name ?? 'No disponible' }}</td>
+                                <td>{{ \Carbon\Carbon::parse($payment->date)->format('d/m/Y') }}</td>
+                                <td>${{ number_format($payment->price, 2) }}</td>
+                                <td>
+                                    @if($payment->status->name == 'Pendiente de revisión')
+                                        <span class="status-badge pendiente">Pendiente</span>
+                                    @elseif($payment->status->name == 'Aprobado')
+                                        <span class="status-badge aprobado">Aprobado</span>
+                                    @elseif($payment->status->name == 'Rechazado')
+                                        <span class="status-badge rechazado">Rechazado</span>
+                                    @elseif($payment->status->name == 'Vencido')
+                                        <span class="status-badge vencido">Vencido</span>
+                                    @endif
+                                </td>
+                                <td>
+                                    <button class="btn btn-sm details-btn" data-payment-id="{{ $payment->id }}">
+                                        <i class="fas fa-info-circle"></i> Ver más
+                                    </button>
+                                </td>
+                            </tr>
+                            @endforeach
+                        </tbody>
+                    </table>
+                </div>
+                <div class="mt-3 px-3 py-2 d-flex justify-content-center">
+                    {{ $allPayments->links() }}
+                </div>
+                @else
+                <div class="text-center p-4">
+                    <p>No hay registros de pagos.</p>
+                </div>
+                @endif
+            </div>
+        </div>
+
+        <!-- Pending Payments Table -->
+        <div id="table-pending" style="display: none;">
+            <div class="card-header payment-card-header">
+                <h5 class="mb-0"><i class="far fa-clock me-2"></i>Pagos Pendientes</h5>
+            </div>
+            <div class="card-body p-0">
+                @if($paymentsPending->count() > 0)
+                <div class="table-responsive">
+                    <table class="table align-middle mb-0 payment-table">
+                        <thead>
                             <tr>
-                                <td style="font-size: 1.3rem;">{{ $payment->membership->name ?? 'No disponible' }}</td>
-                                <td style="font-size: 1.3rem;">{{ \Carbon\Carbon::parse($payment->date)->format('d/m/Y') }}</td>
-                                <td style="font-size: 1.3rem;">${{ number_format($payment->price, 2) }}</td>
-                                <td style="font-size: 1.3rem;">
+                                <th>Membresía</th>
+                                <th>Fecha de Pago</th>
+                                <th>Monto</th>
+                                <th>Estado</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach($paymentsPending as $payment)
+                            <tr>
+                                <td>{{ $payment->membership->name ?? 'No disponible' }}</td>
+                                <td>{{ \Carbon\Carbon::parse($payment->date)->format('d/m/Y') }}</td>
+                                <td>${{ number_format($payment->price, 2) }}</td>
+                                <td>
                                     <span class="status-badge pendiente">Pendiente de revisión</span>
                                 </td>
                             </tr>
-                            @empty
-                            <tr>
-                                <td colspan="4" class="text-center" style="font-size: 1.3rem;">No hay pagos pendientes.</td>
-                            </tr>
-                            @endforelse
+                            @endforeach
                         </tbody>
                     </table>
                 </div>
+                <div class="mt-3 px-3 py-2 d-flex justify-content-center">
+                    {{ $paymentsPending->links() }}
+                </div>
+                @else
+                <div class="text-center p-4">
+                    <p>No hay pagos pendientes.</p>
+                </div>
+                @endif
             </div>
         </div>
 
-        <!-- Approved Table -->
+        <!-- Approved Payments Table -->
         <div id="table-approved" style="display: none;">
             <div class="card-header payment-card-header">
-                <h5 class="mb-0" style="font-size: 1.5rem;"><i class="fas fa-check-circle me-2"></i>Pagos Aprobados</h5>
+                <h5 class="mb-0"><i class="fas fa-check-circle me-2"></i>Pagos Aprobados</h5>
             </div>
             <div class="card-body p-0">
+                @if($paymentsApproved->count() > 0)
                 <div class="table-responsive">
                     <table class="table align-middle mb-0 payment-table">
                         <thead>
                             <tr>
-                                <th style="font-size: 1.3rem;">Membresía</th>
-                                <th style="font-size: 1.3rem;">Fecha de Pago</th>
-                                <th style="font-size: 1.3rem;">Monto</th>
-                                <th style="font-size: 1.3rem;">Fecha de Aprobación</th>
-                                <th style="font-size: 1.3rem;">Estado</th>
+                                <th>Membresía</th>
+                                <th>Fecha de Pago</th>
+                                <th>Monto</th>
+                                <th>Fecha de Aprobación</th>
+                                <th>Estado</th>
                             </tr>
                         </thead>
                         <tbody>
-                            @forelse($paymentsApproved as $payment)
+                            @foreach($paymentsApproved as $payment)
                             <tr>
-                                <td style="font-size: 1.3rem;">{{ $payment->membership->name ?? 'No disponible' }}</td>
-                                <td style="font-size: 1.3rem;">{{ \Carbon\Carbon::parse($payment->date)->format('d/m/Y') }}</td>
-                                <td style="font-size: 1.3rem;">${{ number_format($payment->price, 2) }}</td>
-                                <td style="font-size: 1.3rem;">{{ $payment->updated_at->format('d/m/Y') }}</td>
-                                <td style="font-size: 1.3rem;">
+                                <td>{{ $payment->membership->name ?? 'No disponible' }}</td>
+                                <td>{{ \Carbon\Carbon::parse($payment->date)->format('d/m/Y') }}</td>
+                                <td>${{ number_format($payment->price, 2) }}</td>
+                                <td>{{ $payment->updated_at->format('d/m/Y') }}</td>
+                                <td>
                                     <span class="status-badge aprobado">Aprobado</span>
                                 </td>
                             </tr>
-                            @empty
-                            <tr>
-                                <td colspan="5" class="text-center" style="font-size: 1.3rem;">No hay pagos aprobados.</td>
-                            </tr>
-                            @endforelse
+                            @endforeach
                         </tbody>
                     </table>
                 </div>
+                <div class="mt-3 px-3 py-2 d-flex justify-content-center">
+                    {{ $paymentsApproved->links() }}
+                </div>
+                @else
+                <div class="text-center p-4">
+                    <p>No hay pagos aprobados.</p>
+                </div>
+                @endif
             </div>
         </div>
 
-        <!-- Rejected Table -->
+        <!-- Rejected Payments Table -->
         <div id="table-rejected" style="display: none;">
             <div class="card-header payment-card-header">
-                <h5 class="mb-0" style="font-size: 1.5rem;"><i class="fas fa-times-circle me-2"></i>Pagos Rechazados</h5>
+                <h5 class="mb-0"><i class="fas fa-times-circle me-2"></i>Pagos Rechazados</h5>
             </div>
             <div class="card-body p-0">
+                @if($paymentsRejected->count() > 0)
                 <div class="table-responsive">
                     <table class="table align-middle mb-0 payment-table">
                         <thead>
                             <tr>
-                                <th style="font-size: 1.3rem;">Membresía</th>
-                                <th style="font-size: 1.3rem;">Fecha de Pago</th>
-                                <th style="font-size: 1.3rem;">Monto</th>
-                                <th style="font-size: 1.3rem;">Motivo de Rechazo</th>
-                                <th style="font-size: 1.3rem;">Fecha de Rechazo</th>
-                                <th style="font-size: 1.3rem;">Estado</th>
+                                <th>Membresía</th>
+                                <th>Fecha de Pago</th>
+                                <th>Monto</th>
+                                <th>Motivo de Rechazo</th>
+                                <th>Fecha de Rechazo</th>
+                                <th>Estado</th>
                             </tr>
                         </thead>
                         <tbody>
-                            @forelse($paymentsRejected as $payment)
+                            @foreach($paymentsRejected as $payment)
                             <tr>
-                                <td style="font-size: 1.3rem;">{{ $payment->membership->name ?? 'No disponible' }}</td>
-                                <td style="font-size: 1.3rem;">{{ \Carbon\Carbon::parse($payment->date)->format('d/m/Y') }}</td>
-                                <td style="font-size: 1.3rem;">${{ number_format($payment->price, 2) }}</td>
-                                <td style="font-size: 1.3rem; white-space: pre-wrap; max-width: 200px;">{{ $payment->comment ?? 'No especificado' }}</td>
-                                <td style="font-size: 1.3rem;">{{ $payment->updated_at->format('d/m/Y') }}</td>
-                                <td style="font-size: 1.3rem;">
+                                <td>{{ $payment->membership->name ?? 'No disponible' }}</td>
+                                <td>{{ \Carbon\Carbon::parse($payment->date)->format('d/m/Y') }}</td>
+                                <td>${{ number_format($payment->price, 2) }}</td>
+                                <td class="rejection-reason">{{ $payment->comment ?? 'No especificado' }}</td>
+                                <td>{{ $payment->updated_at->format('d/m/Y') }}</td>
+                                <td>
                                     <span class="status-badge rechazado">Rechazado</span>
                                 </td>
                             </tr>
-                            @empty
-                            <tr>
-                                <td colspan="6" class="text-center" style="font-size: 1.3rem;">No hay pagos rechazados.</td>
-                            </tr>
-                            @endforelse
+                            @endforeach
                         </tbody>
                     </table>
                 </div>
+                <div class="mt-3 px-3 py-2 d-flex justify-content-center">
+                    {{ $paymentsRejected->links() }}
+                </div>
+                @else
+                <div class="text-center p-4">
+                    <p>No hay pagos rechazados.</p>
+                </div>
+                @endif
             </div>
         </div>
 
-        <!-- Expired Table -->
+        <!-- Expired Payments Table -->
         <div id="table-expired" style="display: none;">
             <div class="card-header payment-card-header">
-                <h5 class="mb-0" style="font-size: 1.5rem;"><i class="fas fa-calendar-times me-2"></i>Pagos Vencidos</h5>
+                <h5 class="mb-0"><i class="fas fa-calendar-times me-2"></i>Pagos Vencidos</h5>
             </div>
             <div class="card-body p-0">
+                @if($paymentsExpired->count() > 0)
                 <div class="table-responsive">
                     <table class="table align-middle mb-0 payment-table">
                         <thead>
                             <tr>
-                                <th style="font-size: 1.3rem;">Membresía</th>
-                                <th style="font-size: 1.3rem;">Fecha de Pago</th>
-                                <th style="font-size: 1.3rem;">Monto</th>
-                                <th style="font-size: 1.3rem;">Fecha de Vencimiento</th>
-                                <th style="font-size: 1.3rem;">Estado</th>
+                                <th>Membresía</th>
+                                <th>Fecha de Pago</th>
+                                <th>Monto</th>
+                                <th>Fecha de Vencimiento</th>
+                                <th>Estado</th>
                             </tr>
                         </thead>
                         <tbody>
-                            @forelse($paymentsExpired as $payment)
+                            @foreach($paymentsExpired as $payment)
                             <tr>
-                                <td style="font-size: 1.3rem;">{{ $payment->membership->name ?? 'No disponible' }}</td>
-                                <td style="font-size: 1.3rem;">{{ \Carbon\Carbon::parse($payment->date)->format('d/m/Y') }}</td>
-                                <td style="font-size: 1.3rem;">${{ number_format($payment->price, 2) }}</td>
-                                <td style="font-size: 1.3rem;">{{ \Carbon\Carbon::parse($payment->expiration_date)->format('d/m/Y') }}</td>
-                                <td style="font-size: 1.3rem;">
+                                <td>{{ $payment->membership->name ?? 'No disponible' }}</td>
+                                <td>{{ \Carbon\Carbon::parse($payment->date)->format('d/m/Y') }}</td>
+                                <td>${{ number_format($payment->price, 2) }}</td>
+                                <td>{{ \Carbon\Carbon::parse($payment->expiration_date)->format('d/m/Y') }}</td>
+                                <td>
                                     <span class="status-badge vencido">Vencido</span>
                                 </td>
                             </tr>
-                            @empty
-                            <tr>
-                                <td colspan="5" class="text-center" style="font-size: 1.3rem;">No hay pagos vencidos.</td>
-                            </tr>
-                            @endforelse
+                            @endforeach
                         </tbody>
                     </table>
                 </div>
+                <div class="mt-3 px-3 py-2 d-flex justify-content-center">
+                    {{ $paymentsExpired->links() }}
+                </div>
+                @else
+                <div class="text-center p-4">
+                    <p>No hay pagos vencidos.</p>
+                </div>
+                @endif
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="paymentDetailsModal" tabindex="-1" aria-labelledby="paymentDetailsModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-dialog-centered">
+        <div class="modal-content border-0 shadow-lg">
+            <div class="modal-header" style="background-color: #1A365D; border-bottom: 3px solid #FF6B35;">
+                <h5 class="modal-title text-white" id="paymentDetailsModalLabel">
+                    <i class="fas fa-file-invoice-dollar me-2"></i>Detalles del Pago
+                </h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body p-4" id="paymentDetailsContent" style="background-color: #f8f9fa;">
+                <div class="text-center py-4">
+                    <i class="fas fa-spinner fa-spin fa-3x mb-3" style="color: #1A365D;"></i>
+                    <p style="color: #1A365D; opacity: 0.8;">Cargando detalles del pago...</p>
+                </div>
+            </div>
+            <div class="modal-footer" style="background-color: #f8f9fa; border-top: 1px solid #e9ecef;">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" style="background-color: #1A365D; border: none;">
+                    <i class="fas fa-times me-1"></i>Cerrar
+                </button>
             </div>
         </div>
     </div>
@@ -200,223 +299,516 @@
 
 <script>
 document.addEventListener('DOMContentLoaded', function () {
-    const btns = {
-        pending: document.getElementById('btn-pending'),
-        approved: document.getElementById('btn-approved'),
-        rejected: document.getElementById('btn-rejected'),
-        expired: document.getElementById('btn-expired')
-    };
-
-    const tables = {
-        pending: document.getElementById('table-pending'),
-        approved: document.getElementById('table-approved'),
-        rejected: document.getElementById('table-rejected'),
-        expired: document.getElementById('table-expired')
-    };
-
-    function clearActive() {
-        Object.values(btns).forEach(btn => {
-            btn.classList.remove('active');
-            if(btn.classList.contains('pending')) btn.style.backgroundColor = '#FFD166';
-            if(btn.classList.contains('approved')) btn.style.backgroundColor = '#2EC4B6';
-            if(btn.classList.contains('rejected')) btn.style.backgroundColor = '#FF6B35';
-            if(btn.classList.contains('expired')) btn.style.backgroundColor = '#1A365D';
+    // Filter functionality remains unchanged
+    const filterOptions = document.querySelectorAll('.filter-option');
+    
+    function setActiveFilter(selectedFilter) {
+        filterOptions.forEach(option => {
+            option.classList.remove('active');
+            if(option.dataset.filter === selectedFilter) {
+                option.classList.add('active');
+            }
         });
+        
+        const dropdownBtn = document.getElementById('filterDropdown');
+        const activeOption = document.querySelector('.filter-option.active');
+        dropdownBtn.innerHTML = `<i class="fas fa-filter me-2"></i>${activeOption.textContent.trim()}`;
     }
-
-    function setActive(btn) {
-        btn.classList.add('active');
+    
+    function showTable(tableToShow) {
+        document.querySelectorAll('#table-all, #table-pending, #table-approved, #table-rejected, #table-expired').forEach(table => {
+            table.style.display = 'none';
+        });
+        
+        if(tableToShow) {
+            document.getElementById(tableToShow).style.display = '';
+        }
     }
-
-    function hideAllTables() {
-        Object.values(tables).forEach(tbl => tbl.style.display = 'none');
-    }
-
-    // Event listeners
-    btns.pending.addEventListener('click', () => {
-        clearActive();
-        setActive(btns.pending);
-        hideAllTables();
-        tables.pending.style.display = '';
+    
+    filterOptions.forEach(option => {
+        option.addEventListener('click', function(e) {
+            e.preventDefault();
+            const filterValue = this.dataset.filter;
+            
+            setActiveFilter(filterValue);
+            
+            if(filterValue === 'all') {
+                showTable('table-all');
+            } else {
+                showTable(`table-${filterValue}`);
+            }
+        });
     });
+    
+    setActiveFilter('all');
+    
+    // Enhanced Payment Details Modal
+    const paymentModal = new bootstrap.Modal(document.getElementById('paymentDetailsModal'));
 
-    btns.approved.addEventListener('click', () => {
-        clearActive();
-        setActive(btns.approved);
-        hideAllTables();
-        tables.approved.style.display = '';
+    document.addEventListener('click', async function(e) {
+        if (e.target.closest('.details-btn')) {
+            const button = e.target.closest('.details-btn');
+            const paymentId = button.getAttribute('data-payment-id');
+            const modalContent = document.getElementById('paymentDetailsContent');
+            
+            try {
+                // Show loader
+                modalContent.innerHTML = `
+                    <div class="text-center py-4">
+                        <i class="fas fa-spinner fa-spin fa-3x mb-3" style="color: #1A365D;"></i>
+                        <p style="color: #1A365D; opacity: 0.8;">Cargando detalles del pago...</p>
+                    </div>
+                `;
+                
+                paymentModal.show();
+                
+                const response = await fetch(`/user/payments/${paymentId}`);
+                
+                if (!response.ok) throw new Error('Error al cargar los datos');
+                
+                const data = await response.json();
+                if (!data.success) throw new Error(data.message || 'Error en los datos recibidos');
+                
+                // Enhanced payment details layout
+                modalContent.innerHTML = `
+                    <div class="payment-details-container">
+                        <div class="row gx-3 gy-3">
+                            <!-- Left Column - Payment Information -->
+                            <div class="col-md-6">
+                                <div class="detail-card h-100 p-4 rounded-3" style="background-color: white; border-left: 4px solid #1A365D;">
+                                    <h6 class="fw-bold mb-3 d-flex align-items-center" style="color: #1A365D; font-size: 1.1rem;">
+                                        <i class="fas fa-info-circle me-2 fs-5"></i>
+                                        Información del Pago
+                                    </h6>
+                                    <div class="detail-grid">
+                                        <div class="detail-item mb-3">
+                                            <div class="detail-label fw-semibold small text-muted mb-1">ID de Transacción</div>
+                                            <div class="detail-value fw-bold" style="color: #1A365D; font-size: 1rem;">${data.data.transaction_id}</div>
+                                        </div>
+                                        <div class="detail-item mb-3">
+                                            <div class="detail-label fw-semibold small text-muted mb-1">Membresía</div>
+                                            <div class="detail-value" style="color: #1A365D; font-size: 1rem;">${data.data.membership}</div>
+                                        </div>
+                                        <div class="detail-item">
+                                            <div class="detail-label fw-semibold small text-muted mb-1">Monto</div>
+                                            <div class="detail-value fw-bold" style="color: #2a9d8f; font-size: 1.2rem;">${data.data.amount}</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!-- Right Column - Dates and Status -->
+                            <div class="col-md-6">
+                                <div class="detail-card h-100 p-4 rounded-3" style="background-color: white; border-left: 4px solid #2EC4B6;">
+                                    <h6 class="fw-bold mb-3 d-flex align-items-center" style="color: #1A365D; font-size: 1.1rem;">
+                                        <i class="fas fa-clock me-2 fs-5" style="color: #2EC4B6;"></i>
+                                        Fechas y Estado
+                                    </h6>
+                                    <div class="detail-grid">
+                                        <div class="detail-item mb-3">
+                                            <div class="detail-label fw-semibold small text-muted mb-1">Fecha de Pago</div>
+                                            <div class="detail-value" style="color: #1A365D; font-size: 1rem;">${data.data.payment_date}</div>
+                                        </div>
+                                        <div class="detail-item mb-3">
+                                            <div class="detail-label fw-semibold small text-muted mb-1">Procesado</div>
+                                            <div class="detail-value" style="color: #1A365D; font-size: 1rem;">${data.data.processed_date}</div>
+                                        </div>
+                                        <div class="detail-item">
+                                            <div class="detail-label fw-semibold small text-muted mb-1">Estado</div>
+                                            <div class="detail-value">
+                                                <span class="badge ${data.data.status_class} p-2 px-3 rounded-pill">${data.data.status}</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Comments Section - Improved with better spacing -->
+                        ${data.data.comment ? `
+                        <div class="mt-4">
+                            <div class="detail-card p-4 rounded-3" style="background-color: white; border-left: 4px solid #FF6B35;">
+                                <h6 class="fw-bold mb-3 d-flex align-items-center" style="color: #1A365D; font-size: 1.1rem;">
+                                    <i class="fas fa-comment me-2 fs-5" style="color: #FF6B35;"></i>
+                                    Comentarios
+                                </h6>
+                                <div class="p-3 bg-light rounded-2" style="max-height: 150px; overflow-y: auto;">
+                                    <p class="mb-0" style="white-space: pre-wrap; color: #495057; font-size: 0.95rem; line-height: 1.5;">${data.data.comment}</p>
+                                </div>
+                            </div>
+                        </div>
+                        ` : ''}
+                    </div>
+                `;
+                
+            } catch (error) {
+                console.error('Error:', error);
+                modalContent.innerHTML = `
+                    <div class="alert alert-danger border-0" style="background-color: rgba(255, 107, 53, 0.1); border-left: 4px solid #FF6B35;">
+                        <i class="fas fa-exclamation-triangle me-2" style="color: #d82c0d;"></i>
+                        <span style="color: #d82c0d;">Error al cargar los detalles: ${error.message}</span>
+                    </div>
+                `;
+            }
+        }
     });
-
-    btns.rejected.addEventListener('click', () => {
-        clearActive();
-        setActive(btns.rejected);
-        hideAllTables();
-        tables.rejected.style.display = '';
-    });
-
-    btns.expired.addEventListener('click', () => {
-        clearActive();
-        setActive(btns.expired);
-        hideAllTables();
-        tables.expired.style.display = '';
-    });
-
-    // Mostrar tabla pendiente por defecto
-    setActive(btns.pending);
-    tables.pending.style.display = '';
 });
 </script>
 
 <style>
-    /* Estilos base */
+   /* Enhanced Detail Card Styles */
+    .detail-card {
+        transition: all 0.3s ease;
+        box-shadow: 0 2px 12px rgba(0, 0, 0, 0.05);
+        height: 100%;
+    }
+    
+    .detail-card:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 6px 16px rgba(0, 0, 0, 0.1);
+    }
+    
+    .payment-details-container {
+        display: flex;
+        flex-direction: column;
+        gap: 1.5rem;
+    }
+    
+    .detail-grid {
+        display: flex;
+        flex-direction: column;
+        gap: 1.5rem;
+    }
+    
+    .detail-item {
+        display: flex;
+        flex-direction: column;
+    }
+    
+    .detail-label {
+        font-size: 0.85rem;
+        letter-spacing: 0.3px;
+        opacity: 0.8;
+    }
+    
+    /* Custom Scrollbar for Comments */
+    .detail-card ::-webkit-scrollbar {
+        width: 6px;
+    }
+    
+    .detail-card ::-webkit-scrollbar-thumb {
+        background-color: rgba(0, 0, 0, 0.15);
+        border-radius: 4px;
+    }
+    
+    .detail-card ::-webkit-scrollbar-track {
+        background-color: rgba(0, 0, 0, 0.05);
+        border-radius: 4px;
+    }
+    
+    /* Responsive Adjustments */
+    @media (max-width: 768px) {
+        .detail-grid {
+            gap: 1rem;
+        }
+        
+        .detail-card {
+            padding: 1.5rem !important;
+        }
+    }  border-radius: 3px;
+    
+    /* Base Styles */
     body {
         font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        background-color: #f8f9fa;
+        color: #333;
     }
     
-    .filter-buttons {
-        display: flex;
-        flex-wrap: wrap;
-        gap: 0.5rem;
-        margin-bottom: 1.5rem;
+    /* Welcome Section */
+    .welcome-container {
+        background: linear-gradient(135deg, #1A365D 0%, #2a528a 100%);
+        color: white;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
     }
     
-    .filter-btn {
-        font-weight: 600;
-        padding: 0.6rem 1rem;
-        border-radius: 6px;
-        transition: all 0.2s ease;
-        flex: 0 0 auto;
-        width: auto;
-        min-width: 150px;
-        text-align: center;
-        border: 2px solid transparent;
-        font-size: 1.3rem;
-        cursor: pointer;
+    .wallet-icon {
+        color: #FFD166;
     }
     
-    .filter-btn:hover {
+    .welcome-title {
+        font-size: 2rem;
+        margin-bottom: 0.5rem;
+        font-weight: 700;
+    }
+    
+    .welcome-subtitle {
+        font-size: 1.4rem;
         opacity: 0.9;
-        transform: translateY(-2px);
-        box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        margin-bottom: 0;
+        color: #2EC4B6;
     }
     
-    .filter-btn.active {
-        border-color: #fff;
-        box-shadow: 0 0 0 2px rgba(0,0,0,0.2);
-    }
-    
-    .pending {
-        background-color: #FFD166;
+    /* Section Title */
+    .section-title {
+        font-size: 1.6rem;
         color: #1A365D;
+        font-weight: 700;
+        margin: 0;
     }
     
-    .approved {
-        background-color: #2EC4B6;
-        color: #FFFFFF;
+    /* Filter Dropdown */
+    .filter-container {
+        margin: 0.5rem 0;
     }
     
-    .rejected {
-        background-color: #FF6B35;
-        color: #FFFFFF;
-    }
-    
-    .expired {
+    .filter-dropdown {
         background-color: #1A365D;
-        color: #FFFFFF;
+        color: white;
+        border: none;
+        padding: 0.6rem 1.2rem;
+        border-radius: 8px;
+        font-weight: 500;
+        transition: all 0.2s ease;
     }
     
-    .payment-card {
-        border: 2px solid #1A365D;
+    .filter-dropdown:hover {
+        background-color: #2a528a;
+        transform: translateY(-1px);
+    }
+    
+    .filter-dropdown:active, .filter-dropdown:focus {
+        background-color: #1A365D;
+    }
+    
+    .dropdown-menu {
         border-radius: 8px;
-        box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        border: 1px solid rgba(0, 0, 0, 0.1);
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    }
+    
+    .dropdown-item {
+        padding: 0.5rem 1rem;
+        font-size: 1rem;
+        transition: all 0.2s ease;
+    }
+    
+    .dropdown-item:hover {
+        background-color: #f8f9fa;
+    }
+    
+    .dropdown-item.active {
+        background-color: #e9ecef;
+        color: #1A365D;
+        font-weight: 500;
+    }
+    
+    /* Payment Card */
+    .payment-card {
+        border: none;
+        border-radius: 12px;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
         overflow: hidden;
+        margin-bottom: 25rem;
     }
     
     .payment-card-header {
         background-color: #1A365D;
-        color: #FFFFFF;
-        border-bottom: 3px solid #FF6B35;
+        color: white;
         padding: 1rem 1.5rem;
+        border-bottom: none;
     }
     
     .payment-card-header h5 {
         margin: 0;
+        font-weight: 600;
         display: flex;
         align-items: center;
-        font-size: 1.5rem;
     }
     
+    /* Status Badges */
     .status-badge {
         display: inline-block;
-        padding: 4px 12px;
+        padding: 0.35rem 0.8rem;
         border-radius: 20px;
         font-weight: 500;
-        font-size: 1.1rem;
+        font-size: 0.85rem;
+        white-space: nowrap;
     }
     
     .pendiente {
-        background-color: #FFD166;
-        color: #1A365D;
+        background-color: rgba(255, 209, 102, 0.2);
+        color: #d4a017;
     }
     
     .aprobado {
-        background-color: #2EC4B6;
-        color: white;
+        background-color: rgba(46, 196, 182, 0.2);
+        color: #2EC4B6;
     }
     
     .rechazado {
-        background-color: #FF6B35;
-        color: white;
+        background-color: rgba(255, 107, 53, 0.2);
+        color: #FF6B35;
     }
     
     .vencido {
-        background-color: #d82c0d;
-        color: white;
-    }
-
-    /* Estilos para tablas */
-    .payment-table {
-        border-collapse: collapse;
-        width: 100%;
-        border: 1px solid #000;
+        background-color: rgba(216, 44, 13, 0.2);
+        color: #d82c0d;
     }
     
-    .payment-table th,
-    .payment-table td {
-        border: 1px solid #000;
-        padding: 12px 15px;
-        text-align: left;
+    /* Tables */
+    .payment-table {
+        border-collapse: separate;
+        border-spacing: 0;
+        width: 100%;
     }
     
     .payment-table th {
-        background-color: #1A365D;
-        color: white;
+        background-color: #f8f9fa;
+        color: #495057;
         font-weight: 600;
-        font-size: 1.3rem;
+        padding: 1rem 1.5rem;
+        border-bottom: 2px solid #e9ecef;
+        position: sticky;
+        top: 0;
     }
     
     .payment-table td {
-        font-size: 1.3rem;
+        padding: 1rem 1.5rem;
+        border-bottom: 1px solid #e9ecef;
+        vertical-align: middle;
     }
     
-    .payment-table tbody tr:nth-child(even) {
-        background-color: #f8f9fa;
+    .payment-table tbody tr:last-child td {
+        border-bottom: none;
     }
     
     .payment-table tbody tr:hover {
-        background-color: #e9ecef;
+        background-color: #f8f9fa;
     }
     
-    /* Responsividad */
-    @media (max-width: 768px) {
-        .filter-buttons {
-            flex-direction: column;
+    /* Details Button */
+    .details-btn {
+        background-color: transparent;
+        color: #1A365D;
+        border: 1px solid #1A365D;
+        border-radius: 6px;
+        padding: 0.25rem 0.75rem;
+        transition: all 0.2s ease;
+    }
+    
+    .details-btn:hover {
+        background-color: #1A365D;
+        color: white;
+    }
+    
+    /* Rejection Reason */
+    .rejection-reason {
+        max-width: 200px;
+        white-space: pre-wrap;
+        word-wrap: break-word;
+    }
+    
+    /* Pagination Styles */
+    .pagination {
+        display: flex;
+        padding-left: 0;
+        list-style: none;
+        border-radius: 0.375rem;
+    }
+    
+    .page-item.active .page-link {
+        background-color: #1A365D;
+        border-color: #1A365D;
+    }
+    
+    .page-link {
+        color: #1A365D;
+        padding: 0.375rem 0.75rem;
+        margin-left: -1px;
+        line-height: 1.25;
+        border: 1px solid #dee2e6;
+    }
+    
+    .page-link:hover {
+        color: #0a2540;
+        background-color: #e9ecef;
+        border-color: #dee2e6;
+    }
+    
+    /* Payment Details Modal */
+    .payment-details {
+        display: grid;
+        grid-template-columns: 1fr 2fr;
+        gap: 1rem;
+    }
+    
+    .detail-item {
+        display: contents;
+    }
+    
+    .detail-label {
+        font-weight: 600;
+        color: #495057;
+    }
+    
+    .detail-value {
+        color: #212529;
+    }
+    
+    /* Responsive Design */
+    @media (max-width: 992px) {
+        .welcome-title {
+            font-size: 1.8rem;
         }
         
-        .filter-btn {
-            width: 100%;
-            margin-bottom: 0.5rem;
+        .welcome-subtitle {
             font-size: 1.2rem;
+        }
+        
+        .section-title {
+            font-size: 1.4rem;
+        }
+    }
+    
+    @media (max-width: 768px) {
+        .payment-details {
+            grid-template-columns: 1fr;
+            gap: 0.5rem;
+        }
+        
+        .detail-item {
+            display: flex;
+            flex-direction: column;
+            margin-bottom: 0.75rem;
+        }
+        
+        .payment-table th, 
+        .payment-table td {
+            padding: 0.75rem;
+        }
+    }
+    
+    @media (max-width: 576px) {
+        .welcome-title {
+            font-size: 1.5rem;
+        }
+        
+        .welcome-subtitle {
+            font-size: 1.1rem;
+        }
+        
+        .section-title {
+            font-size: 1.3rem;
+            margin-bottom: 0.5rem;
+        }
+        
+        .filter-container {
+            width: 100%;
+        }
+        
+        .filter-dropdown {
+            width: 100%;
+            text-align: left;
         }
         
         .payment-table {
@@ -424,19 +816,6 @@ document.addEventListener('DOMContentLoaded', function () {
             overflow-x: auto;
         }
         
-        .payment-table th,
-        .payment-table td {
-            padding: 8px 10px;
-            font-size: 1.1rem;
-        }
-        
-        .payment-card-header h5 {
-            font-size: 1.3rem;
-        }
-        
-        .status-badge {
-            font-size: 1rem;
-        }
     }
 </style>
 @endsection
