@@ -24,7 +24,33 @@ class CheckMembershipExpirations extends Command
         $activeStatusId = Status::where('name', 'Activo')->where('type', 1)->value('id');       // usuarios
         $inactiveStatusId = Status::where('name', 'Inactivo')->where('type', 1)->value('id');   // usuarios
 
-        // Obtener pagos aprobados con membresías activas
+        // ✅ Activar usuarios inactivos que ahora tienen pagos vigentes
+        $usersWithValidPayments = Payment::with(['membership', 'user'])
+            ->where('status_id', $statusApprovedId)
+            ->whereHas('membership', function ($q) use ($activeStatusId) {
+                $q->where('status_id', $activeStatusId);
+            })
+            ->get()
+            ->groupBy('user_id');
+
+        foreach ($usersWithValidPayments as $userPayments) {
+            $user = $userPayments->first()->user;
+
+            $hasAtLeastOneValid = $userPayments->contains(function ($p) {
+                $expirationDate = Carbon::parse($p->date)
+                    ->addDays($p->membership->duration ?? 0)
+                    ->startOfDay();
+
+                return Carbon::now()->lessThan($expirationDate);
+            });
+
+            if ($hasAtLeastOneValid && $user->status_id !== $activeStatusId) {
+                $user->update(['status_id' => $activeStatusId]);
+                $this->info("🟢 Usuario {$user->email} reactivado automáticamente.");
+            }
+        }
+
+        // Verificar pagos con membresías activas
         $payments = Payment::with(['membership', 'user'])
             ->where('status_id', $statusApprovedId)
             ->whereHas('membership', function ($q) use ($activeStatusId) {
@@ -43,34 +69,34 @@ class CheckMembershipExpirations extends Command
 
             $expirationDate = Carbon::parse($payment->date)
                 ->addDays($membership->duration)
-                ->endOfDay();
+                ->startOfDay(); // ✅ vencimiento desde inicio del día
 
-            if (Carbon::now()->greaterThan($expirationDate)) {
+            if (Carbon::now()->greaterThanOrEqualTo($expirationDate)) {
                 if ($payment->status_id !== $statusDuePaymentId) {
                     $payment->update(['status_id' => $statusDuePaymentId]);
 
                     $user->notify(new MembershipExpiredNotification());
                     $this->info("⚠️ Notificación de vencimiento enviada a {$user->email}");
-
-                    // Verificar si el usuario tiene otros pagos aún vigentes
-                    $otherValidPayments = Payment::where('user_id', $user->id)
-                        ->where('status_id', $statusApprovedId)
-                        ->where('id', '!=', $payment->id)
-                        ->get()
-                        ->filter(function ($p) {
-                            $expirationDate = Carbon::parse($p->date)
-                                ->addDays($p->membership->duration ?? 0)
-                                ->endOfDay();
-
-                            return Carbon::now()->lessThanOrEqualTo($expirationDate);
-                        });
-
-                    // Si no tiene otras membresías activas, inactivar usuario
-                    if ($otherValidPayments->isEmpty() && $user->status_id !== $inactiveStatusId) {
-                        $user->update(['status_id' => $inactiveStatusId]);
-                        $this->info("🔴 Usuario {$user->email} desactivado automáticamente.");
-                    }
                 }
+
+                // Evaluar si debe desactivarse el usuario
+                $otherValidPayments = Payment::where('user_id', $user->id)
+                    ->where('status_id', $statusApprovedId)
+                    ->where('id', '!=', $payment->id)
+                    ->get()
+                    ->filter(function ($p) {
+                        $expirationDate = Carbon::parse($p->date)
+                            ->addDays($p->membership->duration ?? 0)
+                            ->startOfDay();
+
+                        return Carbon::now()->lessThan($expirationDate);
+                    });
+
+                if ($otherValidPayments->isEmpty() && $user->status_id !== $inactiveStatusId) {
+                    $user->update(['status_id' => $inactiveStatusId]);
+                    $this->info("🔴 Usuario {$user->email} desactivado automáticamente.");
+                }
+
                 continue;
             }
 

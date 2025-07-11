@@ -149,3 +149,9 @@ Route::middleware(['auth'])->prefix('user')->name('user.')->group(function () {
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
 });
 
+Route::prefix('user')->middleware(['auth', 'verified'])->group(function () {
+    // ... otras rutas
+    
+    Route::get('/payments', [UserPaymentController::class, 'index'])->name('user.payments');
+    Route::get('/payments/{id}', [UserPaymentController::class, 'show'])->name('user.payments.show');
+});

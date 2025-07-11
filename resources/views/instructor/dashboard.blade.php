@@ -221,9 +221,10 @@
                         <tr>
                             <td data-label="Alumno">{{ $registration->user->names }} {{ $registration->user->last_name }}</td>
                             <td data-label="Servicio">{{ $registration->class->service->name }}</td>
-                            <td data-label="Fecha">{{ $registration->class->date->format('d/m/Y') }}</td>
+                            <td data-label="Fecha">{{ $registration->class->date->translatedFormat('d \d\e F \d\e Y') }}</td>
                             <td data-label="Hora">{{ \Carbon\Carbon::parse($registration->class->time)->format('h:i A') }}</td>
                             <td data-label="Descripción">{{ $registration->class->description }}</td>
+                            {{-- {{ \Carbon\Carbon::parse($user->birth_date)->translatedFormat('d \d\e F \d\e Y') }} --}}
                         </tr>
                     @endforeach
                 </tbody>
