@@ -7,17 +7,6 @@
             <div class="card shadow-sm" style="border: 2px solid #1A365D;">
                 <div class="card-header py-3" style="background-color: #1A365D; color: #FFFFFF; border-bottom: 3px solid #FF6B35;">
                     <div class="d-flex justify-content-between align-items-center">
-                        <form onsubmit="event.preventDefault();" class="d-flex align-items-center" style="gap: 1rem;">
-                            <div class="input-container">
-                                <input 
-                                    id="search-live"
-                                    class="input" 
-                                    type="text" 
-                                    placeholder="Buscador............" 
-                                    autocomplete="off"
-                                    onkeyup="filtrarServiciosEnVivo()"/>
-                            </div>
-                        </form>
                         <h2 class="mb-0" style="font-weight: 700; font-size: 2.0rem;">
                             <i class="fas fa-concierge-bell me-3"></i>GESTIÓN DE SERVICIOS
                         </h2>
@@ -308,24 +297,6 @@
                 bsAlert.close();
             }, 3000);
         });
-
-        // Filtro en vivo para servicios
-        window.filtrarServiciosEnVivo = function() {
-            const input = document.getElementById("search-live").value.toLowerCase();
-            const table = document.querySelector("table tbody");
-            const rows = table.getElementsByTagName("tr");
-
-            for (let i = 0; i < rows.length; i++) {
-                const cells = rows[i].getElementsByTagName("td");
-
-                if (cells.length >= 3) {
-                    const nombre = cells[0].textContent.toLowerCase();
-                    const descripcion = cells[1].textContent.toLowerCase();
-                    const coincide = nombre.includes(input) || descripcion.includes(input);
-                    rows[i].style.display = coincide ? "" : "none";
-                }
-            }
-        }
 
         // Confirmación para eliminar
         document.querySelectorAll('.btn-delete').forEach(button => {

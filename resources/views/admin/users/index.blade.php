@@ -278,10 +278,14 @@
         font-size: 1.1rem;
     }
     
-    /* Estilo del buscador */
-    .input {
+      .input-container {
+        position: relative;
         width: 100%;
         max-width: 270px;
+    }
+
+    .input {
+        width: 100%;
         height: 45px;
         padding: 12px;
         font-size: 18px;
@@ -296,7 +300,7 @@
     }
 
     .input::placeholder {
-        color: rgba(26, 54, 93, 0.6); /* azul con transparencia */
+        color: rgba(26, 54, 93, 0.6);
     }
 
     .input:hover {
@@ -315,18 +319,123 @@
         color: #fff;
     }
 
-    .input-container {
-        position: relative;
-        width: 100%;
-        max-width: 270px;
+    /* Animación de cursor parpadeante */
+    .input-container::after {
+        content: "|";
+        position: absolute;
+        right: 15px;
+        top: 50%;
+        transform: translateY(-50%);
+        color: #1A365D;
+        opacity: 0;
+        transition: opacity 0.3s ease;
     }
 
+    .input:focus + .input-container::after,
+    .input:not(:placeholder-shown) + .input-container::after {
+        opacity: 1;
+        animation: blink 0.7s step-end infinite;
+    }
+
+    @keyframes blink {
+        50% {
+            opacity: 0;
+        }
+    }
+
+    /* Animación de glitch cuando hay texto */
+    .input:not(:placeholder-shown) {
+        animation: glitch 1s linear infinite;
+        font-weight: bold;
+        letter-spacing: 1px;
+    }
+
+    @keyframes glitch {
+        0% {
+            transform: none;
+            opacity: 1;
+        }
+        7% {
+            transform: skew(-0.5deg, -0.9deg);
+            opacity: 0.75;
+        }
+        10% {
+            transform: none;
+            opacity: 1;
+        }
+        27% {
+            transform: none;
+            opacity: 1;
+        }
+        30% {
+            transform: skew(0.8deg, -0.1deg);
+            opacity: 0.75;
+        }
+        35% {
+            transform: none;
+            opacity: 1;
+        }
+        52% {
+            transform: none;
+            opacity: 1;
+        }
+        55% {
+            transform: skew(-1deg, 0.2deg);
+            opacity: 0.75;
+        }
+        50% {
+            transform: none;
+            opacity: 1;
+        }
+        72% {
+            transform: none;
+            opacity: 1;
+        }
+        75% {
+            transform: skew(0.4deg, 1deg);
+            opacity: 0.75;
+        }
+        80% {
+            transform: none;
+            opacity: 1;
+        }
+        100% {
+            transform: none;
+            opacity: 1;
+        }
+    }
+
+    /* Animación de shake al enfocar */
     @keyframes shake {
-        0% { transform: translateX(0); }
-        25% { transform: translateX(-5px) rotate(-5deg); }
-        50% { transform: translateX(5px) rotate(5deg); }
-        75% { transform: translateX(-5px) rotate(-5deg); }
-        100% { transform: translateX(0); }
+        0% {
+            transform: translateX(0);
+        }
+        25% {
+            transform: translateX(-5px) rotate(-5deg);
+        }
+        50% {
+            transform: translateX(5px) rotate(5deg);
+        }
+        75% {
+            transform: translateX(-5px) rotate(-5deg);
+        }
+        100% {
+            transform: translateX(0);
+        }
+    }
+
+    /* Animación de typing (opcional, para cuando se valida el input) */
+    @keyframes typing {
+        from {
+            width: 0;
+        }
+        to {
+            width: 100%;
+        }
+    }
+
+    .input:valid {
+        animation: typing 2s steps(30, end);
     }
 
     .wrap-text {

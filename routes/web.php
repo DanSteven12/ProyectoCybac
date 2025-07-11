@@ -94,11 +94,19 @@ Route::middleware(['auth', 'can:admin'])->prefix('admin')->name('admin.')->group
     Route::get('/report', [AdminPaymentController::class, 'generateReport'])->name('payments.report'); 
 });
 
-// Dentro del grupo con middleware 'auth'
+// Grupo de rutas con prefijo 'user'
+Route::prefix('user')->middleware(['auth', 'verified'])->group(function () {
+    Route::get('/payments', [UserPaymentController::class, 'index'])->name('user.payments.index');
+    Route::get('/payments/{id}', [UserPaymentController::class, 'show'])->name('user.payments.show');
+});
+
+// Ruta para historial, diferente URL pero mismo controlador
 Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/history', [UserPaymentController::class, 'index'])
-        ->name('user.payments.index');
+        ->name('user.history');
 });
+
+
 
 // Rutas accesibles solo con autenticación (sin necesidad de membresía activa)
 Route::middleware(['auth'])->prefix('user')->name('user.')->group(function () {
@@ -147,11 +155,4 @@ Route::middleware('auth')->prefix('admin')->name('admin.')->group(function () {
 
 Route::middleware(['auth'])->prefix('user')->name('user.')->group(function () {
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
-});
-
-Route::prefix('user')->middleware(['auth', 'verified'])->group(function () {
-    // ... otras rutas
-    
-    Route::get('/payments', [UserPaymentController::class, 'index'])->name('user.payments');
-    Route::get('/payments/{id}', [UserPaymentController::class, 'show'])->name('user.payments.show');
 });

@@ -93,7 +93,7 @@
                             @if($isCancelada)
                             <tr>
                                 <td style="font-size: 1.3rem;">{{ $class->service->name }}</td>
-                                <td style="font-size: 1.3rem;">{{ \Carbon\Carbon::parse($class->date)->format('d/m/Y') }}</td>
+                                <td style="font-size: 1.3rem;">{{ \Carbon\Carbon::parse($class->date)->translatedFormat('d \d\e F \d\e Y') }}</td>
                                 <td style="font-size: 1.3rem;">{{ $class->comment }}</td>
                             </tr>
                             @endif
@@ -125,7 +125,7 @@
                         @foreach($clasesLlenas as $class)
                         <tr>
                             <td style="font-size: 1.3rem;">{{ $class->service->name }}</td>
-                            <td style="font-size: 1.3rem;">{{ \Carbon\Carbon::parse($class->date)->format('d/m/Y') }}</td>
+                            <td style="font-size: 1.3rem;">{{ \Carbon\Carbon::parse($class->date)->translatedFormat('d \d\e F \d\e Y') }}</td>
                             <td style="font-size: 1.3rem;">{{ \Carbon\Carbon::parse($class->time)->format('h:i A') }}</td>
                         </tr>
                         @endforeach
@@ -165,7 +165,7 @@
                             <td style="font-size: 1.3rem;">{{ $registration->class->service->name }}</td>
                             <td style="font-size: 1.3rem;">{{ $registration->class->description }}</td>
                             <td style="font-size: 1.3rem;">{{ $registration->class->instructor->names }} {{ $registration->class->instructor->last_name }}</td>
-                            <td style="font-size: 1.3rem;">{{ $registration->class->date->format('d/m/Y') }}</td>
+                            <td style="font-size: 1.3rem;">{{ $registration->class->date->translatedFormat('d \d\e F \d\e Y') }}</td>
                             <td style="font-size: 1.3rem;">{{ \Carbon\Carbon::parse($registration->class->time)->format('h:i A') }}</td>
                             <td style="font-size: 1.3rem;">
                                 <ul class="list-unstyled">
