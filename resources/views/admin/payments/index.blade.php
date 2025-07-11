@@ -3,59 +3,62 @@
 @section('content')
 
 <div class="container-fluid py-4">
-    <!-- Encabezado (sin cambios en estructura) -->
+    <!-- Encabezado -->
     <div class="mb-4">
-        <h2 class="fw-bold text-primary-dark mb-1" style="font-size: 1.8rem;">
+        <h1 class="fw-bold text-azul-marino mb-1" style="font-size: 1.9rem;">
+            FITINIFLOW
+        </h1>
+        <h2 class="fw-bold text-azul-marino mb-1" style="font-size: 1.6rem;">
             Lista de Pagos
         </h2>
-        <p class="text-primary-dark opacity-80" style="font-size: 1.5rem;">
+        <p class="text-azul-marino opacity-80" style="font-size: 1.5rem;">
             Gestión de pagos de membresías
         </p>
     </div>
 
-    <!-- Filtro por estado (mejorado visualmente pero misma funcionalidad) -->
-   <form action="{{ route('admin.payments.index') }}" method="GET" class="mb-4 card shadow-sm border-0">
-    <div class="card-body">
-        <div class="row g-3 align-items-end">
-            <div class="col-md-6">
-                <label for="estado" class="form-label fw-semibold text-primary-dark" style="font-size: 1.4rem">Filtrar por estado:</label>
-                <select name="estado" id="estado" class="form-select-enhanced" style="font-size: 1.3rem" onchange="this.form.submit()">
-                    <option value="pendiente" {{ request('estado', 'pendiente') == 'pendiente' ? 'selected' : '' }}>Pendiente</option>
-                    <option value="aprobado" {{ request('estado') == 'aprobado' ? 'selected' : '' }}>Aprobado</option>
-                    <option value="rechazado" {{ request('estado') == 'rechazado' ? 'selected' : '' }}>Rechazado</option>
-                    <option value="vencido" {{ request('estado') == 'vencido' ? 'selected' : '' }}>Vencido</option>
-                </select>
+    <!-- Filtro por estado -->
+    <form action="{{ route('admin.payments.index') }}" method="GET" class="mb-4 card shadow-sm border-0" style="background-color: var(--azul-oscuro);">
+        <div class="card-body">
+            <div class="row g-3 align-items-end">
+                <div class="col-md-6">
+                    <label for="estado" class="form-label fw-semibold text-white" style="font-size: 1.4rem">Filtrar por estado:</label>
+                    <select name="estado" id="estado" class="form-select-enhanced" style="font-size: 1.3rem; background-color: var(--blanco);" onchange="this.form.submit()">
+                        <option value="pendiente" {{ request('estado', 'pendiente') == 'pendiente' ? 'selected' : '' }}>Pendiente</option>
+                        <option value="aprobado" {{ request('estado') == 'aprobado' ? 'selected' : '' }}>Aprobado</option>
+                        <option value="rechazado" {{ request('estado') == 'rechazado' ? 'selected' : '' }}>Rechazado</option>
+                        <option value="vencido" {{ request('estado') == 'vencido' ? 'selected' : '' }}>Vencido</option>
+                    </select>
+                </div>
+                <div class="col-md-6">
+                    <label for="search" class="form-label fw-semibold text-white" style="font-size: 1.4rem">Buscar usuario:</label>
+                    <input 
+                        type="text"
+                        name="search"
+                        id="search"
+                        class="form-control"
+                        placeholder="Buscar por nombre, apellido o correo..."
+                        value="{{ request('search') }}"
+                        style="background-color: var(--blanco); font-size: 1.3rem;"
+                    >
+                </div>
             </div>
-            <div class="col-md-6">
-                <label for="search" class="form-label fw-semibold text-primary-dark" style="font-size: 1.4rem">Buscar usuario:</label>
-                <input 
-                    type="text"
-                    name="search"
-                    id="search"
-                    class="form-control"
-                    placeholder="Buscar por nombre, apellido o correo..."
-                    value="{{ request('search') }}"
-                >
-            </div>
+            <center class="mt-3">
+                <button type="submit" class="btn py-2 px-4" style="background-color: var(--naranja-brillante); color: var(--blanco); font-weight: 600; font-size: 1.3rem;">
+                    <i class="fas fa-search me-2"></i> BUSCAR
+                </button>
+
+                <a href="{{ route('admin.payments.index', ['estado' => request('estado', 'pendiente')]) }}" 
+                   class="btn py-2 px-4" 
+                   style="background-color: var(--azul-marino); color: var(--blanco); font-weight: 600; font-size: 1.3rem;">
+                    <i class="fas fa-times me-2"></i> LIMPIAR
+                </a>
+            </center>
         </div>
-        <center>
-            <button type="submit" class="btn py-2 px-4" style="background-color: #FF6B35; color: #FFFFFF; font-weight: 600; font-size: 1.3rem;">
-        <i class="fas fa-search me-2"></i> BUSCAR
-    </button>
+    </form>
 
-    <a href="{{ route('admin.payments.index', ['estado' => request('estado', 'pendiente')]) }}" 
-   class="btn btn-outline-secondary py-2 px-4" 
-   style="font-weight: 600; font-size: 1.3rem;">
-    <i class="fas fa-times me-2"></i> LIMPIAR
-</a>
-</center>
-    </div>
-</form>
-
-
-    <!-- Resumen de totales (sin cambios) -->
+    <!-- Resumen de totales -->
     @if(request('estado') == 'aprobado')
-    <div class="alert bg-primary-dark text-white mb-4" style="font-size: 1.4rem">
+    <div class="alert text-white mb-4" style="font-size: 1.4rem; background-color: var(--verde-esmeralda);">
         <div class="d-flex justify-content-between">
             <span>Total de ventas: <strong>${{ number_format($payments->sum('price'), 2) }}</strong></span>
             <span>Total de membresías: <strong>{{ $payments->count() }}</strong></span>
@@ -63,17 +66,17 @@
     </div>
     @endif
 
-    <!-- Formulario de reportes (mejor visualmente, misma funcionalidad) -->
-    <form action="{{ route('admin.payments.report') }}" method="GET" class="mb-4 card shadow-sm border-0" id="report-form">
+    <!-- Formulario de reportes -->
+    <form action="{{ route('admin.payments.report') }}" method="GET" class="mb-4 card shadow-sm border-0" id="report-form" style="background-color: var(--azul-oscuro);">
         <div class="card-body">
             <input type="hidden" name="estado" value="{{ request('estado', 'pendiente') }}">
             <input type="hidden" name="format" value="pdf">
             <input type="hidden" name="view" value="0" id="view-input">
             <div class="row g-3">
                 <div class="col-md-4">
-                    <label for="mes" class="form-label fw-semibold text-primary-dark" style="font-size: 1.4rem">Mes:</label>
+                    <label for="mes" class="form-label fw-semibold text-white" style="font-size: 1.4rem">Mes:</label>
                     <div class="custom-select-wrapper">
-                        <select name="mes" id="mes" class="form-select-enhanced" style="font-size: 1.3rem" required>
+                        <select name="mes" id="mes" class="form-select-enhanced" style="font-size: 1.3rem; background-color: var(--blanco);" required>
                             @foreach([
                                 1 => 'Enero', 2 => 'Febrero', 3 => 'Marzo', 4 => 'Abril',
                                 5 => 'Mayo', 6 => 'Junio', 7 => 'Julio', 8 => 'Agosto',
@@ -85,9 +88,9 @@
                     </div>
                 </div>
                 <div class="col-md-4">
-                    <label for="anio" class="form-label fw-semibold text-primary-dark" style="font-size: 1.4rem">Año:</label>
+                    <label for="anio" class="form-label fw-semibold text-white" style="font-size: 1.4rem">Año:</label>
                     <div class="custom-select-wrapper">
-                        <select name="anio" id="anio" class="form-select-enhanced" required style="font-size: 1.3rem">
+                        <select name="anio" id="anio" class="form-select-enhanced" required style="font-size: 1.3rem; background-color: var(--blanco);">
                             @for ($i = date('Y'); $i <= date('Y') + 5; $i++)
                                 <option value="{{ $i }}" {{ $i == date('Y') ? 'selected' : '' }}>{{ $i }}</option>
                             @endfor
@@ -95,11 +98,11 @@
                     </div>
                 </div>
                 <div class="col-md-4 d-flex align-items-end gap-2">
-                    <button type="submit" class="btn btn-primary-dark btn-sm w-100" style="font-size: 1.3rem;"
+                    <button type="submit" class="btn btn-sm w-100" style="font-size: 1.4rem; background-color: var(--naranja-brillante); color: var(--blanco);"
                         onclick="document.getElementById('view-input').value=0">
                         <i class="fas fa-file-download me-1"></i> Descargar PDF
                     </button>
-                    <button type="submit" class="btn btn-outline-primary-dark btn-sm w-100" style="font-size: 1.3rem;"
+                    <button type="submit" class="btn btn-sm w-100" style="font-size: 1.4rem; background-color: var(--verde-esmeralda); color: var(--blanco);"
                         onclick="document.getElementById('view-input').value=1; this.form.target='_blank';">
                         <i class="fas fa-eye me-1"></i> Ver PDF
                     </button>
@@ -108,15 +111,14 @@
         </div>
     </form>
 
-
-    <!-- Paginación superior - Diseño compacto -->
+    <!-- Paginación superior -->
     <div class="d-flex justify-content-between align-items-center mb-3">
         <div class="d-flex align-items-center gap-3">
-            <span class="badge bg-primary-dark text-white" style="font-size: 0.9rem;">
+            <span class="badge text-white" style="font-size: 1.4rem; background-color: var(--azul-marino);">
                 {{ ucfirst(request('estado', 'pendiente')) }}
             </span>
             @if(request('estado') == 'aprobado')
-            <span class="text-primary-dark" style="font-size: 0.9rem;">
+            <span class="text-azul-marino" style="font-size: 1.4rem;">
                 <i class="fas fa-dollar-sign me-1"></i>{{ number_format($payments->sum('price'), 2) }}
             </span>
             @endif
@@ -125,20 +127,20 @@
         <nav>
             <ul class="pagination pagination-rounded mb-0">
                 <li class="page-item {{ $payments->onFirstPage() ? 'disabled' : '' }}">
-                    <a class="page-link border-primary text-primary-dark" href="{{ $payments->previousPageUrl() }}">
+                    <a class="page-link text-azul-marino" href="{{ $payments->previousPageUrl() }}" style="border-color: var(--azul-marino); font-size: 1.3rem;">
                         <i class="fas fa-chevron-left"></i>
                     </a>
                 </li>
                 
                 @foreach ($payments->getUrlRange(1, $payments->lastPage()) as $page => $url)
                     <li class="page-item {{ $payments->currentPage() == $page ? 'active' : '' }}">
-                        <a class="page-link border-primary {{ $payments->currentPage() == $page ? 'bg-primary-dark text-white' : 'text-primary-dark' }}" 
-                           href="{{ $url }}">{{ $page }}</a>
+                        <a class="page-link {{ $payments->currentPage() == $page ? 'bg-azul-marino text-white' : 'text-azul-marino' }}" 
+                           href="{{ $url }}" style="border-color: var(--azul-marino); font-size: 1.4rem;">{{ $page }}</a>
                     </li>
                 @endforeach
                 
                 <li class="page-item {{ $payments->hasMorePages() ? '' : 'disabled' }}">
-                    <a class="page-link border-primary text-primary-dark" href="{{ $payments->nextPageUrl() }}">
+                    <a class="page-link text-azul-marino" href="{{ $payments->nextPageUrl() }}" style="border-color: var(--azul-marino); font-size: 1.4rem;">
                         <i class="fas fa-chevron-right"></i>
                     </a>
                 </li>
@@ -146,14 +148,14 @@
         </nav>
     </div>
 
-    <!-- Tabla de pagos - Diseño profesional -->
+    <!-- Tabla de pagos -->
     <div class="card border-0 shadow-sm mb-5 overflow-hidden">
-        <div class="card-header bg-primary-dark text-white py-2">
+        <div class="card-header text-white py-2" style="background-color: var(--azul-marino);">
             <div class="d-flex justify-content-between align-items-center">
-                <h5 class="mb-0" style="font-size: 1.1rem;">
+                <h5 class="mb-0" style="font-size: 1.5rem;">
                     <i class="fas fa-list-alt me-2"></i>Registros de pagos
                 </h5>
-                <span class="badge bg-white text-primary-dark" style="font-size: 0.8rem;">
+                <span class="badge" style="font-size: 1.4rem; background-color: var(--blanco); color: var(--azul-marino);">
                     {{ $payments->total() }} registros
                 </span>
             </div>
@@ -162,16 +164,16 @@
         <div class="card-body p-0">
             <div class="table-responsive">
                 <table class="table table-hover mb-0">
-                    <thead class="bg-primary-light">
+                    <thead style="background-color: var(--verde-esmeralda);">
                         <tr>
-                            <th class="text-primary-dark py-2">Usuario</th>
-                            <th class="text-primary-dark py-2">Membresía</th>
-                            <th class="text-primary-dark py-2">Monto</th>
-                            <th class="text-primary-dark py-2">Estado</th>
-                            <th class="text-primary-dark py-2">Fecha</th>
-                            <th class="text-primary-dark py-2">Comprobante</th>
-                            <th id="th-comentario" class="text-primary-dark py-2" style="display: none;">Comentario</th>
-                            <th id="th-accion" class="text-primary-dark py-2" style="display: none;">Acción</th>
+                            <th style="font-size: 1.4rem;">Usuario</th>
+                            <th style="font-size: 1.4rem;">Membresía</th>
+                            <th style="font-size: 1.4rem;">Monto</th>
+                            <th style="font-size: 1.4rem;">Estado</th>
+                            <th style="font-size: 1.4rem;">Fecha</th>
+                            <th style="font-size: 1.4rem;">Comprobante</th>
+                            <th id="th-comentario" style="display: none; font-size: 1.4rem;">Comentario</th>
+                            <th id="th-accion" style="display: none; font-size: 1.4rem;">Acción</th>
                         </tr>
                     </thead>
                     <tbody id="payment-table-body">
@@ -186,52 +188,52 @@
                             };
                         @endphp
                         <tr class="payment-row {{ $statusClass }}">
-                            <td class="py-2">
+                            <td class="py-2" style="font-size: 1.4rem;">
                                 <div class="d-flex align-items-center">
-                                    <div class="avatar-sm bg-primary-light text-primary-dark rounded-circle d-flex align-items-center justify-content-center me-2">
+                                    <div class="avatar-sm rounded-circle d-flex align-items-center justify-content-center me-2" style="background-color: var(--azul-marino); color: var(--blanco);">
                                         {{ substr($payment->user->names, 0, 1) }}{{ substr($payment->user->last_name, 0, 1) }}
                                     </div>
                                     <div>
-                                        <div class="fw-semibold">{{ $payment->user->names }} {{ $payment->user->last_name }}</div>
-                                        <small class="text-muted">{{ $payment->user->email }}</small>
+                                        <div class="fw-semibold" style="font-size: 1.4rem;">{{ $payment->user->names }} {{ $payment->user->last_name }}</div>
+                                        <small class="text-muted" style="font-size: 1.4rem;">{{ $payment->user->email }}</small>
                                     </div>
                                 </div>
                             </td>
-                            <td class="py-2">
+                            <td class="py-2" style="font-size: 1.4rem;">
                                 <span class="fw-semibold">{{ $payment->membership->name }}</span>
-                                <small class="text-muted d-block">({{ $payment->membership->duration }} días)</small>
+                                <small class="text-muted d-block" style="font-size: 1.4rem;">({{ $payment->membership->duration }} días)</small>
                             </td>
-                            <td class="py-2 fw-semibold">${{ number_format($payment->price, 2) }}</td>
-                            <td class="py-2">
-                                <span class="badge status-badge">{{ $payment->status->name }}</span>
+                            <td class="py-2 fw-semibold" style="font-size: 1.4rem;">${{ number_format($payment->price, 2) }}</td>
+                            <td class="py-2" style="font-size: 1.4rem;">
+                                <span class="badge status-badge" style="font-size: 1.4rem;">{{ $payment->status->name }}</span>
                             </td>
-                            <td class="py-2">
+                            <td class="py-2" style="font-size: 1.4rem;">
                                 <div class="d-flex flex-column">
                                     <span>{{ \Carbon\Carbon::parse($payment->date)->translatedFormat('d M Y') }}</span>
                                     @if($statusClass === 'vencido' && $payment->expiration_date)
-                                    <small class="text-danger">
+                                    <small class="text-danger" style="font-size: 1.4rem;">
                                         <i class="fas fa-clock me-1"></i>Expiró: {{ \Carbon\Carbon::parse($payment->expiration_date)->translatedFormat('d M Y') }}
                                     </small>
                                     @endif
                                 </div>
                             </td>
-                            <td class="py-2">
+                            <td class="py-2" style="font-size: 1.4rem;">
                                 <a href="{{ Storage::url($payment->receipt_url) }}" target="_blank" 
-                                   class="btn btn-sm btn-outline-primary">
+                                   class="btn btn-sm" style="background-color: var(--verde-esmeralda); color: var(--blanco); font-size: 1.4rem;">
                                     <i class="fas fa-eye me-1"></i> Ver
                                 </a>
                             </td>
-                            <td class="comentario-col py-2" style="{{ $statusClass === 'rechazado' ? '' : 'display:none' }};">
-                                <small>{{ $statusClass === 'rechazado' ? ($payment->comment ?? 'Sin comentario') : '' }}</small>
+                            <td class="comentario-col py-2" style="{{ $statusClass === 'rechazado' ? '' : 'display:none' }}; font-size: 1.4rem;">
+                                <small style="font-size: 1.4rem;">{{ $statusClass === 'rechazado' ? ($payment->comment ?? 'Sin comentario') : '' }}</small>
                             </td>
-                            <td class="accion-col py-2" style="{{ $statusClass === 'pendiente' ? '' : 'display:none' }};">
+                            <td class="accion-col py-2" style="{{ $statusClass === 'pendiente' ? '' : 'display:none' }}; font-size: 1.4rem;">
                                 @if($statusClass === 'pendiente')
                                 <form id="form-{{ $payment->id }}" action="{{ route('admin.payments.update', $payment) }}" method="POST">
                                     @csrf
                                     @method('PUT')
                                     <div class="d-flex gap-2">
                                         <div class="custom-select-container select-sm">
-                                            <select name="status_id" onchange="handleStatusChange(this, {{ $payment->id }})" class="custom-select">
+                                            <select name="status_id" onchange="handleStatusChange(this, {{ $payment->id }})" class="custom-select" style="font-size: 1.4rem;">
                                                 <option value="4" selected>Pendiente</option>
                                                 <option value="5">Aprobar</option>
                                                 <option value="6">Rechazar</option>
@@ -243,8 +245,8 @@
                                         <div id="comment-area-{{ $payment->id }}" class="flex-grow-1" style="display: none;">
                                             <div class="input-group input-group-sm">
                                                 <input type="text" name="comment" class="form-control" 
-                                                    placeholder="Motivo" required>
-                                                <button type="submit" class="btn btn-sm btn-danger">
+                                                    placeholder="Motivo" required style="font-size: 1.4rem;">
+                                                <button type="submit" class="btn btn-sm" style="background-color: var(--naranja-brillante); color: var(--blanco); font-size: 1.4rem;">
                                                     <i class="fas fa-check"></i>
                                                 </button>
                                             </div>
@@ -266,20 +268,20 @@
         <nav>
             <ul class="pagination pagination-rounded mb-0">
                 <li class="page-item {{ $payments->onFirstPage() ? 'disabled' : '' }}">
-                    <a class="page-link border-primary text-primary-dark" href="{{ $payments->previousPageUrl() }}">
+                    <a class="page-link text-azul-marino" href="{{ $payments->previousPageUrl() }}" style="border-color: var(--azul-marino); font-size: 1.4rem;">
                         <i class="fas fa-chevron-left"></i>
                     </a>
                 </li>
                 
                 @foreach ($payments->getUrlRange(1, $payments->lastPage()) as $page => $url)
                     <li class="page-item {{ $payments->currentPage() == $page ? 'active' : '' }}">
-                        <a class="page-link border-primary {{ $payments->currentPage() == $page ? 'bg-primary-dark text-white' : 'text-primary-dark' }}" 
-                        href="{{ $url }}">{{ $page }}</a>
+                        <a class="page-link {{ $payments->currentPage() == $page ? 'bg-azul-marino text-white' : 'text-azul-marino' }}" 
+                        href="{{ $url }}" style="border-color: var(--azul-marino); font-size: 1.4rem;">{{ $page }}</a>
                     </li>
                 @endforeach
                 
                 <li class="page-item {{ $payments->hasMorePages() ? '' : 'disabled' }}">
-                    <a class="page-link border-primary text-primary-dark" href="{{ $payments->nextPageUrl() }}">
+                    <a class="page-link text-azul-marino" href="{{ $payments->nextPageUrl() }}" style="border-color: var(--azul-marino); font-size: 1.4rem;">
                         <i class="fas fa-chevron-right"></i>
                     </a>
                 </li>
@@ -290,27 +292,28 @@
 
 <style>
     :root {
-        --primary-dark: #1A365D;
-        --primary-light: #E9F0F7;
-        --secondary: #FFC107;
-        --danger: #FF6B35;
-        --success: #28A745;
+        --azul-marino: #1A365D;
+        --naranja-brillante: #FF6B35;
+        --verde-esmeralda: #2EC4B6;
+        --blanco: #FFFFFF;
+        --azul-oscuro: #0f2a4a;
+        --neon-glow: #2EC4B6;
     }
     
-    .text-primary-dark { color: var(--primary-dark); }
-    .bg-primary-dark { background-color: var(--primary-dark); }
-    .bg-primary-light { background-color: var(--primary-light); }
-    .border-primary { border-color: var(--primary-dark) !important; }
+    .text-azul-marino { color: var(--azul-marino); }
+    .bg-azul-marino { background-color: var(--azul-marino); }
+    .bg-verde-esmeralda { background-color: var(--verde-esmeralda); }
+    .bg-naranja-brillante { background-color: var(--naranja-brillante); }
     
     .status-badge {
         padding: 0.35em 0.65em;
         font-weight: 500;
-        font-size: 0.8rem;
+        border-radius: 0.5rem;
     }
     
-    .pendiente .status-badge { background-color: #FFD166; color: var(--primary-dark); }
-    .aprobado .status-badge { background-color: var(--success); color: white; }
-    .rechazado .status-badge { background-color: var(--danger); color: white; }
+    .pendiente .status-badge { background-color: #FFD166; color: var(--azul-marino); }
+    .aprobado .status-badge { background-color: var(--verde-esmeralda); color: white; }
+    .rechazado .status-badge { background-color: var(--naranja-brillante); color: white; }
     .vencido .status-badge { background-color: #6C757D; color: white; }
     
     .card {
@@ -331,8 +334,7 @@
     .custom-select {
         width: 100%;
         padding: 0.5rem 2rem 0.5rem 1rem;
-        font-size: 1rem;
-        color: var(--primary-dark);
+        color: var(--azul-marino);
         background-color: white;
         border: 1px solid rgba(26, 54, 93, 0.2);
         border-radius: 0.5rem;
@@ -342,12 +344,11 @@
     
     .select-sm .custom-select {
         padding: 0.25rem 1.5rem 0.25rem 0.75rem;
-        font-size: 0.9rem;
     }
     
     .custom-select:focus {
         outline: none;
-        border-color: var(--primary-dark);
+        border-color: var(--azul-marino);
         box-shadow: 0 0 0 3px rgba(26, 54, 93, 0.1);
     }
     
@@ -357,7 +358,7 @@
         right: 1rem;
         transform: translateY(-50%);
         pointer-events: none;
-        color: var(--primary-dark);
+        color: var(--azul-marino);
         transition: transform 0.2s ease;
     }
     
@@ -365,60 +366,10 @@
         transform: translateY(-50%) rotate(180deg);
     }
     
-    /* Barra de búsqueda profesional */
-    .search-container {
-        position: relative;
-        width: 100%;
-        max-width: 300px;
-    }
-    
-    .search-icon {
-        position: absolute;
-        left: 12px;
-        top: 50%;
-        transform: translateY(-50%);
-        color: var(--primary-dark);
-        opacity: 0.7;
-        z-index: 10;
-    }
-    
-    .search-input {
-        width: 100%;
-        padding: 0.5rem 1rem 0.5rem 2.5rem;
-        font-size: 0.9rem;
-        color: var(--primary-dark);
-        background-color: white;
-        border: 1px solid rgba(26, 54, 93, 0.2);
-        border-radius: 0.5rem;
-        transition: all 0.3s ease;
-        box-shadow: 0 1px 3px rgba(0,0,0,0.05);
-    }
-    
-    .search-input:focus {
-        outline: none;
-        border-color: var(--primary-dark);
-        box-shadow: 0 0 0 3px rgba(26, 54, 93, 0.1);
-    }
-    
-    .search-border {
-        position: absolute;
-        bottom: 0;
-        left: 0;
-        width: 0;
-        height: 2px;
-        background-color: var(--primary-dark);
-        transition: width 0.3s ease;
-    }
-    
-    .search-input:focus ~ .search-border {
-        width: 100%;
-    }
-    
     /* Avatar de usuario */
     .avatar-sm {
-        width: 30px;
-        height: 30px;
-        font-size: 0.8rem;
+        width: 35px;
+        height: 35px;
         font-weight: bold;
     }
     
@@ -435,54 +386,28 @@
     }
     
     .pagination-rounded .page-item.active .page-link {
-        background-color: var(--primary-dark);
-        border-color: var(--primary-dark);
+        background-color: var(--azul-marino);
+        border-color: var(--azul-marino);
     }
     
     .pagination-rounded .page-link:hover {
         background-color: rgba(26, 54, 93, 0.1);
     }
     
-    /* Botones PDF */
-    .btn-primary-dark {
-        background-color: var(--primary-dark);
-        color: white;
-        border: 1px solid var(--primary-dark);
-        transition: all 0.3s ease;
-    }
-    
-    .btn-outline-primary-dark {
-        color: var(--primary-dark);
-        border: 1px solid var(--primary-dark);
-        background-color: transparent;
-        transition: all 0.3s ease;
-    }
-    
-    .btn-outline-primary-dark:hover {
-        background-color: var(--primary-dark);
-        color: white;
-    }
-    
     /* Responsive */
     @media (max-width: 768px) {
         .card-header h5, .alert {
-            font-size: 1rem;
-        }
-        
-        .search-container {
-            max-width: 100%;
+            font-size: 1.2rem;
         }
         
         .pagination-rounded .page-link {
             width: 35px;
             height: 35px;
-            font-size: 0.9rem;
         }
         
         .custom-select {
-            font-size: 0.9rem;
+            font-size: 1.2rem;
         }
-        
     }
 </style>
 

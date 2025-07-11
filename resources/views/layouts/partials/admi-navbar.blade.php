@@ -362,38 +362,34 @@
             }
         }
 
-        /* Tarjetas del Menú */
+        /* Tarjetas del Menú convertidas en iconos grandes */
         .menu-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-            gap: 2rem;
+            grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+            gap: 3rem;
             width: 100%;
             max-width: 1200px;
             padding: 2rem;
             position: relative;
             z-index: 2;
+            justify-items: center;
         }
 
         .menu-card {
-            background: var(--verde-esmeralda);
-            border-radius: 12px;
-            padding: 2rem;
-            min-height: 150px;
+            background: transparent;
+            border: none;
+            width: 120px;
+            height: 120px;
             display: flex;
+            flex-direction: column;
             align-items: center;
             justify-content: center;
-            text-align: center;
-            transition: all 0.4s cubic-bezier(0.23, 1, 0.32, 1);
             cursor: pointer;
             text-decoration: none;
             position: relative;
-            overflow: hidden;
-            transform-style: preserve-3d;
-            perspective: 1000px;
-            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
-            border: 3px solid var(--azul-marino);
-            opacity: 0; /* Inicialmente ocultas */
-            transform: translateY(50px); /* Posición inicial para la animación */
+            opacity: 0;
+            transform: translateY(50px);
+            transition: all 0.3s ease;
         }
 
         .menu-card.animate__zoomInDown {
@@ -401,54 +397,55 @@
             transform: translateY(0);
         }
 
-        .menu-card::before {
-            content: "";
-            position: absolute;
-            width: 100%;
-            height: 100%;
-            left: 0;
-            bottom: 0;
-            z-index: -1;
-            transform: translateZ(-50px);
-            background: linear-gradient(
-                45deg,
-                rgba(255, 107, 53, 0.4) 0%,
-                rgba(255, 107, 53, 0.1) 100%
-            );
-            filter: blur(15px);
-        }
-
-        .menu-card:hover {
-            transform: translateY(-8px) rotateX(5deg);
-            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.4);
-        }
-
-        .menu-card span {
+        .menu-card i {
+            font-size: 5.5rem;
             color: var(--blanco);
-            font-size: 1.8rem;
-            font-weight: 700;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            position: relative;
-            z-index: 2;
-            text-shadow: 0 2px 3px rgba(0, 0, 0, 0.3);
+            transition: all 0.3s ease;
+            text-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
+            background: var(--verde-esmeralda);
+            width: 100px;
+            height: 100px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            border: 3px solid var(--azul-marino);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+            margin-bottom: 10px;
         }
 
-        .menu-card:nth-child(1) { background: var(--azul-marino); }
-        .menu-card:nth-child(2) { background: var(--naranja-brillante); }
-        .menu-card:nth-child(3) { background: var(--verde-esmeralda); }
-        .menu-card:nth-child(4) { background: #1c5c9e; }
-        .menu-card:nth-child(5) { background: #e05a2c; }
-        .menu-card:nth-child(6) { background: #26d8cf; }
-        .menu-card:nth-child(7) { background: var(--azul-oscuro); }
-        .menu-card:nth-child(8) { background: #9b59b6; }
-        .menu-card:nth-child(9) { background: var(--azul-marino); }
-        .menu-card:nth-child(10) { background: #e05a2c; }
-        .menu-card:nth-child(11) { background: #1c5c9e; }
+        .menu-card:hover i {
+            transform: scale(1.1);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.4);
+        }
+
+        .menu-card .menu-label {
+            color: var(--blanco);
+            font-size: 1.4rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            white-space: nowrap;
+            text-shadow: 0 2px 3px rgba(0, 0, 0, 0.5);
+            margin-top: 10px;
+            text-align: center;
+        }
+
+        /* Colores específicos para cada icono */
+        .menu-card:nth-child(1) i { background: var(--azul-marino); }
+        .menu-card:nth-child(2) i { background: var(--naranja-brillante); }
+        .menu-card:nth-child(3) i { background: var(--verde-esmeralda); }
+        .menu-card:nth-child(4) i { background: #1c5c9e; }
+        .menu-card:nth-child(5) i { background: #e05a2c; }
+        .menu-card:nth-child(6) i { background: #26d8cf; }
+        .menu-card:nth-child(7) i { background: var(--azul-oscuro); }
+        .menu-card:nth-child(8) i { background: #9b59b6; }
+        .menu-card:nth-child(9) i { background: var(--azul-marino); }
+        .menu-card:nth-child(10) i { background: #e05a2c; }
+        .menu-card:nth-child(11) i { background: #1c5c9e; }
 
         /* Estilos para el alert de cerrar sesión */
         .swal2-popup.logout-alert {
-            border: 3px solid #1A365D;
+            border: 3px solid #1A365D; /*cambiar el borde de fuera del alert*/
             font-size: 1.4rem;
             border-radius: 12px;
             padding: 1.5rem;
@@ -466,7 +463,7 @@
 
         /* CONTENEDOR DE BOTONES */
         .swal2-actions.logout-actions {
-            gap: 1.5rem !important;       /* Espacio entre botones */
+            gap: 1.5rem !important;
             margin: 1.5rem 0 0 0 !important;
             padding: 0 !important;
             justify-content: center !important;
@@ -475,17 +472,17 @@
         /* ESTILOS BASE PARA AMBOS BOTONES (SIMPLIFICADO) */
         .swal2-confirm.logout-confirm,
         .swal2-cancel.logout-cancel {
-            font-size: 1.3rem !important;       /* Texto más pequeño */
-            padding: 0.9rem 0.9rem !important;   /* Tamaño compacto */
+            font-size: 1.3rem !important;
+            padding: 0.9rem 0.9rem !important;
             border-radius: 5px !important;
-            margin: 0 5px !important;            /* Espacio horizontal entre botones */
-            min-width: 100px !important;           /* Ancho mínimo reducido */
+            margin: 0 5px !important;
+            min-width: 100px !important;
             transition: all 0.3s ease !important;
             box-shadow: 0 2px 5px rgba(0,0,0,0.1) !important;
             border: none !important;
             text-transform: uppercase;
             letter-spacing: 0.5px;
-            flex: none !important;               /* Evita que se estiren */
+            flex: none !important;
         }
 
         /* BOTÓN CONFIRMAR (NARANJA) */
@@ -563,17 +560,23 @@
             }
             
             .menu-grid {
-                grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-                gap: 1.5rem;
+                grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+                gap: 2.5rem;
             }
             
             .menu-card {
-                min-height: 130px;
-                padding: 1.5rem;
+                width: 100px;
+                height: 100px;
             }
             
-            .menu-card span {
-                font-size: 1.6rem;
+            .menu-card i {
+                font-size: 4.5rem;
+                width: 80px;
+                height: 80px;
+            }
+            
+            .menu-card .menu-label {
+                font-size: 1.2rem;
             }
         }
 
@@ -608,17 +611,23 @@
             }
             
             .menu-grid {
-                grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-                gap: 1.2rem;
+                grid-template-columns: repeat(auto-fit, minmax(90px, 1fr));
+                gap: 2rem;
             }
             
             .menu-card {
-                min-height: 110px;
-                padding: 1.2rem;
+                width: 90px;
+                height: 90px;
             }
             
-            .menu-card span {
-                font-size: 1.4rem;
+            .menu-card i {
+                font-size: 4rem;
+                width: 70px;
+                height: 70px;
+            }
+            
+            .menu-card .menu-label {
+                font-size: 1.1rem;
             }
         }
 
@@ -637,8 +646,8 @@
             }
             
             .menu-grid {
-                grid-template-columns: repeat(2, 1fr);
-                gap: 1rem;
+                grid-template-columns: repeat(3, 1fr);
+                gap: 1.8rem;
             }
 
             /* Mostrar el botón de cerrar solo en móviles */
@@ -661,6 +670,21 @@
                 width: 40px;
                 height: 40px;
                 padding: 6px;
+            }
+            
+            .menu-card i {
+                font-size: 3.5rem;
+                width: 60px;
+                height: 60px;
+            }
+            
+            .menu-card .menu-label {
+                font-size: 1rem;
+            }
+            
+            .menu-grid {
+                grid-template-columns: repeat(3, 1fr);
+                gap: 1.5rem;
             }
         }
     </style>
@@ -705,37 +729,48 @@
     
     <div class="menu-grid">
        <a href="{{ route('admin.dashboard') }}" class="menu-card">
-           <span><i class="fas fa-home"></i> Inicio</span>
+           <i class="fas fa-home"></i>
+           <span class="menu-label">Inicio</span>
         </a>
         <a href="{{ route('admin.classes.index') }}" class="menu-card">
-            <span><i class="fas fa-chalkboard-teacher"></i> Clases</span>
+            <i class="fas fa-chalkboard-teacher"></i>
+            <span class="menu-label">Clases</span>
         </a>
         <a href="{{ route('admin.payments.index') }}" class="menu-card">
-            <span><i class="fas fa-credit-card"></i> Pagos</span>  
+            <i class="fas fa-credit-card"></i>
+            <span class="menu-label">Pagos</span>
         </a>
         <a href="{{ route('admin.memberships.index') }}" class="menu-card">
-            <span><i class="fas fa-id-card"></i> Membresías</span>
+            <i class="fas fa-id-card"></i>
+            <span class="menu-label">Membresías</span>
         </a>
         <a href="{{ route('admin.carousel.index')}}" class="menu-card">
-            <span><i class="fas fa-images"></i> Carrusel Home</span>
+            <i class="fas fa-images"></i>
+            <span class="menu-label">Carrusel</span>
         </a>
         <a href="{{ route('admin.center-information.index')}}" class="menu-card">
-            <span><i class="fas fa-info-circle"></i> Información Home</span>
+            <i class="fas fa-info-circle"></i>
+            <span class="menu-label">Información</span>
         </a>
         <a href="{{ route('admin.services_home.index')}}" class="menu-card">
-            <span><i class="fas fa-concierge-bell"></i> Servicios del Home</span>
+            <i class="fas fa-concierge-bell"></i>
+            <span class="menu-label">home de Servicios</span>
         </a>
         <a href="{{ route('admin.requirements.index') }}" class="menu-card">
-            <span><i class="fas fa-tasks"></i> Requerimientos</span>
+            <i class="fas fa-tasks"></i>
+            <span class="menu-label">Requerimientos</span>
         </a>
         <a href="{{ route('admin.service.index') }}" class="menu-card">
-            <span><i class="fas fa-dumbbell"></i> Servicios</span>
+            <i class="fas fa-dumbbell"></i>
+            <span class="menu-label">Servicios</span>
         </a>
         <a href="{{ route('admin.users.index') }}" class="menu-card">
-            <span><i class="fas fa-users"></i> Usuarios</span>
+            <i class="fas fa-users"></i>
+            <span class="menu-label">Usuarios</span>
         </a>
         <a href="#" class="menu-card" id="logoutButton">
-            <span><i class="fas fa-sign-out-alt"></i> Cerrar Sesión</span>
+            <i class="fas fa-sign-out-alt"></i>
+            <span class="menu-label">Salir</span>
         </a>
     </div>
 </div>
