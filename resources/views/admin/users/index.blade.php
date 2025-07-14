@@ -18,16 +18,6 @@
                                         placeholder="Buscador............" 
                                         autocomplete="off"/>
                                 </div>
-
-                                <select name="roleFilter" class="form-select" onchange="this.form.submit()" style="border: 4px solid #1A365D; background-color: #F4F4F4; color: #1A365D; font-size: 1.3rem; height: 45px;">
-                                    <option value="2" {{ request('roleFilter', '2') == '2' ? 'selected' : '' }}>Usuarios</option>
-                                    <option value="3" {{ request('roleFilter') == '3' ? 'selected' : '' }}>Instructores</option>
-                                </select>
-                                
-                                <button type="button" class="btn py-2 px-4" style="background-color: #1A365D; color: #FFFFFF; font-weight: 600; font-size: 1.3rem; border: 2px solid #FF6B35;" onclick="mostrarAdministrador()">
-                                    <i class="fas fa-user-shield me-2"></i> ADMINISTRADOR
-                                </button>
-
                                 <button type="submit" class="btn py-2 px-4" style="background-color: #FF6B35; color: #FFFFFF; font-weight: 600; font-size: 1.3rem;">
                                     <i class="fas fa-search me-2"></i> BUSCAR
                                 </button>
@@ -35,6 +25,21 @@
                                 <a href="{{ route('admin.users.index') }}" class="btn py-2 px-4" style="background-color: #2EC4B6; color: #FFFFFF; font-weight: 600; font-size: 1.3rem; border: 2px solid #1A365D;">
                                     <i class="fas fa-times me-2"></i> LIMPIAR
                                 </a>
+                                <!-- Select mejorado con estilo circular -->
+                                <div class="circle-select-container">
+                                    <select name="roleFilter" class="circle-select" onchange="this.form.submit()">
+                                        <option value="2" {{ request('roleFilter', '2') == '2' ? 'selected' : '' }}>Usuarios</option>
+                                        <option value="3" {{ request('roleFilter') == '3' ? 'selected' : '' }}>Instructores</option>
+                                    </select>
+                                    <div class="select-icon">
+                                        <i class="fas fa-chevron-down"></i>
+                                    </div>
+                                </div>
+                                
+                                <button type="button" class="btn py-2 px-4" style="background-color: #1A365D; color: #FFFFFF; font-weight: 600; font-size: 1.3rem; border: 2px solid #FF6B35;" onclick="mostrarAdministrador()">
+                                    <i class="fas fa-user-shield me-2"></i> ADMINISTRADOR
+                                </button>
+
                             </form>
                         </div>
 
@@ -104,13 +109,17 @@
                             </thead>
                             <tbody>
                                 @forelse($users as $user)
-                                <tr style="border-bottom: 2px solid #F4F4F4; {{ $user->status && $user->status->name === 'Inactivo' ? 'background-color: rgba(255, 107, 53, 0.1);' : '' }}">
+                                <tr style="border-bottom: 2px solid #F4F4F4; {{ $user->status && $user->status->name === 'Inactivo' ? 'background-color: rgba(255, 107, 53, 0.1);' : 'background-color: rgba(46, 196, 182, 0.1);' }}">
                                     <td class="ps-4" style="font-size: 1.4rem; color: #1A365D; font-weight: 500;">{{ $user->names }}</td>
                                     <td style="font-size: 1.4rem; color: #1A365D; font-weight: 500;">{{ $user->last_name }}</td>
                                     <td style="font-size: 1.4rem; color: #1A365D; font-weight: 500;">{{ $user->email }}</td>
                                     <td style="font-size: 1.4rem; color: #1A365D; font-weight: 500;">{{ $user->role->name_rol ?? 'N/A' }}</td>
                                     <td style="font-size: 1.4rem; color: #1A365D; font-weight: 500;">
-                                        {{ $user->status->name ?? 'N/A' }}
+                                        @if($user->status && $user->status->name === 'Inactivo')
+                                            <span class="badge rounded-pill" style="background-color: #FF6B35; color: white;">{{ $user->status->name }}</span>
+                                        @else
+                                            <span class="badge rounded-pill" style="background-color: #2EC4B6; color: white;">{{ $user->status->name ?? 'N/A' }}</span>
+                                        @endif
                                     </td>
                                     <td style="font-size: 1.4rem; color: #1A365D; font-weight: 500;">
                                         {{ \Carbon\Carbon::parse($user->birth_date)->translatedFormat('d \d\e F \d\e Y') }}
@@ -202,7 +211,7 @@
     }
     
     .table-hover tbody tr:hover {
-        background-color: rgba(46, 196, 182, 0.08);
+        background-color: rgba(46, 196, 182, 0.2) !important;
         transform: translateY(-1px);
     }
     
@@ -276,9 +285,10 @@
     .badge {
         padding: 0.5em 0.9em;
         font-size: 1.1rem;
+        font-weight: 600;
     }
     
-      .input-container {
+    .input-container {
         position: relative;
         width: 100%;
         max-width: 270px;
@@ -317,6 +327,76 @@
 
     .input:focus::placeholder {
         color: #fff;
+    }
+
+    /* Estilos para el select circular mejorado */
+    .circle-select-container {
+        position: relative;
+        width: 180px;
+        height: 45px;
+    }
+
+    .circle-select {
+        width: 100%;
+        height: 100%;
+        padding: 0 20px;
+        padding-right: 40px;
+        font-size: 1.2rem;
+        font-weight: 600;
+        color: #1A365D;
+        background-color: #F4F4F4;
+        border: 3px solid #1A365D;
+        border-radius: 50px;
+        appearance: none;
+        -webkit-appearance: none;
+        -moz-appearance: none;
+        cursor: pointer;
+        outline: none;
+        transition: all 0.3s ease;
+        box-shadow: 0 4px 8px rgba(26, 54, 93, 0.1);
+    }
+
+    .circle-select:hover {
+        border-color: #FF6B35;
+        box-shadow: 0 6px 12px rgba(255, 107, 53, 0.15);
+    }
+
+    .circle-select:focus {
+        border-color: #2EC4B6;
+        box-shadow: 0 0 0 3px rgba(46, 196, 182, 0.3);
+    }
+
+    .select-icon {
+        position: absolute;
+        top: 50%;
+        right: 15px;
+        transform: translateY(-50%);
+        pointer-events: none;
+        color: #1A365D;
+        font-size: 1.1rem;
+        transition: all 0.3s ease;
+    }
+
+    .circle-select:hover ~ .select-icon {
+        color: #FF6B35;
+        transform: translateY(-50%) scale(1.1);
+    }
+
+    .circle-select:focus ~ .select-icon {
+        color: #2EC4B6;
+    }
+
+    /* Estilo para las opciones */
+    .circle-select option {
+        padding: 10px;
+        font-size: 1.1rem;
+        background-color: #F4F4F4;
+        color: #1A365D;
+    }
+
+    .circle-select option:hover {
+        background-color: #2EC4B6 !important;
+        color: #FFFFFF;
     }
 
     /* Animación de cursor parpadeante */
@@ -482,6 +562,22 @@
         
         .table td:last-child {
             min-width: 120px;
+        }
+        
+        .circle-select-container {
+            width: 150px;
+            height: 40px;
+        }
+        
+        .circle-select {
+            font-size: 1.1rem;
+            padding: 0 15px;
+            padding-right: 35px;
+        }
+        
+        .select-icon {
+            right: 12px;
+            font-size: 1rem;
         }
     }
 </style>

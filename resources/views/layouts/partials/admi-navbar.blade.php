@@ -746,7 +746,7 @@
         </a>
         <a href="{{ route('admin.carousel.index')}}" class="menu-card">
             <i class="fas fa-images"></i>
-            <span class="menu-label">Carrusel</span>
+            <span class="menu-label">Carrusel del Inicio</span>
         </a>
         <a href="{{ route('admin.center-information.index')}}" class="menu-card">
             <i class="fas fa-info-circle"></i>
@@ -754,7 +754,7 @@
         </a>
         <a href="{{ route('admin.services_home.index')}}" class="menu-card">
             <i class="fas fa-concierge-bell"></i>
-            <span class="menu-label">home de Servicios</span>
+            <span class="menu-label">Servicios del Inicio</span>
         </a>
         <a href="{{ route('admin.requirements.index') }}" class="menu-card">
             <i class="fas fa-tasks"></i>
