@@ -36,8 +36,8 @@
                 <!-- Filtros superiores -->
                 <div class="card-body p-4" style="background-color: #F4F4F4; border-bottom: 2px solid #1A365D;">
                     <form method="GET" action="{{ route('admin.users.index') }}">
-                        <div class="row g-3">
-                            <!-- Fila 1: Buscador -->
+                        <div class="row g-3 align-items-end">
+                            <!-- Fila 1: Buscador y Botones -->
                             <div class="col-12 col-md-6">
                                 <div class="input-container w-100">
                                     <input 
@@ -53,239 +53,236 @@
                                 </div>
                             </div>
                             
-                            <!-- Fila 1: Botones Buscar y Limpiar -->
-                                <div class="col-12 col-md-6">
-                                    <div class="d-flex" style="gap: 1rem;">
-                                        <button type="submit" class="btn py-2 px-3 flex-grow-1" style="background-color: #FF6B35; color: #FFFFFF; font-weight: 600; font-size: 1.1rem;">
-                                            <i class="fas fa-search me-1"></i> BUSCAR
-                                        </button>
-
-                            <a href="{{ route('admin.users.index', array_merge(request()->except(['search', 'page']), ['search' => null])) }}" 
-                            class="btn py-2 px-3 flex-grow-1" 
-                            style="background-color: #2EC4B6; color: #FFFFFF; font-weight: 600; font-size: 1.1rem; border: 2px solid #1A365D;">
-                                <i class="fas fa-broom me-1"></i> LIMPIAR
-                            </a>
-
-                                    </div>
-                                </div>
-                           <!-- Fila 2: Filtros de Rol y Estado -->
                             <div class="col-12 col-md-6">
-                                <div class="d-flex align-items-center" style="gap: 1rem;">
-                                    <div class="circle-select-container flex-grow-1">
-                                        <select name="roleFilter" class="circle-select" onchange="this.form.submit()">
-                                            <option value="2" {{ $roleFilter == '2' ? 'selected' : '' }}>
-                                                <i class="fas fa-user me-1"></i> Usuarios
-                                            </option>
-                                            <option value="3" {{ $roleFilter == '3' ? 'selected' : '' }}>
-                                                <i class="fas fa-chalkboard-teacher me-1"></i> Instructores
-                                            </option>
-                                            <option value="1" {{ $roleFilter == '1' ? 'selected' : '' }}>
-                                                <i class="fas fa-user-shield me-1"></i> Administradores
-                                            </option>
-                                        </select>
-                                        <div class="select-icon">
-                                            <i class="fas fa-users"></i>
-                                        </div>
+                                <div class="d-flex" style="gap: 1rem;">
+                                    <button type="submit" class="btn py-2 px-3 flex-grow-1" style="background-color: #FF6B35; color: #FFFFFF; font-weight: 600; font-size: 1.1rem;">
+                                        <i class="fas fa-search me-1"></i> BUSCAR
+                                    </button>
+
+                                    <a href="{{ route('admin.users.index', array_merge(request()->except(['search', 'page']), ['search' => null])) }}" 
+                                    class="btn py-2 px-3 flex-grow-1" 
+                                    style="background-color: #2EC4B6; color: #FFFFFF; font-weight: 600; font-size: 1.1rem; border: 2px solid #1A365D;">
+                                        <i class="fas fa-broom me-1"></i> LIMPIAR
+                                    </a>
+                                </div>
+                            </div>
+                            
+                            <!-- Fila 2: Filtros de Rol y Estado -->
+                            <div class="col-12 col-md-6">
+                                <div class="circle-select-container w-100">
+                                    <select name="roleFilter" class="circle-select" onchange="this.form.submit()">
+                                        <option value="2" {{ $roleFilter == '2' ? 'selected' : '' }}>
+                                            <i class="fas fa-user me-1"></i> Usuarios
+                                        </option>
+                                        <option value="3" {{ $roleFilter == '3' ? 'selected' : '' }}>
+                                            <i class="fas fa-chalkboard-teacher me-1"></i> Instructores
+                                        </option>
+                                        <option value="1" {{ $roleFilter == '1' ? 'selected' : '' }}>
+                                            <i class="fas fa-user-shield me-1"></i> Administradores
+                                        </option>
+                                    </select>
+                                    <div class="select-icon">
+                                        <i class="fas fa-users"></i>
                                     </div>
                                 </div>
                             </div>
 
-                        <div class="col-12 col-md-6">
-                        <div class="circle-select-container w-100">
-                            <select name="statusFilter" class="circle-select" onchange="this.form.submit()">
-                                <option value="">
-                                    <i class="fas fa-filter me-1"></i> Todos los estados
-                                </option>
-                                @foreach($statuses->filter(fn($status) => in_array($status->name, ['Activo', 'Inactivo'])) as $status)
-                                    <option value="{{ $status->id }}" {{ request('statusFilter') == $status->id ? 'selected' : '' }}>
-                                        <i class="fas fa-{{ $status->name == 'Activo' ? 'check-circle' : 'times-circle' }} me-1"></i> {{ $status->name }}
-                                    </option>
-                                @endforeach
-                            </select>
-                            <div class="select-icon">
-                                <i class="fas fa-info-circle"></i>
+                            <div class="col-12 col-md-6">
+                                <div class="circle-select-container w-100">
+                                    <select name="statusFilter" class="circle-select" onchange="this.form.submit()">
+                                        <option value="">Todos</option>
+                                        @foreach($statuses->filter(fn($status) => in_array($status->name, ['Activo', 'Inactivo'])) as $status)
+                                            <option value="{{ $status->id }}" {{ request('statusFilter') == $status->id ? 'selected' : '' }}>
+                                                {{ $status->name }}
+                                            </option>
+                                        @endforeach
+                                    </select>
+                                    <div class="select-icon">
+                                        <i class="fas fa-info-circle"></i>
+                                    </div>
+                                </div>
                             </div>
                         </div>
-                    </div>
-                    
+                    </form>
 
-                @if(request('search') || request('roleFilter') || request('statusFilter') || (request('specialtyFilter') && $roleFilter == '3') || (request('certificationFilter') && $roleFilter == '3'))
-                <div class="alert alert-dismissible fade show m-4" role="alert" id="autoDismissAlert"
-                    style="background-color: #2EC4B6; color: #FFFFFF; border-left: 5px solid #1A365D; font-size: 1.4rem;">
-                    <div class="d-flex align-items-center">
-                        <i class="fas fa-filter me-3 fs-4"></i>
-                        <strong class="fs-5">
-                            Filtros aplicados: 
-                            @if(request('search')) <i class="fas fa-search me-1"></i> "{{ request('search') }}" @endif
-                            @if(request('roleFilter')) | <i class="fas fa-users me-1"></i> {{ 
-                                request('roleFilter') == '2' ? 'Usuarios' : 
-                                (request('roleFilter') == '3' ? 'Instructores' : 'Administradores') 
-                            }} @endif
-                            @if(request('statusFilter')) | <i class="fas fa-info-circle me-1"></i> {{ 
-                                \App\Models\Status::find(request('statusFilter'))->name 
-                            }} @endif
-                            @if(request('specialtyFilter') && $roleFilter == '3')) | <i class="fas fa-certificate me-1"></i> {{ request('specialtyFilter') }} @endif
-                            @if(request('certificationFilter') && $roleFilter == '3')) | <i class="fas fa-award me-1"></i> {{ request('certificationFilter') }} @endif
-                        </strong>
-                        <button type="button" class="btn-close btn-close-white ms-auto fs-5" data-bs-dismiss="alert" aria-label="Close"></button>
-                    </div>
-                </div>
-                @endif
-
-                @if (session('success'))
+                    @if(request('search') || request('roleFilter') || request('statusFilter') || (request('specialtyFilter') && $roleFilter == '3') || (request('certificationFilter') && $roleFilter == '3'))
                     <div class="alert alert-dismissible fade show m-4" role="alert" id="autoDismissAlert"
                         style="background-color: #2EC4B6; color: #FFFFFF; border-left: 5px solid #1A365D; font-size: 1.4rem;">
                         <div class="d-flex align-items-center">
-                            <i class="fas fa-check-circle me-3 fs-4"></i>
-                            <strong class="fs-5">{{ session('success') }}</strong>
+                            <i class="fas fa-filter me-3 fs-4"></i>
+                            <strong class="fs-5">
+                                Filtros aplicados: 
+                                @if(request('search')) <i class="fas fa-search me-1"></i> "{{ request('search') }}" @endif
+                                @if(request('roleFilter')) | <i class="fas fa-users me-1"></i> {{ 
+                                    request('roleFilter') == '2' ? 'Usuarios' : 
+                                    (request('roleFilter') == '3' ? 'Instructores' : 'Administradores') 
+                                }} @endif
+                                @if(request('statusFilter')) | <i class="fas fa-info-circle me-1"></i> {{ 
+                                    \App\Models\Status::find(request('statusFilter'))->name 
+                                }} @endif
+                                @if(request('specialtyFilter') && $roleFilter == '3')) | <i class="fas fa-certificate me-1"></i> {{ request('specialtyFilter') }} @endif
+                                @if(request('certificationFilter') && $roleFilter == '3')) | <i class="fas fa-award me-1"></i> {{ request('certificationFilter') }} @endif
+                            </strong>
                             <button type="button" class="btn-close btn-close-white ms-auto fs-5" data-bs-dismiss="alert" aria-label="Close"></button>
                         </div>
                     </div>
-                @endif
+                    @endif
 
-                <div class="card-body p-0">
-                    <div class="table-responsive">
-                        <table class="table table-hover align-middle mb-0" style="border-top: none; width: 100%;">
-                            <thead>
-                                <tr style="background-color: #1A365D; color: #FFFFFF;">
-                                    <th class="ps-4 py-3" style="font-weight: 600; font-size: 1.4rem; width: 10%;">
-                                        <i class="fas fa-id-card me-2"></i>Nombres
-                                    </th>
-                                    <th class="py-3" style="font-weight: 600; font-size: 1.4rem; width: 10%;">
-                                        <i class="fas fa-id-card me-2"></i>Apellidos
-                                    </th>
-                                    <th class="py-3" style="font-weight: 600; font-size: 1.4rem; width: 15%;">
-                                        <i class="fas fa-envelope me-2"></i>Email
-                                    </th>
-                                    <th class="py-3" style="font-weight: 600; font-size: 1.4rem; width: 8%;">
-                                        <i class="fas fa-user-tag me-2"></i>Rol
-                                    </th>
-                                    <th class="py-3" style="font-weight: 600; font-size: 1.4rem; width: 8%;">
-                                        <i class="fas fa-power-off me-2"></i>Estado
-                                    </th>
-                                    <th class="py-3" style="font-weight: 600; font-size: 1.4rem; width: 10%;">
-                                        <i class="fas fa-venus-mars me-2"></i>Género
-                                    </th>
-                                    <th class="py-3" style="font-weight: 600; font-size: 1.4rem; width: 12%;">
-                                        <i class="fas fa-birthday-cake me-2"></i>Fecha Nacimiento
-                                    </th>
-                                    @if($roleFilter == '3')
-                                        <th class="py-3" style="font-weight: 600; font-size: 1.4rem; width: 10%;">
-                                            <i class="fas fa-certificate me-2"></i>Especialidad
-                                        </th>
-                                        <th class="py-3" style="font-weight: 600; font-size: 1.4rem; width: 10%;">
-                                            <i class="fas fa-award me-2"></i>Certificación
-                                        </th>
-                                    @endif
-                                    <th class="pe-4 py-3 text-center" style="font-weight: 600; font-size: 1.4rem; width: {{ $roleFilter == '3' ? '15%' : '25%' }};">
-                                        <i class="fas fa-cogs me-2"></i>Acciones
-                                    </th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                @forelse($users as $user)
-                                <tr style="border-bottom: 2px solid #F4F4F4; {{ $user->status && $user->status->name === 'Inactivo' ? 'background-color: rgba(255, 107, 53, 0.1);' : 'background-color: rgba(46, 196, 182, 0.1);' }}">
-                                    <td class="ps-4" style="font-size: 1.4rem; color: #1A365D; font-weight: 500;">
-                                        <i class="fas fa-user-circle me-2"></i>{{ $user->names }}
-                                    </td>
-                                    <td style="font-size: 1.4rem; color: #1A365D; font-weight: 500;">{{ $user->last_name }}</td>
-                                    <td style="font-size: 1.4rem; color: #1A365D; font-weight: 500;">
-                                        <i class="fas fa-envelope me-2"></i>{{ $user->email }}
-                                    </td>
-                                    <td style="font-size: 1.4rem; color: #1A365D; font-weight: 500;">
-                                        @if($user->role_id == 1)
-                                            <i class="fas fa-user-shield me-2"></i>
-                                        @elseif($user->role_id == 2)
-                                            <i class="fas fa-user me-2"></i>
-                                        @else
-                                            <i class="fas fa-chalkboard-teacher me-2"></i>
-                                        @endif
-                                        {{ $user->role->name_rol ?? 'N/A' }}
-                                    </td>
-                                    <td style="font-size: 1.4rem; color: #1A365D; font-weight: 500;">
-                                        @if($user->status && $user->status->name === 'Inactivo')
-                                            <span class="badge rounded-pill" style="background-color: #FF6B35; color: white;">
-                                                <i class="fas fa-times-circle me-1"></i>{{ $user->status->name }}
-                                            </span>
-                                        @else
-                                            <span class="badge rounded-pill" style="background-color: #2EC4B6; color: white;">
-                                                <i class="fas fa-check-circle me-1"></i>{{ $user->status->name ?? 'N/A' }}
-                                            </span>
-                                        @endif
-                                    </td>
-                                    <td style="font-size: 1.4rem; color: #1A365D; font-weight: 500;">
-                                        @if($user->gender == 'Masculino')
-                                            <i class="fas fa-mars me-2"></i>
-                                        @elseif($user->gender == 'Femenino')
-                                            <i class="fas fa-venus me-2"></i>
-                                        @else
-                                            <i class="fas fa-genderless me-2"></i>
-                                        @endif
-                                        {{ $user->gender }}
-                                    </td>
-                                    <td style="font-size: 1.4rem; color: #1A365D; font-weight: 500;">
-                                        <i class="fas fa-calendar-day me-2"></i>
-                                        {{ \Carbon\Carbon::parse($user->birth_date)->translatedFormat('d/m/Y') }}
-                                    </td>
-                                    @if($roleFilter == '3')
-                                        <td class="wrap-text" style="font-size: 1.4rem; color: #1A365D; font-weight: 500;">
-                                            <i class="fas fa-certificate me-2"></i>{{ $user->specialty ?? 'N/A' }}
-                                        </td>
-                                        <td class="wrap-text" style="font-size: 1.4rem; color: #1A365D; font-weight: 500;">
-                                            <i class="fas fa-award me-2"></i>{{ $user->certification ?? 'N/A' }}
-                                        </td>
-                                    @endif
-                                    <td class="pe-4 text-center" style="min-width: 150px;">
-                                        <div class="d-flex justify-content-center" style="gap: 5px;">
-                                            <a href="{{ route('admin.users.edit', ['user' => $user, 'redirect_filter' => request('roleFilter')]) }}" 
-                                                class="btn py-2 px-3" 
-                                                style="background-color: #2EC4B6; color: #FFFFFF; font-size: 1.3rem; font-weight: 500; white-space: nowrap;">
-                                                <i class="fas fa-edit me-1"></i>EDITAR
-                                            </a>
-                                        </div>
-                                    </td>
-                                </tr>
-                                @empty
-                                <tr>
-                                    <td colspan="{{ $roleFilter == '3' ? 10 : 8 }}" class="text-center py-4">
-                                        <div class="text-muted">
-                                            <i class="fas fa-users-slash fs-1" style="color: #1A365D; font-size: 3rem;"></i>
-                                            <p class="mt-2 fs-5" style="font-size: 1.4rem; font-weight: 600;">
-                                                @if(request('search') || request('roleFilter') || request('statusFilter') || request('specialtyFilter') || request('certificationFilter'))
-                                                    No se encontraron usuarios con los filtros aplicados
-                                                @else
-                                                    No hay usuarios registrados
-                                                @endif
-                                            </p>
-                                        </div>
-                                    </td>
-                                </tr>
-                                @endforelse
-                            </tbody>
-                        </table>
-                    </div>
-
-                    <div class="card-footer py-4" style="background-color: #F4F4F4; border-top: 2px solid #1A365D;">
-                        <div class="d-flex justify-content-between align-items-center">
-                            <div class="text-muted" style="font-size: 1.3rem; font-weight: 500;">
-                                <i class="fas fa-clipboard-list me-2"></i> 
-                                MOSTRANDO <span class="fw-bold">{{ $users->count() }}</span> DE 
-                                <span class="fw-bold">{{ $users->total() }}</span> USUARIOS REGISTRADOS
-                            </div>
-                            <div style="font-size: 1.3rem; font-weight: 500;">
-                                <i class="fas fa-calendar-alt me-2"></i>
-                                {{ now()->translatedFormat('l, d \d\e F \d\e Y') }}
-                            </div>
-                        </div>
-                    </div>
-
-                    @if($users->hasPages())
-                        <div class="card-footer py-4" style="background-color: #F4F4F4; border-top: 2px solid #1A365D;">
-                            <div class="d-flex justify-content-center">
-                                {{ $users->appends(request()->query())->links('pagination::bootstrap-4') }}
+                    @if (session('success'))
+                        <div class="alert alert-dismissible fade show m-4" role="alert" id="autoDismissAlert"
+                            style="background-color: #2EC4B6; color: #FFFFFF; border-left: 5px solid #1A365D; font-size: 1.4rem;">
+                            <div class="d-flex align-items-center">
+                                <i class="fas fa-check-circle me-3 fs-4"></i>
+                                <strong class="fs-5">{{ session('success') }}</strong>
+                                <button type="button" class="btn-close btn-close-white ms-auto fs-5" data-bs-dismiss="alert" aria-label="Close"></button>
                             </div>
                         </div>
                     @endif
+
+                    <div class="card-body p-0">
+                        <div class="table-responsive">
+                            <table class="table table-hover align-middle mb-0" style="border-top: none; width: 100%;">
+                                <thead>
+                                    <tr style="background-color: #1A365D; color: #FFFFFF;">
+                                        <th class="ps-4 py-3" style="font-weight: 600; font-size: 1.4rem; width: 10%;">
+                                            <i class="fas fa-id-card me-2"></i>Nombres
+                                        </th>
+                                        <th class="py-3" style="font-weight: 600; font-size: 1.4rem; width: 10%;">
+                                            <i class="fas fa-id-card me-2"></i>Apellidos
+                                        </th>
+                                        <th class="py-3" style="font-weight: 600; font-size: 1.4rem; width: 15%;">
+                                            <i class="fas fa-envelope me-2"></i>Email
+                                        </th>
+                                        <th class="py-3" style="font-weight: 600; font-size: 1.4rem; width: 8%;">
+                                            <i class="fas fa-user-tag me-2"></i>Rol
+                                        </th>
+                                        <th class="py-3" style="font-weight: 600; font-size: 1.4rem; width: 8%;">
+                                            <i class="fas fa-power-off me-2"></i>Estado
+                                        </th>
+                                        <th class="py-3" style="font-weight: 600; font-size: 1.4rem; width: 10%;">
+                                            <i class="fas fa-venus-mars me-2"></i>Género
+                                        </th>
+                                        <th class="py-3" style="font-weight: 600; font-size: 1.4rem; width: 12%;">
+                                            <i class="fas fa-birthday-cake me-2"></i>Fecha Nacimiento
+                                        </th>
+                                        @if($roleFilter == '3')
+                                            <th class="py-3" style="font-weight: 600; font-size: 1.4rem; width: 10%;">
+                                                <i class="fas fa-certificate me-2"></i>Especialidad
+                                            </th>
+                                            <th class="py-3" style="font-weight: 600; font-size: 1.4rem; width: 10%;">
+                                                <i class="fas fa-award me-2"></i>Certificación
+                                            </th>
+                                        @endif
+                                        <th class="pe-4 py-3 text-center" style="font-weight: 600; font-size: 1.4rem; width: {{ $roleFilter == '3' ? '15%' : '25%' }};">
+                                            <i class="fas fa-cogs me-2"></i>Acciones
+                                        </th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @forelse($users as $user)
+                                    <tr style="border-bottom: 2px solid #F4F4F4; {{ $user->status && $user->status->name === 'Inactivo' ? 'background-color: rgba(255, 107, 53, 0.1);' : 'background-color: rgba(46, 196, 182, 0.1);' }}">
+                                        <td class="ps-4" style="font-size: 1.4rem; color: #1A365D; font-weight: 500;">
+                                            <i class="fas fa-user-circle me-2"></i>{{ $user->names }}
+                                        </td>
+                                        <td style="font-size: 1.4rem; color: #1A365D; font-weight: 500;">{{ $user->last_name }}</td>
+                                        <td style="font-size: 1.4rem; color: #1A365D; font-weight: 500;">
+                                            <i class="fas fa-envelope me-2"></i>{{ $user->email }}
+                                        </td>
+                                        <td style="font-size: 1.4rem; color: #1A365D; font-weight: 500;">
+                                            @if($user->role_id == 1)
+                                                <i class="fas fa-user-shield me-2"></i>
+                                            @elseif($user->role_id == 2)
+                                                <i class="fas fa-user me-2"></i>
+                                            @else
+                                                <i class="fas fa-chalkboard-teacher me-2"></i>
+                                            @endif
+                                            {{ $user->role->name_rol ?? 'N/A' }}
+                                        </td>
+                                        <td style="font-size: 1.4rem; color: #1A365D; font-weight: 500;">
+                                            @if($user->status && $user->status->name === 'Inactivo')
+                                                <span class="badge rounded-pill" style="background-color: #FF6B35; color: white;">
+                                                    <i class="fas fa-times-circle me-1"></i>{{ $user->status->name }}
+                                                </span>
+                                            @else
+                                                <span class="badge rounded-pill" style="background-color: #2EC4B6; color: white;">
+                                                    <i class="fas fa-check-circle me-1"></i>{{ $user->status->name ?? 'N/A' }}
+                                                </span>
+                                            @endif
+                                        </td>
+                                        <td style="font-size: 1.4rem; color: #1A365D; font-weight: 500;">
+                                            @if($user->gender == 'Masculino')
+                                                <i class="fas fa-mars me-2"></i>
+                                            @elseif($user->gender == 'Femenino')
+                                                <i class="fas fa-venus me-2"></i>
+                                            @else
+                                                <i class="fas fa-genderless me-2"></i>
+                                            @endif
+                                            {{ $user->gender }}
+                                        </td>
+                                        <td style="font-size: 1.4rem; color: #1A365D; font-weight: 500;">
+                                            <i class="fas fa-calendar-day me-2"></i>
+                                            {{ \Carbon\Carbon::parse($user->birth_date)->translatedFormat('d/m/Y') }}
+                                        </td>
+                                        @if($roleFilter == '3')
+                                            <td class="wrap-text" style="font-size: 1.4rem; color: #1A365D; font-weight: 500;">
+                                                <i class="fas fa-certificate me-2"></i>{{ $user->specialty ?? 'N/A' }}
+                                            </td>
+                                            <td class="wrap-text" style="font-size: 1.4rem; color: #1A365D; font-weight: 500;">
+                                                <i class="fas fa-award me-2"></i>{{ $user->certification ?? 'N/A' }}
+                                            </td>
+                                        @endif
+                                        <td class="pe-4 text-center" style="min-width: 150px;">
+                                            <div class="d-flex justify-content-center" style="gap: 5px;">
+                                                <a href="{{ route('admin.users.edit', ['user' => $user, 'redirect_filter' => request('roleFilter')]) }}" 
+                                                    class="btn py-2 px-3" 
+                                                    style="background-color: #2EC4B6; color: #FFFFFF; font-size: 1.3rem; font-weight: 500; white-space: nowrap;">
+                                                    <i class="fas fa-edit me-1"></i>EDITAR
+                                                </a>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    @empty
+                                    <tr>
+                                        <td colspan="{{ $roleFilter == '3' ? 10 : 8 }}" class="text-center py-4">
+                                            <div class="text-muted">
+                                                <i class="fas fa-users-slash fs-1" style="color: #1A365D; font-size: 3rem;"></i>
+                                                <p class="mt-2 fs-5" style="font-size: 1.4rem; font-weight: 600;">
+                                                    @if(request('search') || request('roleFilter') || request('statusFilter') || request('specialtyFilter') || request('certificationFilter'))
+                                                        No se encontraron usuarios con los filtros aplicados
+                                                    @else
+                                                        No hay usuarios registrados
+                                                    @endif
+                                                </p>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    @endforelse
+                                </tbody>
+                            </table>
+                        </div>
+
+                        <div class="card-footer py-4" style="background-color: #F4F4F4; border-top: 2px solid #1A365D;">
+                            <div class="d-flex justify-content-between align-items-center">
+                                <div class="text-muted" style="font-size: 1.3rem; font-weight: 500;">
+                                    <i class="fas fa-clipboard-list me-2"></i> 
+                                    MOSTRANDO <span class="fw-bold">{{ $users->count() }}</span> DE 
+                                    <span class="fw-bold">{{ $users->total() }}</span> USUARIOS REGISTRADOS
+                                </div>
+                                <div style="font-size: 1.3rem; font-weight: 500;">
+                                    <i class="fas fa-calendar-alt me-2"></i>
+                                    {{ now()->translatedFormat('l, d \d\e F \d\e Y') }}
+                                </div>
+                            </div>
+                        </div>
+
+                        @if($users->hasPages())
+                            <div class="card-footer py-4" style="background-color: #F4F4F4; border-top: 2px solid #1A365D;">
+                                <div class="d-flex justify-content-center">
+                                    {{ $users->appends(request()->query())->links('pagination::bootstrap-4') }}
+                                </div>
+                            </div>
+                        @endif
+                    </div>
                 </div>
             </div>
         </div>
@@ -456,9 +453,9 @@
     .circle-select {
         width: 100%;
         height: 100%;
-        padding: 0 20px;
+        padding: 0 15px; 
         padding-right: 40px;
-        font-size: 1.2rem;
+        font-size: 1rem;
         font-weight: 600;
         color: #1A365D;
         background-color: #F4F4F4;
