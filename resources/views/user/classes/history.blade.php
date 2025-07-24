@@ -26,7 +26,6 @@
                     $class = $registro->class;
                     $statusName = $class->status?->name ? strtolower(trim($class->status->name)) : null;
                     $isCanceled = $statusName === 'cancelada';
-                    $isFull = $statusName === 'cupo lleno';
                     $classDateTime = \Carbon\Carbon::parse($class->date->Format('Y-m-d') . ' ' . $class->time);
                     $isPastClass = $classDateTime->isPast();
                 @endphp
@@ -37,65 +36,56 @@
                             {{ $class->service->name ?? 'Servicio no disponible' }}
                         </h3>
                         @if($isCanceled)
-                            <span class="badge" style="background-color: #FFD166; color: white; font-size: 1.3rem;">
+                            <span class="badge" style="background-color: #FFD166; color: white; font-size: 1.4rem;">
                                 Cancelada
                             </span>
-                        @elseif($isFull)
-                            <span class="badge" style="background-color: #FF6B35; color: white; font-size: 1.3rem;">
-                                Cupo lleno
-                            </span>
                         @elseif($isPastClass)
-                            <span class="badge" style="background-color: #2EC4B6; color: white; font-size: 1.3rem;">
+                            <span class="badge" style="background-color: #2EC4B6; color: white; font-size: 1.4rem;">
                                 Realizada
                             </span>
                         @else
-                            <span class="badge" style="background-color: #1A365D; color: white; font-size: 1.3rem;">
+                            <span class="badge" style="background-color: #1A365D; color: white; font-size: 1.4rem;">
                                 Próxima
                             </span>
                         @endif
                     </div>
                     
-                    <p class="mb-2" style="font-size: 1.3rem; color: #333;">
+                    <p class="mb-2" style="font-size: 1.4rem; color: #333;">
                         <i class="fas fa-info-circle me-2" style="color: #1A365D;"></i>
                         {{ $class->description ?? 'Sin descripción disponible' }}
                     </p>
                     
                     <div class="mb-3">
-                        <p class="mb-1" style="font-size: 1.3rem; color: #333;">
+                        <p class="mb-1" style="font-size: 1.4rem; color: #333;">
                             <i class="fas fa-user-tie me-2" style="color: #1A365D;"></i>
                             Instructor: {{ $class->instructor->names ?? 'N/A' }} {{ $class->instructor->last_name ?? '' }}
                         </p>
-                        <p class="mb-1" style="font-size: 1.3rem; color: #333;">
+                        <p class="mb-1" style="font-size: 1.4rem; color: #333;">
                             <i class="fas fa-calendar-day me-2" style="color: #1A365D;"></i>
                             Fecha: {{ \Carbon\Carbon::parse($class->date)->translatedFormat('d \d\e F \d\e Y') }}
                         </p>
-                        <p class="mb-1" style="font-size: 1.3rem; color: #333;">
+                        <p class="mb-1" style="font-size: 1.4rem; color: #333;">
                             <i class="fas fa-clock me-2" style="color: #1A365D;"></i>
                             Hora: {{ \Carbon\Carbon::parse($class->time)->format('h:i A') }}
                         </p>
-                        <p class="mb-1" style="font-size: 1.3rem; color: #333;">
+                        <p class="mb-1" style="font-size: 1.4rem; color: #333;">
                             <i class="fas fa-users me-2" style="color: #1A365D;"></i>
-                            Cupo: 
-                            @if($isFull)
-                                <span style="color: #FF6B35; font-weight: 600;">Agotado</span>
-                            @else
-                                {{ $class->current_capacity ?? 0 }}/{{ $class->max_capacity ?? 'N/A' }}
-                            @endif
+                            Cupo: {{ $class->registrations_count ?? $class->registrations->count() }}/{{ $class->max_capacity ?? 'N/A' }}
                         </p>
                     </div>
                     
                     @if($isCanceled && !empty($class->comment))
                         <div class="mb-3">
-                            <p class="fw-bold mb-2" style="font-size: 1.3rem; color: #FF6B35;">
+                            <p class="fw-bold mb-2" style="font-size: 1.4rem; color: #FF6B35;">
                                 <i class="fas fa-exclamation-triangle me-2"></i>Motivo de cancelación:
                             </p>
-                            <p style="font-size: 1.3rem; color: #333;">{{ $class->comment }}</p>
+                            <p style="font-size: 1.4rem; color: #333;">{{ $class->comment }}</p>
                         </div>
                     @endif
                 </div>
             @empty
                 <div class="text-center p-4">
-                    <p style="font-size: 1.3rem; color: #666;">No tienes historial de clases aún.</p>
+                    <p style="font-size: 1.4rem; color: #666;">No tienes historial de clases aún.</p>
                 </div>
             @endforelse
         </div>
@@ -143,7 +133,7 @@
     
     @media (max-width: 768px) {
         .payment-card-header h5 {
-            font-size: 1.3rem;
+            font-size: 1.4rem;
         }
         
         .class-card {
