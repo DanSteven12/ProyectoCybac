@@ -10,9 +10,12 @@ class CenterInformation extends Model
     protected $table = 'center_information';
 
     protected $fillable = [
-        'schedule',     // horarios
-        'phone',         // teléfono
-        'email',         // correo
-        'address',       // dirección
+        'opening_time',   // horario de apertura
+        'closing_time',   // horario de cierre
+        'days',           // días de atención
+        'phone',          // teléfono
+        'email',          // correo
+        'address',        // dirección
+        'map_embed',      // iframe de mapa
     ];
 }

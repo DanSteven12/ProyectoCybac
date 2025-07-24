@@ -30,56 +30,73 @@
                     <div class="table-responsive">  
                         <table class="table table-hover align-middle mb-0">
                             <thead style="background-color: #1A365D; color: #FFFFFF;">
-                                <tr>
-                                    <th class="text-center" style="font-size: 1.5rem; font-weight: 600; padding-bottom: 8px;">NOMBRE DEL SERVICIO</th>
-                                    <th class="text-center" style="font-size: 1.5rem; font-weight: 600; padding-bottom: 8px;">DESCRIPCIÓN</th>
-                                    <th class="text-center" style="font-size: 1.5rem; font-weight: 600; width: 250px; padding-bottom: 8px;">ACCIONES</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                @foreach($services as $service)
-                                    <tr style="border-bottom: 2px solid #F4F4F4;">
-                                        <td class="text-center" style="font-size: 1.4rem; color: #1A365D; padding: 16px; width: 35%;">
-                                            <div class="d-flex justify-content-center align-items-start">
-                                                <div class="icon-circle me-3" style="background-color: rgba(26, 54, 93, 0.1); width: 50px; height: 50px; border-radius: 50%; display: flex; align-items: center; justify-content: center; flex-shrink: 0;">
-                                                    <i class="fas fa-heart-pulse fs-4" style="color: #FF6B35;"></i>
-                                                </div>
-                                                <div style="text-align: center; max-width: calc(100% - 70px);">
-                                                    <div style="font-weight: 600; margin-bottom: 8px; word-break: break-word; white-space: normal;">{{ $service->name }}</div>
-                                                    <small class="text-muted" style="font-size: 1.3rem; display: block;">ÚLTIMA ACTUALIZACIÓN: {{ \Carbon\Carbon::parse($service->updated_at)->translatedFormat('d \d\e F \d\e Y') }}</small>
-                                                </div>
-                                            </div>
-                                        </td>
-                                        <td class="text-center" style="font-size: 1.4rem; color: #1A365D; padding: 16px; width: 35%;">
-                                            <div class="d-flex justify-content-center align-items-start">
-                                                <div class="icon-circle me-3" style="background-color: rgba(26, 54, 93, 0.1); width: 50px; height: 50px; border-radius: 50%; display: flex; align-items: center; justify-content: center;">
-                                                    <i class="fas fa-clipboard-list fs-4" style="color: #1A365D;"></i>
-                                                </div>
-                                                <div style="text-align: center; width: 200px; display: flex; flex-direction: column; align-items: center;">
-                                                    <div style="font-weight: 600; margin-bottom: 8px; width: 100%; word-break: break-word; white-space: normal;">{{ $service->description }}</div>
-                                                    <small class="text-muted" style="font-size: 1.3rem;">Detalles del servicio</small>
-                                                </div>
-                                            </div>
-                                        </td>
-                                        <td class="text-center" style="padding: 12px 16px;">
-                                            <div class="btn-group" role="group">
-                                                <a href="{{ route('admin.service.edit', $service->id) }}" class="btn py-2 px-3 mx-1" 
-                                                   style="background-color: #2EC4B6; color: #FFFFFF; font-size: 1.3rem; font-weight: 500; border-radius: 6px; transition: all 0.2s ease;">
-                                                    <i class="fas fa-edit me-2"></i> EDITAR
-                                                </a>
-                                                <form action="{{ route('admin.service.destroy', $service->id) }}" method="POST" class="d-inline form-eliminar">
-                                                    @csrf
-                                                    @method('DELETE')
-                                                    <button type="submit" class="btn py-2 px-3 mx-1 btn-eliminar" 
-                                                            style="background-color: #FF6B35; color: #FFFFFF; font-size: 1.3rem; font-weight: 500; border-radius: 6px; transition: all 0.3s ease; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);">
-                                                        <i class="fas fa-trash-alt me-2"></i> ELIMINAR
-                                                    </button>
-                                                </form>
-                                            </div>
-                                        </td>
-                                    </tr>
-                                @endforeach
-                            </tbody>    
+    <tr>
+        <th class="text-center" style="font-size: 1.5rem; font-weight: 600; padding-bottom: 8px;">
+            NOMBRE DEL SERVICIO
+        </th>
+        <th class="text-center" style="font-size: 1.5rem; font-weight: 600; padding-bottom: 8px;">
+            DESCRIPCIÓN
+        </th>
+        <th class="text-center" style="font-size: 1.5rem; font-weight: 600; padding-bottom: 8px;">
+            IMAGEN
+        </th>
+        <th class="text-center" style="font-size: 1.5rem; font-weight: 600; width: 250px; padding-bottom: 8px;">
+            ACCIONES
+        </th>
+    </tr>
+</thead>
+
+                           <tbody>
+    @forelse($services as $service)
+    <tr style="border-bottom: 2px solid #F4F4F4;">
+        <td class="text-center" style="font-size: 1.4rem; color: #1A365D; font-weight: 500;">
+            {{ $service->name }}
+        </td>
+        <td class="text-center" style="font-size: 1.4rem; color: #1A365D; font-weight: 500;">
+            {{ $service->description }}
+        </td>
+        <td class="text-center">
+            @if($service->image_url)
+            <a href="{{ asset('storage/'.$service->image_url) }}" target="_blank"
+                class="btn py-1 px-3"
+                style="background-color: #2EC4B6; color: #FFFFFF; font-size: 1.2rem;">
+                <i class="fas fa-expand me-1"></i> Ver Imagen
+            </a>
+            @else
+            <span class="text-muted">Sin imagen</span>
+            @endif
+        </td>
+        <td class="text-center">
+            <div class="d-flex justify-content-center flex-wrap gap-2">
+                <a href="{{ route('admin.service.edit', $service->id) }}" class="btn py-1 px-2"
+                    style="background-color: #2EC4B6; color: #FFFFFF; font-size: 1.3rem; font-weight: 500;">
+                    <i class="fas fa-edit me-1"></i>EDITAR
+                </a>
+                <form action="{{ route('admin.service.destroy', $service->id) }}" method="POST" class="d-inline form-eliminar">
+                    @csrf
+                    @method('DELETE')
+                    <button type="submit" class="btn py-1 px-2"
+                        style="background-color: #FF6B35; color: #FFFFFF; font-size: 1.3rem; font-weight: 500;">
+                        <i class="fas fa-trash-alt me-1"></i>ELIMINAR
+                    </button>
+                </form>
+            </div>
+        </td>
+    </tr>
+    @empty
+    <tr>
+        <td colspan="4" class="text-center py-4">
+            <div class="text-muted">
+                <i class="fas fa-concierge-bell fs-1" style="color: #1A365D; font-size: 3rem;"></i>
+                <p class="mt-2 fs-5" style="font-size: 1.4rem; font-weight: 600;">
+                    No hay servicios registrados
+                </p>
+            </div>
+        </td>
+    </tr>
+    @endforelse
+</tbody>
+   
                         </table>
                     </div>
 
@@ -245,11 +262,76 @@
                     }
                 }).then((result) => {
                     if (result.isConfirmed) {
-                        form.submit();
+                        // Enviar el formulario con fetch para manejar la respuesta
+                        fetch(form.action, {
+                            method: 'POST',
+                            headers: {
+                                'X-CSRF-TOKEN': '{{ csrf_token() }}',
+                                'Content-Type': 'application/json',
+                                'Accept': 'application/json'
+                            },
+                            body: JSON.stringify({
+                                _method: 'DELETE'
+                            })
+                        })
+                        .then(response => {
+                            if (!response.ok) {
+                                return response.json().then(err => { throw err; });
+                            }
+                            return response.json();
+                        })
+                        .then(data => {
+                            if (data.success) {
+                                Swal.fire({
+                                    title: '¡Eliminado!',
+                                    text: 'El servicio ha sido eliminado correctamente.',
+                                    icon: 'success',
+                                    confirmButtonText: 'Aceptar'
+                                }).then(() => {
+                                    window.location.reload();
+                                });
+                            }
+                        })
+                        .catch(error => {
+                            console.error('Error:', error);
+                            let errorMessage = 'Ocurrió un error al eliminar el servicio.';
+                            
+                            if (error.message && error.message.includes('foreign key constraint')) {
+                                errorMessage = 'No se puede eliminar este servicio porque está siendo utilizado en clases existentes. Primero elimine o modifique las clases asociadas.';
+                            }
+                            
+                            Swal.fire({
+                                title: 'Error',
+                                html: `
+                                    <div style="text-align: center;">
+                                        <i class="fas fa-times-circle" style="color: #FF6B35; font-size: 3rem; margin-bottom: 1rem;"></i>
+                                        <p>${errorMessage}</p>
+                                    </div>`,
+                                icon: 'error',
+                                confirmButtonText: 'Entendido'
+                            });
+                        });
                     }
                 });
             });
         });
     });
 </script>
+
+@if(session('error'))
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        Swal.fire({
+            title: 'Error',
+            html: `
+                <div style="text-align: center;">
+                    <i class="fas fa-times-circle" style="color: #FF6B35; font-size: 3rem; margin-bottom: 1rem;"></i>
+                    <p>{{ session('error') }}</p>
+                </div>`,
+            icon: 'error',
+            confirmButtonText: 'Entendido'
+        });
+    });
+</script>
+@endif
 @endsection

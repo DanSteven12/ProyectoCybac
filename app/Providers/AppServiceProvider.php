@@ -9,7 +9,6 @@ use Illuminate\Support\Facades\Auth;
 use Carbon\Carbon;
 use App\Models\Payment;
 use App\Models\CenterInformation;
-use App\Models\ServicesHome;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -33,7 +32,6 @@ class AppServiceProvider extends ServiceProvider
     'layouts.partials.admi-navbar',
     'layouts.partials.footer'  // Agregas la vista del footer aquí
 ], function ($view) {
-    $view->with('servicesHome', \App\Models\ServicesHome::take(12)->get());
     $view->with('services', \App\Models\Service::all());  // Aquí agregas $services
 });
 

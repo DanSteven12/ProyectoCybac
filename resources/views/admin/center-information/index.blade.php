@@ -38,11 +38,23 @@
                         <div class="space-y-4" style="font-size: 1.4rem; color: #1A365D;">
                             <p>
                                 <span style="font-weight: 600;">
-                                    <i class="fas fa-clock me-2"></i>Horario:
+                                    <i class="fas fa-calendar-alt me-2"></i>Días de atención:
                                 </span> 
-                                {{ $info->schedule }}
+                                {{ $info->days ?? 'No especificado' }}
                             </p>
                             <p>
+    <span style="font-weight: 600;">
+        <i class="fas fa-clock me-2"></i>Horario de apertura:
+    </span> 
+    {{ $info->opening_time ? \Carbon\Carbon::parse($info->opening_time)->format('h:i A') : 'No especificado' }}
+</p>
+<p>
+    <span style="font-weight: 600;">
+        <i class="fas fa-clock me-2"></i>Horario de cierre:
+    </span> 
+    {{ $info->closing_time ? \Carbon\Carbon::parse($info->closing_time)->format('h:i A') : 'No especificado' }}
+</p>
+
                                 <span style="font-weight: 600;">
                                     <i class="fas fa-phone me-2"></i>Teléfono:
                                 </span> 
@@ -60,6 +72,17 @@
                                 </span> 
                                 {{ $info->address }}
                             </p>
+
+                            @if($info->map_embed)
+                            <div class="mt-4">
+                                <span style="font-weight: 600;">
+                                    <i class="fas fa-map me-2"></i>Ubicación en mapa:
+                                </span>
+                                <div class="mt-2" style="border:1px solid #1A365D; border-radius:6px; overflow:hidden;">
+                                    {!! $info->map_embed !!}
+                                </div>
+                            </div>
+                            @endif
                         </div>
 
                         <div class="d-flex justify-content-end mt-5">
@@ -99,8 +122,6 @@
         </div>
     </div>
 </div>
-
-
 <style>
     .card {
         border-radius: 10px;

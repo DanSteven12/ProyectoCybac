@@ -40,7 +40,7 @@
                         
                         <div class="mb-3">
                             <p class="mb-1" style="font-size: 1.3rem; color: #333;"><i class="fas fa-user-tie me-2" style="color: #1A365D;"></i>Instructor: {{ $class->instructor->names }} {{ $class->instructor->last_name }}</p>
-                            <p class="mb-1" style="font-size: 1.3rem; color: #333;"><i class="fas fa-calendar-day me-2" style="color: #1A365D;"></i>Fecha: {{ $class->date->format('d/m/Y') }}</p>
+                            <p class="mb-1" style="font-size: 1.3rem; color: #333;"><i class="fas fa-calendar-day me-2" style="color: #1A365D;"></i>Fecha: {{ $class->date->translatedFormat('d \d\e F \d\e Y') }}</p>
                             <p class="mb-1" style="font-size: 1.3rem; color: #333;"><i class="fas fa-clock me-2" style="color: #1A365D;"></i>Hora: {{ \Carbon\Carbon::parse($class->time)->format('h:i A') }}</p>
                         </div>
                         
@@ -212,7 +212,7 @@
                     
                     <div class="mb-3">
                         <p class="mb-1" style="font-size: 1.3rem; color: #333;"><i class="fas fa-user-tie me-2" style="color: #1A365D;"></i>Instructor: {{ $class->instructor->names }} {{ $class->instructor->last_name }}</p>
-                        <p class="mb-1" style="font-size: 1.3rem; color: #333;"><i class="fas fa-calendar-day me-2" style="color: #1A365D;"></i>Fecha: {{ $class->date->format('d/m/Y') }}</p>
+                        <p class="mb-1" style="font-size: 1.3rem; color: #333;"><i class="fas fa-calendar-day me-2" style="color: #1A365D;"></i>Fecha: {{ $class->date->translatedFormat('d \d\e F \d\e Y') }}</p>
                         <p class="mb-1" style="font-size: 1.3rem; color: #333;"><i class="fas fa-clock me-2" style="color: #1A365D;"></i>Hora: {{ \Carbon\Carbon::parse($class->time)->format('h:i A') }}</p>
                     </div>
                     
@@ -225,20 +225,27 @@
                         </ul>
                     </div>
                     
-                    <div class="d-flex justify-content-end">
-                        @if ($canCancel)
-                            <form method="POST" action="{{ route('user.classes.cancel', $class->id) }}" class="d-inline-block" id="cancelForm{{$class->id}}">
-                                @csrf
-                                @method('DELETE')
-                                <button type="button" class="btn px-4 py-2" style="background-color: #FF6B35; color: white; font-size: 1.3rem; min-width: 100px;" 
-                                    onclick="confirmCancel({{$class->id}}, '{{$class->service->name}}', '{{$class->date->format('d/m/Y')}}')">
-                                    <i class="fas fa-times-circle me-1"></i> Cancelar
-                                </button>
-                            </form>
-                        @else
-                            <span class="badge bg-secondary px-4 py-2" style="font-size: 1.3rem; min-width: 100px; line-height: normal;">No se puede cancelar (menos de 2 horas)</span>
-                        @endif
-                    </div>
+                    <!-- Botón de cancelación -->
+                   <div class="d-flex justify-content-end">
+    @if ($canCancel)
+        <form method="POST" action="{{ route('user.classes.cancel', $class->id) }}" class="d-inline-block" id="cancelForm{{$class->id}}">
+            @csrf
+            @method('DELETE')
+            <button type="button" class="btn px-4 py-2" style="background-color: #FF6B35; color: white; font-size: 1.3rem; min-width: 100px;" 
+                onclick="confirmCancel({{$class->id}}, '{{$class->service->name}}', '{{$class->date->translatedFormat('d M Y')}}')">
+                <i class="fas fa-times-circle me-1"></i> Cancelar
+            </button>
+        </form>
+    @else
+        <span class="badge bg-secondary px-4 py-2" style="font-size: 1.3rem; min-width: 100px; line-height: normal;">
+            @if(isset($classDateTime) && now()->gte($classDateTime))
+                La clase ya ha finalizado
+            @else
+                No se puede cancelar (menos de 2 horas)
+            @endif
+        </span>
+    @endif
+</div>
                 </div>
             </div>
             @endforeach
@@ -446,10 +453,10 @@
 
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script>
-    function confirmCancel(classId, className, classDate) {
+     function confirmCancel(classId, className, classDate) {
         Swal.fire({
             title: '¿Cancelar reserva?',
-            html: ¿Estás seguro que deseas cancelar la clase <strong>${className}</strong> del <strong>${classDate}</strong>?,
+            html: `¿Estás seguro que deseas cancelar la clase <strong>${className}</strong> del <strong>${classDate}</strong>?`,
             icon: 'warning',
             showCancelButton: true,
             confirmButtonText: 'Sí, cancelar',
@@ -465,7 +472,7 @@
             }
         }).then((result) => {
             if (result.isConfirmed) {
-                document.getElementById(cancelForm${classId}).submit();
+                document.getElementById(`cancelForm${classId}`).submit();
             }
         });
     }

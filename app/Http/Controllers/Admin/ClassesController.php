@@ -28,15 +28,20 @@ class ClassesController extends Controller
 {
     $services = Service::all();
 
-    // Obtener solo usuarios con el rol "Instructor"
+    // Solo instructores con status "Activo" de tipo 1
     $instructors = User::whereHas('role', function ($query) {
-        $query->where('slug', 'instructor'); // Asegúrate que este slug exista en tu tabla roles
-    })->get();
+        $query->where('slug', 'instructor');
+    })
+    ->whereHas('status', function ($query) {
+        $query->where('name', 'Activo')->where('type', 1); // Estado activo para usuarios
+    })
+    ->get();
 
     $statuses = Status::where('type', 3)->get(); // Estados para clases
 
     return view('admin.classes.create', compact('services', 'instructors', 'statuses'));
 }
+
 
 
     // Guardar nueva clase
@@ -63,15 +68,21 @@ class ClassesController extends Controller
 
     // Mostrar formulario para editar una clase
     public function edit(Classes $class)
-    {
-        $services = Service::all();
-        $instructors = User::whereHas('role', function ($query) {
-    $query->where('slug', 'instructor'); // o usa name_rol si no tienes slug
-})->get();
-        $statuses = Status::where('type', 3)->get(); // Estados para clases
+{
+    $services = Service::all();
+    $instructors = User::whereHas('role', function ($query) {
+        $query->where('slug', 'instructor');
+    })
+    ->whereHas('status', function ($query) {
+        $query->where('name', 'Activo')->where('type', 1);
+    })
+    ->get();
 
-        return view('admin.classes.edit', compact('class', 'services', 'instructors', 'statuses'));
-    }
+    // Add this line to get the statuses for classes (type 3)
+    $statuses = Status::where('type', 3)->get();
+
+    return view('admin.classes.edit', compact('class', 'services', 'instructors', 'statuses'));
+}
 
     // Actualizar clase (incluye actualización desde inscripciones)
    public function update(Request $request, Classes $class)

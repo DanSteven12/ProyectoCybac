@@ -32,39 +32,53 @@
                         <table class="table table-hover align-middle mb-0">
                             <thead style="background-color: #1A365D; color: #FFFFFF;">
                                 <tr>
-                                    <th class="text-center" style="font-size: 1.4rem; font-weight: 600;">NOMBRE</th>
-                                    <th class="text-center" style="font-size: 1.4rem; font-weight: 600;">DESCRIPCIÓN</th>
-                                    <th class="text-center" style="font-size: 1.4rem; font-weight: 600;">PRECIO</th>
-                                    <th class="text-center" style="font-size: 1.4rem; font-weight: 600;">DURACIÓN</th>
-                                    <th class="text-center" style="font-size: 1.4rem; font-weight: 600;">ESTADO</th>
-                                    <th class="text-center" style="font-size: 1.4rem; font-weight: 600; width: 250px;">ACCIONES</th>
+                                    <th class="text-center" style="font-size: 1.4rem; font-weight: 600;">
+                                        <i class="fas fa-signature me-2"></i>NOMBRE
+                                    </th>
+                                    <th class="text-center" style="font-size: 1.4rem; font-weight: 600;">
+                                        <i class="fas fa-align-left me-2"></i>DESCRIPCIÓN
+                                    </th>
+                                    <th class="text-center" style="font-size: 1.4rem; font-weight: 600;">
+                                        <i class="fas fa-tag me-2"></i>PRECIO
+                                    </th>
+                                    <th class="text-center" style="font-size: 1.4rem; font-weight: 600;">
+                                        <i class="far fa-calendar-alt me-2"></i>DURACIÓN
+                                    </th>
+                                    <th class="text-center" style="font-size: 1.4rem; font-weight: 600;">
+                                        <i class="fas fa-info-circle me-2"></i>ESTADO
+                                    </th>
+                                    <th class="text-center" style="font-size: 1.4rem; font-weight: 600; width: 250px;">
+                                        <i class="fas fa-cogs me-2"></i>ACCIONES
+                                    </th>
                                 </tr>
                             </thead>
                             <tbody>
                                 @foreach($memberships as $membership)
                                     <tr style="border-bottom: 2px solid #F4F4F4;">
                                         <td class="text-center" style="font-size: 1.3rem; font-weight: 600; color: #1A365D; padding: 12px 16px;">
-                                            {{ $membership->name }}
+                                            <i class="fas fa-id-card me-2 text-primary"></i>{{ $membership->name }}
                                         </td>
-                                        <td class="text-center" style="font-size: 1.3rem; color: #1A365D; padding: 12px 16px;">
-                                            <div class="description-container" style="max-width: 300px; margin: 0 auto;">
-                                                <div class="short-description">
-                                                    {{ Str::limit($membership->description, 50) }}
-                                                    @if(strlen($membership->description) > 50)
-                                                        <a href="#" class="show-more" style="color: #1A365D; font-weight: 600;">... Ver más</a>
-                                                    @endif
-                                                </div>
-                                                <div class="full-description d-none">
-                                                    {{ $membership->description }}
-                                                    <a href="#" class="show-less" style="color: #1A365D; font-weight: 600;"> Ver menos</a>
-                                                </div>
-                                            </div>
+                                       <td class="text-center" style="font-size: 1.3rem; color: #1A365D; padding: 12px 16px;">
+    <div class="description-container" style="max-width: 300px; margin: 0 auto;">
+        <div class="short-description">
+            <i class="fas fa-align-left me-2 text-muted"></i>
+            {{ Str::limit($membership->description, 50) }}
+            @if(strlen($membership->description) > 50)
+                <a href="#" class="show-more" style="color: #1A365D; font-weight: 600;">... <i class="fas fa-chevron-down"></i> Ver más</a>
+            @endif
+        </div>
+        <div class="full-description d-none">
+            <i class="fas fa-align-left me-2 text-muted"></i>
+            {{ $membership->description }}
+            <a href="#" class="show-less" style="color: #1A365D; font-weight: 600;"> <i class="fas fa-chevron-up"></i> Ver menos</a>
+        </div>
+    </div>
+</td>
+                                        <td class="text-center" style="font-size: 1.3rem; font-weight: 600; color: #1A365D; padding: 12px 16px;">
+                                            <i class="fas fa-dollar-sign me-2 text-success"></i>${{ number_format($membership->price, 2) }}
                                         </td>
                                         <td class="text-center" style="font-size: 1.3rem; font-weight: 600; color: #1A365D; padding: 12px 16px;">
-                                            ${{ number_format($membership->price, 2) }}
-                                        </td>
-                                        <td class="text-center" style="font-size: 1.3rem; font-weight: 600; color: #1A365D; padding: 12px 16px;">
-                                            {{ $membership->duration }} días
+                                            <i class="far fa-clock me-2 text-info"></i>{{ $membership->duration }} días
                                         </td>
                                         <td class="text-center" style="padding: 12px 16px;">
                                             @php
@@ -75,22 +89,31 @@
                                                     'pendiente' => '#FFD166',
                                                 ];
                                                 $color = $colors[$status] ?? '#A9A9A9';
+                                                $icons = [
+                                                    'activo' => 'fa-check-circle',
+                                                    'inactivo' => 'fa-times-circle',
+                                                    'pendiente' => 'fa-clock'
+                                                ];
+                                                $icon = $icons[$status] ?? 'fa-question-circle';
                                             @endphp
                                             <span class="badge" style="background-color: {{ $color }}; color: #FFFFFF; font-size: 1.3rem; padding: 8px 12px;">
+                                                <i class="fas {{ $icon }} me-1"></i>
                                                 {{ ucfirst($membership->status->name ?? 'N/A') }}
                                             </span>
                                         </td>
                                         <td class="text-center" style="padding: 12px 16px;">
                                             <div class="btn-group" role="group">
                                                 <a href="{{ route('admin.memberships.edit', $membership) }}" class="btn py-2 px-3 mx-1" 
-                                                    style="background-color: #2EC4B6; color: #FFFFFF; font-size: 1.3rem; font-weight: 500; border-radius: 6px; transition: all 0.2s ease;">
+                                                    style="background-color: #2EC4B6; color: #FFFFFF; font-size: 1.3rem; font-weight: 500; border-radius: 6px; transition: all 0.2s ease;"
+                                                    data-bs-toggle="tooltip" data-bs-placement="top" title="Editar">
                                                     <i class="fas fa-edit me-2"></i> EDITAR
                                                 </a>
                                                 <form action="{{ route('admin.memberships.destroy', $membership) }}" method="POST" class="d-inline form-eliminar">
                                                     @csrf
                                                     @method('DELETE')
                                                     <button type="submit" class="btn py-2 px-3 mx-1 btn-eliminar" 
-                                                            style="background-color: #FF6B35; color: #FFFFFF; font-size: 1.3rem; font-weight: 500;">
+                                                            style="background-color: #FF6B35; color: #FFFFFF; font-size: 1.3rem; font-weight: 500;"
+                                                            data-bs-toggle="tooltip" data-bs-placement="top" title="Eliminar">
                                                         <i class="fas fa-trash-alt me-2"></i> ELIMINAR
                                                     </button>
                                                 </form>
@@ -223,9 +246,38 @@
             width: 100%;
         }
         
-        .description-container {
-            max-width: 200px !important;
-        }
+         .description-container {
+        max-width: 150px !important;
+        white-space: normal !important;
+    }
+    
+    .short-description, .full-description {
+        white-space: normal;
+        word-break: break-word;
+        text-align: left;
+    }
+    
+    .show-more, .show-less {
+        display: block;
+        margin-top: 5px;
+        white-space: nowrap;
+    }
+    
+    .table td:nth-child(2) { /* Columna de descripción */
+        min-width: 150px;
+        max-width: 180px;
+    }
+}
+
+@media (max-width: 768px) {
+    .description-container {
+        max-width: 120px !important;
+    }
+    
+    .table td:nth-child(2) { /* Columna de descripción */
+        min-width: 120px;
+        max-width: 150px;
+    }
     }
 </style>
 
@@ -258,6 +310,12 @@
                 container.querySelector('.full-description').classList.add('d-none');
                 container.querySelector('.short-description').classList.remove('d-none');
             });
+        });
+
+        // Inicializar tooltips
+        const tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
+        tooltipTriggerList.map(function (tooltipTriggerEl) {
+            return new bootstrap.Tooltip(tooltipTriggerEl);
         });
 
         // Delete confirmation

@@ -27,7 +27,7 @@
                     $statusName = $class->status?->name ? strtolower(trim($class->status->name)) : null;
                     $isCanceled = $statusName === 'cancelada';
                     $isFull = $statusName === 'cupo lleno';
-                    $classDateTime = \Carbon\Carbon::parse($class->date->format('Y-m-d') . ' ' . $class->time);
+                    $classDateTime = \Carbon\Carbon::parse($class->date->Format('Y-m-d') . ' ' . $class->time);
                     $isPastClass = $classDateTime->isPast();
                 @endphp
 
@@ -37,7 +37,7 @@
                             {{ $class->service->name ?? 'Servicio no disponible' }}
                         </h3>
                         @if($isCanceled)
-                            <span class="badge" style="background-color: #FF6B35; color: white; font-size: 1.3rem;">
+                            <span class="badge" style="background-color: #FFD166; color: white; font-size: 1.3rem;">
                                 Cancelada
                             </span>
                         @elseif($isFull)
@@ -67,7 +67,7 @@
                         </p>
                         <p class="mb-1" style="font-size: 1.3rem; color: #333;">
                             <i class="fas fa-calendar-day me-2" style="color: #1A365D;"></i>
-                            Fecha: {{ \Carbon\Carbon::parse($class->date)->format('d/m/Y') }}
+                            Fecha: {{ \Carbon\Carbon::parse($class->date)->translatedFormat('d \d\e F \d\e Y') }}
                         </p>
                         <p class="mb-1" style="font-size: 1.3rem; color: #333;">
                             <i class="fas fa-clock me-2" style="color: #1A365D;"></i>

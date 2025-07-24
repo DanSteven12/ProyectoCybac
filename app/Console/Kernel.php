@@ -15,6 +15,8 @@ class Kernel extends ConsoleKernel
     protected $commands = [
         \App\Console\Commands\NotifyCancelledClasses::class,
         \App\Console\Commands\CheckMembershipExpirations::class,
+        \App\Console\Commands\ReactivateUsers::class,
+        \App\Console\Commands\DeactivateUsers::class,
     ];
 
     /**
@@ -24,8 +26,8 @@ class Kernel extends ConsoleKernel
     {
         $schedule->command('check:memberships')->hourly();
         $schedule->command('classes:notify-cancelled')->everyMinute();
-
-
+        $schedule->command('users:reactivate')->everyMinute();       // Reactiva usuarios con pagos vigentes
+        $schedule->command('users:deactivate')->everyMinute();       // Desactiva usuarios sin pagos válidos
     }
 
     /**

@@ -31,8 +31,9 @@
                         </div>
                     @endif
                     
-                    <form method="POST" action="{{ route('admin.users.store') }}" class="needs-validation" novalidate>
+                    <form action="{{ route('admin.users.store') }}" method="POST" class="needs-validation" novalidate>
                         @csrf
+                        <input type="hidden" name="redirect_filter" value="{{ request('roleFilter', '3') }}">
 
                         <div class="row g-3">
                             <!-- Columna Izquierda -->
@@ -42,12 +43,16 @@
                                     <label for="names" class="form-label fw-bold" style="color: #1A365D; font-size: 1.4rem;">Nombres</label>
                                     <input type="text" class="form-control @error('names') is-invalid @enderror" 
                                         id="names" name="names" value="{{ old('names') }}" 
-                                        style="border: 2px solid #1A365D; border-radius: 6px; padding: 10px 14px; font-size: 1.3rem;" required>
+                                        style="border: 2px solid #1A365D; border-radius: 6px; padding: 10px 14px; font-size: 1.3rem;" 
+                                        required
+                                        placeholder="Ingrese nombres (solo letras y espacios)"
+                                        maxlength="50">
                                     @error('names')
                                         <div class="invalid-feedback" style="font-size: 1.2rem;">
                                             <i class="fas fa-exclamation-circle me-2"></i>{{ $message }}
                                         </div>
                                     @enderror
+                                    <small class="text-muted d-block mt-1" id="namesCharCount">{{ strlen(preg_replace('/[^a-zA-ZáéíóúÁÉÍÓÚñÑ\s]/', '', old('names'))) }} / 50 caracteres</small>
                                 </div>
 
                                 <!-- Apellidos -->
@@ -55,12 +60,16 @@
                                     <label for="last_name" class="form-label fw-bold" style="color: #1A365D; font-size: 1.4rem;">Apellidos</label>
                                     <input type="text" class="form-control @error('last_name') is-invalid @enderror" 
                                         id="last_name" name="last_name" value="{{ old('last_name') }}" 
-                                        style="border: 2px solid #1A365D; border-radius: 6px; padding: 10px 14px; font-size: 1.3rem;" required>
+                                        style="border: 2px solid #1A365D; border-radius: 6px; padding: 10px 14px; font-size: 1.3rem;" 
+                                        required
+                                        placeholder="Ingrese apellidos (solo letras y espacios)"
+                                        maxlength="50">
                                     @error('last_name')
                                         <div class="invalid-feedback" style="font-size: 1.2rem;">
                                             <i class="fas fa-exclamation-circle me-2"></i>{{ $message }}
                                         </div>
                                     @enderror
+                                    <small class="text-muted d-block mt-1" id="lastNameCharCount">{{ strlen(preg_replace('/[^a-zA-ZáéíóúÁÉÍÓÚñÑ\s]/', '', old('last_name'))) }} / 50 caracteres</small>
                                 </div>
 
                                 <!-- Email -->
@@ -68,7 +77,9 @@
                                     <label for="email" class="form-label fw-bold" style="color: #1A365D; font-size: 1.4rem;">Email</label>
                                     <input type="email" class="form-control @error('email') is-invalid @enderror" 
                                         id="email" name="email" value="{{ old('email') }}" 
-                                        style="border: 2px solid #1A365D; border-radius: 6px; padding: 10px 14px; font-size: 1.3rem;" required>
+                                        style="border: 2px solid #1A365D; border-radius: 6px; padding: 10px 14px; font-size: 1.3rem;" 
+                                        required
+                                        placeholder="ejemplo@dominio.com">
                                     @error('email')
                                         <div class="invalid-feedback" style="font-size: 1.2rem;">
                                             <i class="fas fa-exclamation-circle me-2"></i>{{ $message }}
@@ -81,12 +92,16 @@
                                     <label for="password" class="form-label fw-bold" style="color: #1A365D; font-size: 1.4rem;">Contraseña</label>
                                     <input type="password" class="form-control @error('password') is-invalid @enderror" 
                                         id="password" name="password" 
-                                        style="border: 2px solid #1A365D; border-radius: 6px; padding: 10px 14px; font-size: 1.3rem;" required>
+                                        style="border: 2px solid #1A365D; border-radius: 6px; padding: 10px 14px; font-size: 1.3rem;" 
+                                        required
+                                        placeholder="Mínimo 8 caracteres"
+                                        minlength="8">
                                     @error('password')
                                         <div class="invalid-feedback" style="font-size: 1.2rem;">
                                             <i class="fas fa-exclamation-circle me-2"></i>{{ $message }}
                                         </div>
                                     @enderror
+                                    <small class="text-muted d-block mt-1" id="passwordHelp">La contraseña debe tener al menos 8 caracteres</small>
                                 </div>
 
                                 <!-- Confirmar Contraseña -->
@@ -94,7 +109,9 @@
                                     <label for="password_confirmation" class="form-label fw-bold" style="color: #1A365D; font-size: 1.4rem;">Confirmar Contraseña</label>
                                     <input type="password" class="form-control" 
                                         id="password_confirmation" name="password_confirmation" 
-                                        style="border: 2px solid #1A365D; border-radius: 6px; padding: 10px 14px; font-size: 1.3rem;" required>
+                                        style="border: 2px solid #1A365D; border-radius: 6px; padding: 10px 14px; font-size: 1.3rem;" 
+                                        required
+                                        placeholder="Repita la contraseña">
                                 </div>
                             </div>
 
@@ -105,10 +122,10 @@
                                     <label for="rol_id" class="form-label fw-bold" style="color: #1A365D; font-size: 1.4rem;">Rol</label>
                                     <select class="form-select @error('rol_id') is-invalid @enderror" id="rol_id" name="rol_id" 
                                         style="border: 2px solid #1A365D; border-radius: 6px; padding: 10px 14px; font-size: 1.3rem;" required>
-                                        <option value="">Seleccione un rol</option>
+                                        <option value="" selected disabled>-- Seleccione un rol --</option>
                                         @foreach($roles as $role)
-                                            @if($role->name_rol !== 'Usuario' && $role->name_rol !== 'Administrador')
-                                                <option value="{{ $role->id }}" {{ old('rol_id') == $role->id ? 'selected' : '' }}>
+                                            @if($role->name_rol !== 'Usuario')
+                                                <option value="{{ $role->id }}" {{ old('rol_id') == $role->id ? 'selected' : '' }} data-role-name="{{ $role->name_rol }}">
                                                     {{ $role->name_rol }}
                                                 </option>
                                             @endif
@@ -126,7 +143,7 @@
                                     <label for="status_id" class="form-label fw-bold" style="color: #1A365D; font-size: 1.4rem;">Estado</label>
                                     <select class="form-select @error('status_id') is-invalid @enderror" id="status_id" name="status_id" 
                                             style="border: 2px solid #1A365D; border-radius: 6px; padding: 10px 14px; font-size: 1.3rem;" required>
-                                        <option value="">Seleccione estado</option>
+                                        <option value="" selected disabled>-- Seleccione estado --</option>
                                         @foreach ($statuses as $status)
                                             @if(in_array($status->name, ['Activo', 'Inactivo', 'Pendiente']))
                                                 <option value="{{ $status->id }}" {{ old('status_id') == $status->id ? 'selected' : '' }}>
@@ -142,7 +159,7 @@
                                     @enderror
                                 </div>
 
-                                <!-- Fecha de Nacimiento modificada -->
+                                <!-- Fecha de Nacimiento -->
                                 <div class="mb-3">
                                     <label for="birth_date" class="form-label fw-bold" style="color: #1A365D; font-size: 1.4rem;">Fecha de Nacimiento</label>
                                     <input type="text" class="form-control @error('birth_date') is-invalid @enderror" 
@@ -182,7 +199,6 @@
                                     @enderror
                                 </div>
 
-                                <!-- Sección de Especialidad y Certificación -->
                                 <div class="row g-2">
                                     <!-- Especialidad -->
                                     <div class="col-md-6">
@@ -193,12 +209,16 @@
                                             <input type="text" class="form-control @error('specialty') is-invalid @enderror" 
                                                 id="specialty" name="specialty" value="{{ old('specialty') }}"
                                                 style="border: 2px solid #1A365D; border-radius: 6px; padding: 10px 14px; 
-                                                        font-size: 1.3rem; width: 100%;">
+                                                        font-size: 1.3rem; width: 100%;"
+                                                placeholder="Ej: Cardiología"
+                                                maxlength="100"
+                                                {{ old('rol_id') && $roles->find(old('rol_id'))->name_rol !== 'Instructor' ? 'disabled' : '' }}>
                                             @error('specialty')
                                                 <div class="invalid-feedback mt-1" style="font-size: 1.2rem;">
-                                                    {{ $message }}
+                                                    <i class="fas fa-exclamation-circle me-2"></i>{{ $message }}
                                                 </div>
                                             @enderror
+                                            <small class="text-muted d-block mt-1" id="specialtyCharCount">{{ strlen(old('specialty')) }} / 100 caracteres</small>
                                         </div>
                                     </div>
 
@@ -211,12 +231,16 @@
                                             <input type="text" class="form-control @error('certification') is-invalid @enderror" 
                                                 id="certification" name="certification" value="{{ old('certification') }}"
                                                 style="border: 2px solid #1A365D; border-radius: 6px; padding: 10px 14px; 
-                                                        font-size: 1.3rem; width: 100%;">
+                                                        font-size: 1.3rem; width: 100%;"
+                                                placeholder="Ej: ABC12345"
+                                                maxlength="50"
+                                                {{ old('rol_id') && $roles->find(old('rol_id'))->name_rol !== 'Instructor' ? 'disabled' : '' }}>
                                             @error('certification')
                                                 <div class="invalid-feedback mt-1" style="font-size: 1.2rem;">
-                                                    {{ $message }}
+                                                    <i class="fas fa-exclamation-circle me-2"></i>{{ $message }}
                                                 </div>
                                             @enderror
+                                            <small class="text-muted d-block mt-1" id="certificationCharCount">{{ strlen(old('certification')) }} / 50 caracteres</small>
                                         </div>
                                     </div>
                                 </div>
@@ -225,7 +249,7 @@
 
                         <!-- Botones -->
                         <div class="d-flex justify-content-end gap-2 mt-3">
-                            <a href="{{ route('admin.users.index') }}" class="btn py-1 px-3" 
+                            <a href="{{ route('admin.users.index', ['roleFilter' => $redirectFilter]) }}" class="btn py-1 px-3" 
                             style="background-color: #1A365D; color: #FFFFFF; font-weight: 600; font-size: 1.3rem; border: 2px solid #1A365D;">
                                 <i class="fas fa-times-circle me-1"></i> CANCELAR
                             </a>
@@ -279,6 +303,25 @@
     .btn:hover {
         transform: translateY(-3px);
         box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+    }
+    
+    /* Estilos para validación visual */
+    .is-valid {
+        border-color: #28a745 !important;
+        background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' width='8' height='8' viewBox='0 0 8 8'%3e%3cpath fill='%2328a745' d='M2.3 6.73L.6 4.53c-.4-1.04.46-1.4 1.1-.8l1.1 1.4 3.4-3.8c.6-.63 1.6-.27 1.2.7l-4 4.6c-.43.5-.8.4-1.1.1z'/%3e%3c/svg%3e");
+        background-repeat: no-repeat;
+        background-position: right calc(0.375em + 0.1875rem) center;
+        background-size: calc(0.75em + 0.375rem) calc(0.75em + 0.375rem);
+        padding-right: 2.25rem;
+    }
+    
+    .is-invalid {
+        border-color: #dc3545 !important;
+        background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' fill='none' stroke='%23dc3545' viewBox='0 0 12 12'%3e%3ccircle cx='6' cy='6' r='4.5'/%3e%3cpath stroke-linejoin='round' d='M5.8 3.6h.4L6 6.5z'/%3e%3ccircle cx='6' cy='8.2' r='.6' fill='%23dc3545' stroke='none'/%3e%3c/svg%3e");
+        background-repeat: no-repeat;
+        background-position: right calc(0.375em + 0.1875rem) center;
+        background-size: calc(0.75em + 0.375rem) calc(0.75em + 0.375rem);
+        padding-right: 2.25rem;
     }
     
     /* ESTILOS DEL ALERT - TAMAÑOS AUMENTADOS */
@@ -502,6 +545,14 @@
         padding-top: 1rem !important;
         padding-bottom: 1rem !important;
     }
+
+    /* Estilo para campos deshabilitados */
+    .form-control:disabled {
+        background-color: #f8f9fa !important;
+        border-color: #dee2e6 !important;
+        color: #6c757d !important;
+        cursor: not-allowed !important;
+    }
 </style>
 
 @section('scripts')
@@ -627,6 +678,221 @@
                 birthDatePicker.open();
             }
         });
+
+        // Función para contar caracteres válidos (letras y espacios, excluyendo números y especiales)
+        function countValidChars(text) {
+            const cleanText = text.replace(/[^a-zA-ZáéíóúÁÉÍÓÚñÑ\s]/g, '');
+            return cleanText.length;
+        }
+
+        // Contador de caracteres para nombres
+        const namesInput = document.getElementById('names');
+        const namesCharCount = document.getElementById('namesCharCount');
+        
+        namesInput.addEventListener('input', function() {
+            // Eliminar números y caracteres especiales
+            this.value = this.value.replace(/[^a-zA-ZáéíóúÁÉÍÓÚñÑ\s]/g, '');
+            
+            const charCountValue = countValidChars(this.value);
+            namesCharCount.textContent = `${charCountValue} / 50 caracteres`;
+            
+            // Validación visual
+            if (this.checkValidity()) {
+                this.classList.remove('is-invalid');
+                if (this.value) {
+                    this.classList.add('is-valid');
+                } else {
+                    this.classList.remove('is-valid');
+                }
+            } else {
+                this.classList.remove('is-valid');
+                this.classList.add('is-invalid');
+            }
+        });
+
+        // Contador de caracteres para apellidos
+        const lastNameInput = document.getElementById('last_name');
+        const lastNameCharCount = document.getElementById('lastNameCharCount');
+        
+        lastNameInput.addEventListener('input', function() {
+            // Eliminar números y caracteres especiales
+            this.value = this.value.replace(/[^a-zA-ZáéíóúÁÉÍÓÚñÑ\s]/g, '');
+            
+            const charCountValue = countValidChars(this.value);
+            lastNameCharCount.textContent = `${charCountValue} / 50 caracteres`;
+            
+            // Validación visual
+            if (this.checkValidity()) {
+                this.classList.remove('is-invalid');
+                if (this.value) {
+                    this.classList.add('is-valid');
+                } else {
+                    this.classList.remove('is-valid');
+                }
+            } else {
+                this.classList.remove('is-valid');
+                this.classList.add('is-invalid');
+            }
+        });
+
+        // Contador de caracteres para especialidad
+        const specialtyInput = document.getElementById('specialty');
+        const specialtyCharCount = document.getElementById('specialtyCharCount');
+        
+        specialtyInput.addEventListener('input', function() {
+            const charCountValue = this.value.length;
+            specialtyCharCount.textContent = `${charCountValue} / 100 caracteres`;
+            
+            // Validación visual
+            if (this.checkValidity()) {
+                this.classList.remove('is-invalid');
+                if (this.value) {
+                    this.classList.add('is-valid');
+                } else {
+                    this.classList.remove('is-valid');
+                }
+            } else {
+                this.classList.remove('is-valid');
+                this.classList.add('is-invalid');
+            }
+        });
+
+        // Contador de caracteres para certificación
+        const certificationInput = document.getElementById('certification');
+        const certificationCharCount = document.getElementById('certificationCharCount');
+        
+        certificationInput.addEventListener('input', function() {
+            const charCountValue = this.value.length;
+            certificationCharCount.textContent = `${charCountValue} / 50 caracteres`;
+            
+            // Validación visual
+            if (this.checkValidity()) {
+                this.classList.remove('is-invalid');
+                if (this.value) {
+                    this.classList.add('is-valid');
+                } else {
+                    this.classList.remove('is-valid');
+                }
+            } else {
+                this.classList.remove('is-valid');
+                this.classList.add('is-invalid');
+            }
+        });
+
+        // Validación de contraseña
+        const passwordInput = document.getElementById('password');
+        const passwordConfirmInput = document.getElementById('password_confirmation');
+        
+        function validatePassword() {
+            if (passwordInput.value !== passwordConfirmInput.value) {
+                passwordConfirmInput.setCustomValidity("Las contraseñas no coinciden");
+                passwordConfirmInput.classList.add('is-invalid');
+            } else {
+                passwordConfirmInput.setCustomValidity("");
+                if (passwordConfirmInput.value) {
+                    passwordConfirmInput.classList.add('is-valid');
+                } else {
+                    passwordConfirmInput.classList.remove('is-valid');
+                }
+                passwordConfirmInput.classList.remove('is-invalid');
+            }
+        }
+        
+        passwordInput.addEventListener('input', function() {
+            if (this.checkValidity()) {
+                this.classList.remove('is-invalid');
+                if (this.value) {
+                    this.classList.add('is-valid');
+                } else {
+                    this.classList.remove('is-valid');
+                }
+            } else {
+                this.classList.remove('is-valid');
+                this.classList.add('is-invalid');
+            }
+            validatePassword();
+        });
+        
+        passwordConfirmInput.addEventListener('input', validatePassword);
+
+        // Control de habilitación/deshabilitación de campos según rol seleccionado
+        const rolSelect = document.getElementById('rol_id');
+        const specialtyField = document.getElementById('specialty');
+        const certificationField = document.getElementById('certification');
+
+        function toggleSpecialtyFields() {
+            const selectedOption = rolSelect.options[rolSelect.selectedIndex];
+            const roleName = selectedOption.getAttribute('data-role-name');
+            
+            if (roleName === 'Instructor') {
+                specialtyField.disabled = false;
+                certificationField.disabled = false;
+                specialtyField.required = true;
+                certificationField.required = true;
+            } else {
+                specialtyField.disabled = true;
+                certificationField.disabled = true;
+                specialtyField.required = false;
+                certificationField.required = false;
+                specialtyField.value = '';
+                certificationField.value = '';
+                
+                // Actualizar contadores
+                document.getElementById('specialtyCharCount').textContent = '0 / 100 caracteres';
+                document.getElementById('certificationCharCount').textContent = '0 / 50 caracteres';
+                
+                // Limpiar validación visual
+                specialtyField.classList.remove('is-valid', 'is-invalid');
+                certificationField.classList.remove('is-valid', 'is-invalid');
+            }
+        }
+
+        // Ejecutar al cargar la página
+        toggleSpecialtyFields();
+        
+        // Ejecutar cuando cambie el rol
+        rolSelect.addEventListener('change', toggleSpecialtyFields);
+
+        // Validación visual para campos con contenido al cargar
+        if (namesInput.value && namesInput.checkValidity()) {
+            namesInput.classList.add('is-valid');
+        }
+        
+        if (lastNameInput.value && lastNameInput.checkValidity()) {
+            lastNameInput.classList.add('is-valid');
+        }
+        
+        const emailInput = document.getElementById('email');
+        if (emailInput.value && emailInput.checkValidity()) {
+            emailInput.classList.add('is-valid');
+        }
+        
+        if (passwordInput.value && passwordInput.checkValidity()) {
+            passwordInput.classList.add('is-valid');
+        }
+        
+        if (passwordConfirmInput.value && passwordConfirmInput.checkValidity()) {
+            passwordConfirmInput.classList.add('is-valid');
+        }
+        
+        if (rolSelect.value && rolSelect.checkValidity()) {
+            rolSelect.classList.add('is-valid');
+        }
+        
+        const statusSelect = document.getElementById('status_id');
+        if (statusSelect.value && statusSelect.checkValidity()) {
+            statusSelect.classList.add('is-valid');
+        }
+        
+        if (specialtyInput.value && specialtyInput.checkValidity()) {
+            specialtyInput.classList.add('is-valid');
+        }
+        
+        if (certificationInput.value && certificationInput.checkValidity()) {
+            certificationInput.classList.add('is-valid');
+        }
     });
 </script>
+@endsection
+
 @endsection

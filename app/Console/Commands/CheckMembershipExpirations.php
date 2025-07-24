@@ -13,7 +13,9 @@ class CheckMembershipExpirations extends Command
 
     public function handle()
     {
-        app(MembershipService::class)->verificarVencimientos($this);
-        $this->info('✅ Verificación de membresías completada.');
+      $service = app(\App\Services\MembershipService::class);
+    $service->reactivarUsuarios($this);
+    $service->desactivarUsuarios($this);
+    $this->info('✅ Verificación de membresías completada.');
     }
 }

@@ -45,7 +45,7 @@
                                                     <i class="fas fa-heart-pulse fs-4" style="color: #FF6B35;"></i>
                                                 </div>
                                                 <div style="text-align: center;">
-                                                    <div style="font-weight: 600; margin-bottom: 8px;">{{ $requirement->service->name }}</div>
+                                                    <div style="font-weight: 600; margin-bottom: 8px;">{{ $requirement->service->name ?? 'Sin servicio'}}</div>
                                                     <small class="text-muted" style="font-size: 1.3rem; display: block;">ÚLTIMA ACTUALIZACIÓN: {{ \Carbon\Carbon::parse($requirement->updated_at)->translatedFormat('d \d\e F \d\e Y') }}</small>
                                                 </div>
                                             </div>

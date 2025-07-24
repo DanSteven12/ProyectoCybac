@@ -5,33 +5,33 @@
 <div class="container-fluid py-4">
     <!-- Welcome Message -->
     <div class="mb-4 text-center p-4 rounded-3 welcome-container">
-        <i class="fas fa-wallet fa-5x mb-3 wallet-icon"></i>
+        <i class="fas fa-file-invoice-dollar fa-5x mb-3 wallet-icon"></i>
         <h2 class="welcome-title">
-            ¡Bienvenido a tu Historial de Pagos!
+            <i class="fas fa-hand-holding-usd me-2"></i>¡Bienvenido a tu Historial de Pagos!
         </h2>
         <p class="welcome-subtitle">
-            Revisa el estado de tus transacciones y membresías
+            <i class="fas fa-search-dollar me-2"></i>Revisa el estado de tus transacciones y membresías
         </p>
     </div>
 
     <!-- Header and Filter -->
     <div class="d-flex justify-content-between align-items-center mb-4 flex-wrap">
         <h2 class="section-title">
-            <i class="fas fa-history me-2"></i>Mis Pagos
+            <i class="fas fa-money-check-alt me-2"></i>Mis Pagos
         </h2>
         
         <div class="filter-container">
             <div class="dropdown">
                 <button class="btn dropdown-toggle filter-dropdown" type="button" id="filterDropdown" data-bs-toggle="dropdown" aria-expanded="false">
-                    <i class="fas fa-filter me-2"></i>Filtrar por estado
+                    <i class="fas fa-sliders-h me-2"></i>Filtrar por estado
                 </button>
                 <ul class="dropdown-menu" aria-labelledby="filterDropdown">
-                    <li><a class="dropdown-item filter-option active" href="#" data-filter="all"><i class="fas fa-list me-2"></i>Todos los pagos</a></li>
+                    <li><a class="dropdown-item filter-option active" href="#" data-filter="all"><i class="fas fa-list-ol me-2"></i>Todos los pagos</a></li>
                     <li><hr class="dropdown-divider"></li>
-                    <li><a class="dropdown-item filter-option" href="#" data-filter="pending"><i class="far fa-clock me-2"></i>Pendientes</a></li>
-                    <li><a class="dropdown-item filter-option" href="#" data-filter="approved"><i class="fas fa-check-circle me-2"></i>Aprobados</a></li>
-                    <li><a class="dropdown-item filter-option" href="#" data-filter="rejected"><i class="fas fa-times-circle me-2"></i>Rechazados</a></li>
-                    <li><a class="dropdown-item filter-option" href="#" data-filter="expired"><i class="fas fa-calendar-times me-2"></i>Vencidos</a></li>
+                    <li><a class="dropdown-item filter-option" href="#" data-filter="pending"><i class="fas fa-hourglass-half me-2"></i>Pendientes</a></li>
+                    <li><a class="dropdown-item filter-option" href="#" data-filter="approved"><i class="fas fa-check-double me-2"></i>Aprobados</a></li>
+                    <li><a class="dropdown-item filter-option" href="#" data-filter="rejected"><i class="fas fa-ban me-2"></i>Rechazados</a></li>
+                    <li><a class="dropdown-item filter-option" href="#" data-filter="expired"><i class="fas fa-clock me-2"></i>Vencidos</a></li>
                 </ul>
             </div>
         </div>
@@ -42,7 +42,7 @@
         <!-- All Payments Table -->
         <div id="table-all">
             <div class="card-header payment-card-header">
-                <h5 class="mb-0"><i class="fas fa-list me-2"></i>Todos mis Pagos</h5>
+                <h5 class="mb-0"><i class="fas fa-table me-2"></i>Todos mis Pagos</h5>
             </div>
             <div class="card-body p-0">
                 @if($allPayments->count() > 0)
@@ -50,33 +50,33 @@
                     <table class="table align-middle mb-0 payment-table">
                         <thead>
                             <tr>
-                                <th>Membresía</th>
-                                <th>Fecha de Pago</th>
-                                <th>Monto</th>
-                                <th>Estado</th>
-                                <th>Detalles</th>
+                                <th><i class="fas fa-id-card me-2"></i>Membresía</th>
+                                <th><i class="far fa-calendar-alt me-2"></i>Fecha de Pago</th>
+                                <th><i class="fas fa-dollar-sign me-2"></i>Monto</th>
+                                <th><i class="fas fa-info-circle me-2"></i>Estado</th>
+                                <th><i class="fas fa-ellipsis-h me-2"></i>Detalles</th>
                             </tr>
                         </thead>
                         <tbody>
                             @foreach($allPayments as $payment)
                             <tr class="payment-row" data-status="{{ strtolower(str_replace(' ', '_', $payment->status->name)) }}">
-                                <td>{{ $payment->membership->name ?? 'No disponible' }}</td>
-                                <td>{{ \Carbon\Carbon::parse($payment->date)->format('d/m/Y') }}</td>
-                                <td>${{ number_format($payment->price, 2) }}</td>
+                                <td><i class="fas fa-cut me-2"></i>{{ $payment->membership->name ?? 'No disponible' }}</td>
+                                <td><i class="far fa-clock me-2"></i>{{ \Carbon\Carbon::parse($payment->date)->translatedFormat('d \d\e F \d\e Y') }}</td>
+                                <td><i class="fas fa-money-bill-wave me-2"></i>${{ number_format($payment->price, 2) }}</td>
                                 <td>
                                     @if($payment->status->name == 'Pendiente de revisión')
-                                        <span class="status-badge pendiente">Pendiente</span>
+                                        <span class="status-badge pendiente"><i class="fas fa-hourglass-half me-1"></i>Pendiente</span>
                                     @elseif($payment->status->name == 'Aprobado')
-                                        <span class="status-badge aprobado">Aprobado</span>
+                                        <span class="status-badge aprobado"><i class="fas fa-check-circle me-1"></i>Aprobado</span>
                                     @elseif($payment->status->name == 'Rechazado')
-                                        <span class="status-badge rechazado">Rechazado</span>
+                                        <span class="status-badge rechazado"><i class="fas fa-times-circle me-1"></i>Rechazado</span>
                                     @elseif($payment->status->name == 'Vencido')
-                                        <span class="status-badge vencido">Vencido</span>
+                                        <span class="status-badge vencido"><i class="fas fa-exclamation-triangle me-1"></i>Vencido</span>
                                     @endif
                                 </td>
                                 <td>
                                     <button class="btn btn-sm details-btn" data-payment-id="{{ $payment->id }}">
-                                        <i class="fas fa-info-circle"></i> Ver más
+                                        <i class="fas fa-search-plus me-1"></i> Ver más
                                     </button>
                                 </td>
                             </tr>
@@ -89,6 +89,7 @@
                 </div>
                 @else
                 <div class="text-center p-4">
+                    <i class="fas fa-wallet fa-3x mb-3 text-muted"></i>
                     <p>No hay registros de pagos.</p>
                 </div>
                 @endif
@@ -98,7 +99,7 @@
         <!-- Pending Payments Table -->
         <div id="table-pending" style="display: none;">
             <div class="card-header payment-card-header">
-                <h5 class="mb-0"><i class="far fa-clock me-2"></i>Pagos Pendientes</h5>
+                <h5 class="mb-0"><i class="fas fa-hourglass me-2"></i>Pagos Pendientes</h5>
             </div>
             <div class="card-body p-0">
                 @if($paymentsPending->count() > 0)
@@ -106,20 +107,20 @@
                     <table class="table align-middle mb-0 payment-table">
                         <thead>
                             <tr>
-                                <th>Membresía</th>
-                                <th>Fecha de Pago</th>
-                                <th>Monto</th>
-                                <th>Estado</th>
+                                <th><i class="fas fa-id-card me-2"></i>Membresía</th>
+                                <th><i class="far fa-calendar-alt me-2"></i>Fecha de Pago</th>
+                                <th><i class="fas fa-dollar-sign me-2"></i>Monto</th>
+                                <th><i class="fas fa-info-circle me-2"></i>Estado</th>
                             </tr>
                         </thead>
                         <tbody>
                             @foreach($paymentsPending as $payment)
                             <tr>
-                                <td>{{ $payment->membership->name ?? 'No disponible' }}</td>
-                                <td>{{ \Carbon\Carbon::parse($payment->date)->format('d/m/Y') }}</td>
-                                <td>${{ number_format($payment->price, 2) }}</td>
+                                <td><i class="fas fa-cut me-2"></i>{{ $payment->membership->name ?? 'No disponible' }}</td>
+                                <td><i class="far fa-clock me-2"></i>{{ \Carbon\Carbon::parse($payment->date)->translatedFormat('d \d\e F \d\e Y') }}</td>
+                                <td><i class="fas fa-money-bill-wave me-2"></i>${{ number_format($payment->price, 2) }}</td>
                                 <td>
-                                    <span class="status-badge pendiente">Pendiente de revisión</span>
+                                    <span class="status-badge pendiente"><i class="fas fa-hourglass-half me-1"></i>Pendiente de revisión</span>
                                 </td>
                             </tr>
                             @endforeach
@@ -131,6 +132,7 @@
                 </div>
                 @else
                 <div class="text-center p-4">
+                    <i class="fas fa-check-circle fa-3x mb-3 text-muted"></i>
                     <p>No hay pagos pendientes.</p>
                 </div>
                 @endif
@@ -140,7 +142,7 @@
         <!-- Approved Payments Table -->
         <div id="table-approved" style="display: none;">
             <div class="card-header payment-card-header">
-                <h5 class="mb-0"><i class="fas fa-check-circle me-2"></i>Pagos Aprobados</h5>
+                <h5 class="mb-0"><i class="fas fa-check-double me-2"></i>Pagos Aprobados</h5>
             </div>
             <div class="card-body p-0">
                 @if($paymentsApproved->count() > 0)
@@ -148,22 +150,22 @@
                     <table class="table align-middle mb-0 payment-table">
                         <thead>
                             <tr>
-                                <th>Membresía</th>
-                                <th>Fecha de Pago</th>
-                                <th>Monto</th>
-                                <th>Fecha de Aprobación</th>
-                                <th>Estado</th>
+                                <th><i class="fas fa-id-card me-2"></i>Membresía</th>
+                                <th><i class="far fa-calendar-alt me-2"></i>Fecha de Pago</th>
+                                <th><i class="fas fa-dollar-sign me-2"></i>Monto</th>
+                                <th><i class="fas fa-calendar-check me-2"></i>Fecha de Aprobación</th>
+                                <th><i class="fas fa-info-circle me-2"></i>Estado</th>
                             </tr>
                         </thead>
                         <tbody>
                             @foreach($paymentsApproved as $payment)
                             <tr>
-                                <td>{{ $payment->membership->name ?? 'No disponible' }}</td>
-                                <td>{{ \Carbon\Carbon::parse($payment->date)->format('d/m/Y') }}</td>
-                                <td>${{ number_format($payment->price, 2) }}</td>
-                                <td>{{ $payment->updated_at->format('d/m/Y') }}</td>
+                                <td><i class="fas fa-cut me-2"></i>{{ $payment->membership->name ?? 'No disponible' }}</td>
+                                <td><i class="far fa-clock me-2"></i>{{ \Carbon\Carbon::parse($payment->date)->translatedFormat('d \d\e F \d\e Y') }}</td>
+                                <td><i class="fas fa-money-bill-wave me-2"></i>${{ number_format($payment->price, 2) }}</td>
+                                <td><i class="far fa-calendar-check me-2"></i>{{ $payment->updated_at->translatedFormat('d \d\e F \d\e Y') }}</td>
                                 <td>
-                                    <span class="status-badge aprobado">Aprobado</span>
+                                    <span class="status-badge aprobado"><i class="fas fa-check-circle me-1"></i>Aprobado</span>
                                 </td>
                             </tr>
                             @endforeach
@@ -175,6 +177,7 @@
                 </div>
                 @else
                 <div class="text-center p-4">
+                    <i class="fas fa-search-dollar fa-3x mb-3 text-muted"></i>
                     <p>No hay pagos aprobados.</p>
                 </div>
                 @endif
@@ -192,24 +195,24 @@
                     <table class="table align-middle mb-0 payment-table">
                         <thead>
                             <tr>
-                                <th>Membresía</th>
-                                <th>Fecha de Pago</th>
-                                <th>Monto</th>
-                                <th>Motivo de Rechazo</th>
-                                <th>Fecha de Rechazo</th>
-                                <th>Estado</th>
+                                <th><i class="fas fa-id-card me-2"></i>Membresía</th>
+                                <th><i class="far fa-calendar-alt me-2"></i>Fecha de Pago</th>
+                                <th><i class="fas fa-dollar-sign me-2"></i>Monto</th>
+                                <th><i class="fas fa-comment-dots me-2"></i>Motivo de Rechazo</th>
+                                <th><i class="fas fa-calendar-times me-2"></i>Fecha de Rechazo</th>
+                                <th><i class="fas fa-info-circle me-2"></i>Estado</th>
                             </tr>
                         </thead>
                         <tbody>
                             @foreach($paymentsRejected as $payment)
                             <tr>
-                                <td>{{ $payment->membership->name ?? 'No disponible' }}</td>
-                                <td>{{ \Carbon\Carbon::parse($payment->date)->format('d/m/Y') }}</td>
-                                <td>${{ number_format($payment->price, 2) }}</td>
-                                <td class="rejection-reason">{{ $payment->comment ?? 'No especificado' }}</td>
-                                <td>{{ $payment->updated_at->format('d/m/Y') }}</td>
+                                <td><i class="fas fa-cut me-2"></i>{{ $payment->membership->name ?? 'No disponible' }}</td>
+                                <td><i class="far fa-clock me-2"></i>{{ \Carbon\Carbon::parse($payment->date)->translatedFormat('d \d\e F \d\e Y') }}</td>
+                                <td><i class="fas fa-money-bill-wave me-2"></i>${{ number_format($payment->price, 2) }}</td>
+                                <td><i class="fas fa-comment me-2"></i>{{ $payment->comment ?? 'No especificado' }}</td>
+                                <td><i class="far fa-calendar-times me-2"></i>{{ $payment->updated_at->translatedFormat('d \d\e F \d\e Y')}}</td>
                                 <td>
-                                    <span class="status-badge rechazado">Rechazado</span>
+                                    <span class="status-badge rechazado"><i class="fas fa-ban me-1"></i>Rechazado</span>
                                 </td>
                             </tr>
                             @endforeach
@@ -221,6 +224,7 @@
                 </div>
                 @else
                 <div class="text-center p-4">
+                    <i class="fas fa-thumbs-up fa-3x mb-3 text-muted"></i>
                     <p>No hay pagos rechazados.</p>
                 </div>
                 @endif
@@ -230,7 +234,7 @@
         <!-- Expired Payments Table -->
         <div id="table-expired" style="display: none;">
             <div class="card-header payment-card-header">
-                <h5 class="mb-0"><i class="fas fa-calendar-times me-2"></i>Pagos Vencidos</h5>
+                <h5 class="mb-0"><i class="fas fa-clock me-2"></i>Pagos Vencidos</h5>
             </div>
             <div class="card-body p-0">
                 @if($paymentsExpired->count() > 0)
@@ -238,22 +242,22 @@
                     <table class="table align-middle mb-0 payment-table">
                         <thead>
                             <tr>
-                                <th>Membresía</th>
-                                <th>Fecha de Pago</th>
-                                <th>Monto</th>
-                                <th>Fecha de Vencimiento</th>
-                                <th>Estado</th>
+                                <th><i class="fas fa-id-card me-2"></i>Membresía</th>
+                                <th><i class="far fa-calendar-alt me-2"></i>Fecha de Pago</th>
+                                <th><i class="fas fa-dollar-sign me-2"></i>Monto</th>
+                                <th><i class="fas fa-hourglass-end me-2"></i>Fecha de Vencimiento</th>
+                                <th><i class="fas fa-info-circle me-2"></i>Estado</th>
                             </tr>
                         </thead>
                         <tbody>
                             @foreach($paymentsExpired as $payment)
                             <tr>
-                                <td>{{ $payment->membership->name ?? 'No disponible' }}</td>
-                                <td>{{ \Carbon\Carbon::parse($payment->date)->format('d/m/Y') }}</td>
-                                <td>${{ number_format($payment->price, 2) }}</td>
-                                <td>{{ \Carbon\Carbon::parse($payment->expiration_date)->format('d/m/Y') }}</td>
+                                <td><i class="fas fa-cut me-2"></i>{{ $payment->membership->name ?? 'No disponible' }}</td>
+                                <td><i class="far fa-clock me-2"></i>{{ \Carbon\Carbon::parse($payment->date)->translatedFormat('d \d\e F \d\e Y')}}</td>
+                                <td><i class="fas fa-money-bill-wave me-2"></i>${{ number_format($payment->price, 2) }}</td>
+                                <td><i class="fas fa-hourglass-end me-2"></i>{{ \Carbon\Carbon::parse($payment->expiration_date)->translatedFormat('d \d\e F \d\e Y') }}</td>
                                 <td>
-                                    <span class="status-badge vencido">Vencido</span>
+                                    <span class="status-badge vencido"><i class="fas fa-exclamation-triangle me-1"></i>Vencido</span>
                                 </td>
                             </tr>
                             @endforeach
@@ -265,6 +269,7 @@
                 </div>
                 @else
                 <div class="text-center p-4">
+                    <i class="fas fa-check-circle fa-3x mb-3 text-muted"></i>
                     <p>No hay pagos vencidos.</p>
                 </div>
                 @endif
@@ -272,6 +277,7 @@
         </div>
     </div>
 </div>
+
 
 <div class="modal fade" id="paymentDetailsModal" tabindex="-1" aria-labelledby="paymentDetailsModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-lg modal-dialog-centered">

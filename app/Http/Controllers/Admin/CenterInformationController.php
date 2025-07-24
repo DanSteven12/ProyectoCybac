@@ -22,10 +22,13 @@ class CenterInformationController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'schedule' => 'nullable|string',
+            'opening_time' => 'nullable|date_format:H:i',
+            'closing_time' => 'nullable|date_format:H:i',
+            'days' => 'nullable|string|max:100',
             'phone' => 'nullable|string|max:20',
             'email' => 'nullable|email',
             'address' => 'nullable|string',
+            'map_embed' => 'nullable|string',
         ]);
 
         CenterInformation::create($request->all());
@@ -42,10 +45,13 @@ class CenterInformationController extends Controller
     public function update(Request $request, $id)
     {
         $request->validate([
-            'schedule' => 'nullable|string',
+            'opening_time' => 'nullable|date_format:H:i',
+            'closing_time' => 'nullable|date_format:H:i',
+            'days' => 'nullable|string|max:100',
             'phone' => 'nullable|string|max:20',
             'email' => 'nullable|email',
             'address' => 'nullable|string',
+            'map_embed' => 'nullable|string',
         ]);
 
         $centerInformation = CenterInformation::findOrFail($id);
@@ -54,13 +60,12 @@ class CenterInformationController extends Controller
         return redirect()->route('admin.center-information.index')->with('success', 'Información actualizada correctamente.');
     }
 
-public function destroy($id)
-{
-    $info = CenterInformation::findOrFail($id);
-    $info->delete();
-    
-    return redirect()->route('admin.center-information.index')
-        ->with('deleted', 'La información del centro ha sido eliminada correctamente.');
-}
+    public function destroy($id)
+    {
+        $info = CenterInformation::findOrFail($id);
+        $info->delete();
 
+        return redirect()->route('admin.center-information.index')
+            ->with('deleted', 'La información del centro ha sido eliminada correctamente.');
+    }
 }

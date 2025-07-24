@@ -1,7 +1,6 @@
 <?php
 use App\Http\Controllers\User\DashboardController;
 use App\Http\Controllers\Admin\CarouselSlideController;
-use App\Http\Controllers\Admin\ServicesHomeController;
 use App\Http\Controllers\Admin\CenterInformationController;
 use App\Http\Controllers\Admin\RoleController;
 use App\Http\Controllers\Admin\ServiceController; 
@@ -137,7 +136,6 @@ Route::post('/reset-password', [NewPasswordController::class, 'store'])->name('p
 Route::middleware(['auth'])->prefix('admin')->name('admin.')->group(function () {
     // Página de servicios para la home (CMS)
     Route::resource('service', ServiceController::class);
-    Route::resource('services_home', ServicesHomeController::class);
     // Información del centro (CMS)
     Route::resource('center-information', CenterInformationController::class)
         ->except(['show']);

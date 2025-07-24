@@ -12,226 +12,466 @@
     --white: #FFFFFF;
     --light-gray: #f8f9fa;
     --medium-gray: #e9ecef;
+    --dark-shadow: rgba(0, 0, 0, 0.15);
+    --transition: all 0.3s ease;
+}
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    line-height: 1.6;
+    color: #333;
 }
 
 .registrations-container {
-    max-width: 1200px;
+    max-width: 1400px;
     margin: 0 auto;
-    padding: 2rem 1rem;
+    padding: 2rem 1.5rem;
     width: 95%;
 }
 
 .registrations-header {
     text-align: center;
     margin-bottom: 3rem;
+    position: relative;
+    padding-bottom: 1.5rem;
+}
+
+.registrations-header::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 120px;
+    height: 4px;
+    background: linear-gradient(90deg, var(--primary-dark), var(--primary-light));
+    border-radius: 2px;
 }
 
 .registrations-title {
-    font-size: clamp(1.4rem, 4vw, 1.8rem);
+    font-size: clamp(1.8rem, 4vw, 2.5rem);
     color: var(--primary-dark);
     margin-bottom: 1rem;
-    font-weight: 700;
+    font-weight: 800;
+    letter-spacing: -0.5px;
 }
 
 .registrations-subtitle {
-    font-size: clamp(1.2rem, 3vw, 1.6rem);
+    font-size: clamp(1rem, 3vw, 1.4rem);
     color: var(--primary-dark);
     opacity: 0.8;
+    font-weight: 400;
+    max-width: 700px;
+    margin: 0 auto;
 }
 
 .registrations-card {
     background-color: var(--white);
-    border-radius: 8px;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
-    padding: clamp(1rem, 3vw, 2rem);
-    margin-bottom: 2rem;
-    border: 4px solid var(--primary-dark);
+    border-radius: 12px;
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.08);
+    padding: clamp(1.5rem, 3vw, 2.5rem);
+    margin-bottom: 3rem;
+    border: none;
+    transition: var(--transition);
+}
+
+.registrations-card:hover {
+    box-shadow: 0 12px 35px rgba(0, 0, 0, 0.12);
 }
 
 .alert {
-    padding: 1rem;
-    margin-bottom: 1.5rem;
-    border-radius: 6px;
-    font-size: clamp(1.1rem, 3vw, 1.3rem);
+    padding: 1.2rem 1.5rem;
+    margin-bottom: 2rem;
+    border-radius: 8px;
+    font-size: clamp(1rem, 3vw, 1.2rem);
     display: flex;
     align-items: center;
-    gap: 0.8rem;
+    gap: 1rem;
+    border-left: 5px solid;
+    box-shadow: 0 3px 10px var(--dark-shadow);
+}
+
+.alert i {
+    font-size: 1.5rem;
 }
 
 .alert-success {
-    background-color: var(--primary-light);
-    color: var(--white);
-    border: 1px solid var(--primary-dark);
+    background-color: rgba(46, 196, 182, 0.15);
+    color: var(--primary-dark);
+    border-color: var(--primary-light);
 }
 
 .alert-danger {
-    background-color: var(--accent-orange);
-    color: var(--white);
-    border: 1px solid var(--primary-dark);
+    background-color: rgba(255, 107, 53, 0.15);
+    color: var(--primary-dark);
+    border-color: var(--accent-orange);
 }
 
+/* ESTILOS PARA LA TABLA PRINCIPAL */
 .registrations-table {
     width: 100%;
-    border-collapse: collapse;
+    border-collapse: separate;
+    border-spacing: 0;
     margin-top: 1.5rem;
-    border: 1px solid #000;
+    overflow: hidden;
 }
 
 .registrations-table thead {
-    background-color: var(--primary-dark);
+    background: linear-gradient(135deg, var(--primary-dark), #2a4365);
     color: var(--white);
+    position: sticky;
+    top: 0;
 }
 
 .registrations-table th, 
 .registrations-table td {
-    padding: clamp(0.6rem, 2vw, 1.2rem);
+    padding: clamp(0.8rem, 2vw, 1.2rem);
     text-align: left;
-    font-size: clamp(1rem, 3vw, 1.3rem);
-    border: 1px solid #000;
+    font-size: clamp(0.95rem, 3vw, 1.1rem);
+    border-bottom: 1px solid var(--medium-gray);
 }
 
 .registrations-table th {
     font-weight: 600;
-    border-bottom: 2px solid #000;
+    text-transform: uppercase;
+    font-size: 0.9rem;
+    letter-spacing: 0.5px;
+}
+
+.registrations-table th i {
+    margin-right: 8px;
+}
+
+.registrations-table tbody tr {
+    transition: var(--transition);
+}
+
+.registrations-table tbody tr:last-child td {
+    border-bottom: none;
 }
 
 .registrations-table tbody tr:hover {
-    background-color: rgba(26, 54, 93, 0.05);
+    background-color: rgba(46, 196, 182, 0.05);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
+}
+
+.registrations-table tbody tr:nth-child(even) {
+    background-color: var(--light-gray);
+}
+
+.registrations-table tbody tr:nth-child(even):hover {
+    background-color: rgba(46, 196, 182, 0.08);
+}
+
+/* ESTILOS PARA VERSIÓN MÓVIL (TABLA HORIZONTAL) */
+.mobile-table-container {
+    display: none;
+    width: 100%;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    margin-top: 1rem;
+}
+
+.mobile-table {
+    min-width: 600px;
+    border-collapse: separate;
+    border-spacing: 0;
+}
+
+.mobile-table th, 
+.mobile-table td {
+    padding: 0.8rem;
+    text-align: left;
+    border-bottom: 1px solid var(--medium-gray);
+    white-space: nowrap;
+}
+
+.mobile-table th {
+    background: linear-gradient(135deg, var(--primary-dark), #2a4365);
+    color: var(--white);
+    font-weight: 600;
+    text-transform: uppercase;
+    font-size: 0.8rem;
+    letter-spacing: 0.5px;
+    position: sticky;
+    left: 0;
+}
+
+.mobile-table tbody tr {
+    background-color: var(--white);
+}
+
+.mobile-table tbody tr:nth-child(even) {
+    background-color: var(--light-gray);
+}
+
+.empty-state {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 3rem 1rem;
+    text-align: center;
+}
+
+.empty-icon {
+    font-size: clamp(3rem, 10vw, 5rem);
+    color: var(--medium-gray);
+    margin-bottom: 1.5rem;
 }
 
 .empty-message {
-    font-size: clamp(1.2rem, 3vw, 1.4rem);
+    font-size: clamp(1.2rem, 3vw, 1.6rem);
     color: var(--primary-dark);
-    text-align: center;
-    padding: 2rem;
+    margin-bottom: 1rem;
+    font-weight: 500;
+}
+
+.empty-submessage {
+    font-size: clamp(1rem, 3vw, 1.2rem);
+    color: #666;
+    max-width: 500px;
+    margin: 0 auto;
 }
 
 .divider {
     height: 1px;
-    background-color: var(--primary-dark);
-    margin: 2rem 0;
-    opacity: 0.2;
+    background: linear-gradient(90deg, transparent, var(--primary-light), transparent);
+    margin: 2.5rem 0;
 }
 
-/* Estilos responsivos para la tabla en móviles */
-@media (max-width: 768px) {
-    .registrations-table {
-        display: block;
-        overflow-x: auto;
-        white-space: nowrap;
-    }
-    
-    .registrations-table thead {
-        display: none;
-    }
-    
-    .registrations-table tbody, 
-    .registrations-table tr, 
-    .registrations-table td {
-        display: block;
-        width: 100%;
-    }
-    
-    .registrations-table tr {
-        margin-bottom: 1rem;
-        border: 2px solid var(--primary-dark);
-    }
-    
-    .registrations-table td {
-        text-align: right;
-        padding-left: 50%;
-        position: relative;
-        white-space: normal;
-    }
-    
-    .registrations-table td::before {
-        content: attr(data-label);
-        position: absolute;
-        left: 1rem;
-        width: 45%;
-        padding-right: 1rem;
-        font-weight: bold;
-        text-align: left;
-        color: var(--primary-dark);
-    }
+/* Badge para estado de clases */
+.status-badge {
+    display: inline-block;
+    padding: 0.35rem 0.8rem;
+    border-radius: 50px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
 }
 
-/* Mejoras para móviles muy pequeños */
-@media (max-width: 480px) {
+.badge-completed {
+    background-color: rgba(46, 196, 182, 0.15);
+    color: var(--primary-dark);
+}
+
+.badge-upcoming {
+    background-color: rgba(255, 209, 102, 0.15);
+    color: #8a6d3b;
+}
+
+.badge-cancelled {
+    background-color: rgba(255, 107, 53, 0.15);
+    color: var(--accent-orange);
+}
+
+/* MEDIA QUERIES PARA RESPONSIVE */
+@media (max-width: 992px) {
     .registrations-container {
-        padding: 1rem 0.5rem;
-    }
-    
-    .registrations-header {
-        margin-bottom: 1.5rem;
+        padding: 1.5rem 1rem;
     }
     
     .registrations-card {
-        padding: 1rem;
+        padding: 1.5rem;
+    }
+}
+
+/* Versión móvil - ocultar tabla normal y mostrar tabla horizontal */
+@media (max-width: 768px) {
+    .registrations-table {
+        display: none;
+    }
+    
+    .mobile-table-container {
+        display: block;
     }
     
     .alert {
         flex-direction: column;
         text-align: center;
-        gap: 0.5rem;
+        gap: 0.8rem;
     }
     
-    .empty-message {
-        padding: 1rem;
+    .empty-state {
+        padding: 2rem 0.5rem;
     }
 }
+
+/* Animaciones */
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.registrations-card {
+    animation: fadeIn 0.5s ease-out;
+}
+
+.registrations-table tbody tr,
+.mobile-table tbody tr {
+    animation: fadeIn 0.3s ease-out;
+    animation-fill-mode: both;
+}
+
+.registrations-table tbody tr:nth-child(1),
+.mobile-table tbody tr:nth-child(1) { animation-delay: 0.1s; }
+.registrations-table tbody tr:nth-child(2),
+.mobile-table tbody tr:nth-child(2) { animation-delay: 0.2s; }
+.registrations-table tbody tr:nth-child(3),
+.mobile-table tbody tr:nth-child(3) { animation-delay: 0.3s; }
+.registrations-table tbody tr:nth-child(4),
+.mobile-table tbody tr:nth-child(4) { animation-delay: 0.4s; }
 </style>
 
 <div class="registrations-container">
     <div class="registrations-header">
-        <i class="fas fa-chalkboard-teacher fa-4x mb-3" style="color: var(--primary-dark); font-size: clamp(2rem, 10vw, 4rem);"></i>
-        <h1 class="registrations-title">Mis registros de clases como instructor</h1>
-        <p class="registrations-subtitle">Alumnos registrados en tus clases programadas</p>
+        <div class="header-icon">
+            <i class="fas fa-chalkboard-teacher mb-3" style="color: var(--primary-dark); font-size: clamp(3rem, 10vw, 4.5rem);"></i>
+        </div>
+        <h1 class="registrations-title">Registros de Clases</h1>
+        <p class="registrations-subtitle">Visualiza todos los alumnos registrados en tus clases programadas</p>
     </div>
 
     <div class="registrations-card">
         @if(session('success'))
             <div class="alert alert-success">
-                <i class="fas fa-check-circle"></i> {{ session('success') }}
+                <i class="fas fa-check-circle"></i> 
+                <div>{{ session('success') }}</div>
             </div>
         @elseif(session('error'))
             <div class="alert alert-danger">
-                <i class="fas fa-exclamation-circle"></i> {{ session('error') }}
+                <i class="fas fa-exclamation-triangle"></i> 
+                <div>{{ session('error') }}</div>
             </div>
         @endif
 
         @if($registrations->isEmpty())
-            <p class="empty-message">
-                <i class="fas fa-user-slash" style="margin-right: 0.9rem;"></i>
-                No hay alumnos registrados en tus clases.
-            </p>
+            <div class="empty-state">
+                <div class="empty-icon">
+                    <i class="fas fa-user-slash"></i>
+                </div>
+                <h3 class="empty-message">No hay registros disponibles</h3>
+                <p class="empty-submessage">Actualmente no tienes alumnos registrados en tus clases. Los registros aparecerán aquí cuando los alumnos se inscriban.</p>
+            </div>
         @else
-            <table class="registrations-table">
-                <thead>
-                    <tr>
-                        <th data-label="Alumno"><i class="fas fa-user"></i> Alumno</th>
-                        <th data-label="Servicio"><i class="fas fa-dumbbell"></i> Servicio</th>
-                        <th data-label="Fecha"><i class="far fa-calendar-alt"></i> Fecha</th>
-                        <th data-label="Hora"><i class="far fa-clock"></i> Hora</th>
-                        <th data-label="Descripción"><i class="fas fa-align-left"></i> Descripción</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @foreach($registrations as $registration)
+            <!-- Versión de escritorio (Tabla normal) -->
+            <div class="table-responsive">
+                <table class="registrations-table">
+                    <thead>
                         <tr>
-                            <td data-label="Alumno">{{ $registration->user->names }} {{ $registration->user->last_name }}</td>
-                            <td data-label="Servicio">{{ $registration->class->service->name }}</td>
-                            <td data-label="Fecha">{{ $registration->class->date->translatedFormat('d \d\e F \d\e Y') }}</td>
-                            <td data-label="Hora">{{ \Carbon\Carbon::parse($registration->class->time)->format('h:i A') }}</td>
-                            <td data-label="Descripción">{{ $registration->class->description }}</td>
-                            {{-- {{ \Carbon\Carbon::parse($user->birth_date)->translatedFormat('d \d\e F \d\e Y') }} --}}
+                            <th><i class="fas fa-user"></i> Alumno</th>
+                            <th><i class="fas fa-dumbbell"></i> Servicio</th>
+                            <th><i class="far fa-calendar-alt"></i> Fecha</th>
+                            <th><i class="far fa-clock"></i> Hora</th>
+                            <th><i class="fas fa-align-left"></i> Descripción</th>
+                            <th><i class="fas fa-info-circle"></i> Estado</th>
                         </tr>
-                    @endforeach
-                </tbody>
-            </table>
+                    </thead>
+                    <tbody>
+                        @foreach($registrations as $registration)
+                            @php
+                                $classDate = \Carbon\Carbon::parse($registration->class->date);
+                                $isPast = $classDate->isPast();
+                                $statusClass = $isPast ? 'badge-completed' : 'badge-upcoming';
+                                $statusText = $isPast ? 'Completada' : 'Próxima';
+                            @endphp
+                            <tr>
+                                <td>
+                                    <strong>{{ $registration->user->names }} {{ $registration->user->last_name }}</strong>
+                                </td>
+                                <td>{{ $registration->class->service->name }}</td>
+                                <td>{{ $classDate->translatedFormat('d \d\e F \d\e Y') }}</td>
+                                <td>{{ \Carbon\Carbon::parse($registration->class->time)->format('h:i A') }}</td>
+                                <td>{{ Str::limit($registration->class->description, 50, '...') }}</td>
+                                <td>
+                                    <span class="status-badge {{ $statusClass }}">{{ $statusText }}</span>
+                                </td>
+                            </tr>
+                        @endforeach
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Versión móvil (Tabla horizontal) -->
+            <div class="mobile-table-container">
+                <table class="mobile-table">
+                    <thead>
+                        <tr>
+                            <th>Alumno</th>
+                            <th>Servicio</th>
+                            <th>Fecha</th>
+                            <th>Hora</th>
+                            <th>Descripción</th>
+                            <th>Estado</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach($registrations as $registration)
+                            @php
+                                $classDate = \Carbon\Carbon::parse($registration->class->date);
+                                $isPast = $classDate->isPast();
+                                $statusClass = $isPast ? 'badge-completed' : 'badge-upcoming';
+                                $statusText = $isPast ? 'Completada' : 'Próxima';
+                            @endphp
+                            <tr>
+                                <td>
+                                    <strong>{{ $registration->user->names }} {{ $registration->user->last_name }}</strong>
+                                </td>
+                                <td>{{ $registration->class->service->name }}</td>
+                                <td>{{ $classDate->translatedFormat('d/m/Y') }}</td>
+                                <td>{{ \Carbon\Carbon::parse($registration->class->time)->format('h:i A') }}</td>
+                                <td>{{ Str::limit($registration->class->description, 30, '...') }}</td>
+                                <td>
+                                    <span class="status-badge {{ $statusClass }}">{{ $statusText }}</span>
+                                </td>
+                            </tr>
+                        @endforeach
+                    </tbody>
+                </table>
+            </div>
         @endif
 
         <div class="divider"></div>
+        
+        @if(!$registrations->isEmpty())
+            <div class="d-flex justify-content-end">
+                <small class="text-muted">Mostrando {{ $registrations->count() }} registros</small>
+            </div>
+        @endif
     </div>
 </div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Interacción para la versión de escritorio
+    const tableRows = document.querySelectorAll('.registrations-table tbody tr');
+    tableRows.forEach(row => {
+        row.addEventListener('click', function() {
+            // Aquí puedes agregar funcionalidad al hacer clic en una fila
+            console.log('Clic en la fila:', this);
+        });
+        
+        row.addEventListener('mouseenter', function() {
+            this.style.transform = 'translateY(-3px)';
+            this.style.boxShadow = '0 6px 15px rgba(0, 0, 0, 0.1)';
+        });
+        
+        row.addEventListener('mouseleave', function() {
+            this.style.transform = '';
+            this.style.boxShadow = '';
+        });
+    });
+    
+    // Interacción para la versión móvil
+    const mobileRows = document.querySelectorAll('.mobile-table tbody tr');
+    mobileRows.forEach(row => {
+        row.addEventListener('click', function() {
+            // Aquí puedes agregar funcionalidad al hacer clic en una fila móvil
+            console.log('Clic en la fila móvil:', this);
+        });
+    });
+});
+</script>
 @endsection

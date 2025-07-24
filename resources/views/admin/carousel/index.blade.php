@@ -48,12 +48,12 @@
                         <table class="table table-hover align-middle mb-0" style="border-top: none; width: 100%;">
                             <thead>
                                 <tr style="background-color: #1A365D; color: #FFFFFF;">
-                                    <th class="ps-4 py-3" style="font-weight: 600; font-size: 1.4rem;">Imagen</th>
-                                    <th class="py-3" style="font-weight: 600; font-size: 1.4rem;">Descripción</th>
-                                    <th class="py-3" style="font-weight: 600; font-size: 1.4rem;">Enlace</th>
-                                    <th class="py-3" style="font-weight: 600; font-size: 1.4rem;">Orden</th>
-                                    <th class="py-3" style="font-weight: 600; font-size: 1.4rem;">Activo</th>
-                                    <th class="pe-4 py-3 text-center" style="font-weight: 600; font-size: 1.4rem; width: 20%;">Acciones</th>
+                                    <th class="ps-4 py-3" style="font-weight: 600; font-size: 1.4rem;"><i class="fas fa-image me-2"></i>Imagen</th>
+                                    <th class="py-3" style="font-weight: 600; font-size: 1.4rem;"><i class="fas fa-align-left me-2"></i>Descripción</th>
+                                    <th class="py-3" style="font-weight: 600; font-size: 1.4rem;"><i class="fas fa-link me-2"></i>Enlace</th>
+                                    <th class="py-3" style="font-weight: 600; font-size: 1.4rem;"><i class="fas fa-sort-numeric-up me-2"></i>Orden</th>
+                                    <th class="py-3" style="font-weight: 600; font-size: 1.4rem;"><i class="fas fa-power-off me-2"></i>Activo</th>
+                                    <th class="pe-4 py-3 text-center" style="font-weight: 600; font-size: 1.4rem; width: 20%;"><i class="fas fa-cogs me-2"></i>Acciones</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -62,20 +62,26 @@
                                     <td class="ps-4">
                                         <img src="{{ asset('storage/' . $slide->image_path) }}" width="120" class="rounded shadow" style="max-height: 80px; object-fit: cover;" />
                                     </td>
-                                    <td class="wrap-text" style="font-size: 1.4rem; color: #1A365D; font-weight: 500;">{{ $slide->description }}</td>
+                                    <td class="wrap-text" style="font-size: 1.4rem; color: #1A365D; font-weight: 500;">
+                                        <i class="fas fa-comment-alt me-2"></i>{{ $slide->description }}
+                                    </td>
                                     <td style="font-size: 1.4rem; color: #1A365D; font-weight: 500;">
                                         @if($slide->link_url)
-                                            <a href="{{ $slide->link_url }}" target="_blank" class="text-blue-600 hover:underline">{{ Str::limit($slide->link_url, 20) }}</a>
+                                            <a href="{{ $slide->link_url }}" target="_blank" class="text-blue-600 hover:underline">
+                                                <i class="fas fa-external-link-alt me-2"></i>{{ Str::limit($slide->link_url, 20) }}
+                                            </a>
                                         @else
-                                            <span class="text-muted">Sin enlace</span>
+                                            <span class="text-muted"><i class="fas fa-unlink me-2"></i>Sin enlace</span>
                                         @endif
                                     </td>
-                                    <td style="font-size: 1.4rem; color: #1A365D; font-weight: 500;">{{ $slide->display_order }}</td>
+                                    <td style="font-size: 1.4rem; color: #1A365D; font-weight: 500;">
+                                        <i class="fas fa-hashtag me-2"></i>{{ $slide->display_order }}
+                                    </td>
                                     <td style="font-size: 1.4rem; color: #1A365D; font-weight: 500;">
                                         @if($slide->is_active)
-                                            <span class="badge bg-success">Sí</span>
+                                            <span class="badge bg-success"><i class="fas fa-check-circle me-1"></i>Sí</span>
                                         @else
-                                            <span class="badge bg-secondary">No</span>
+                                            <span class="badge bg-secondary"><i class="fas fa-times-circle me-1"></i>No</span>
                                         @endif
                                     </td>
                                     <td class="pe-4 text-center">
@@ -164,16 +170,20 @@
 
                             <div class="row">
                                 <div class="col-md-6">
-                                    <label for="style" class="form-label" style="font-size: 1.4rem; font-weight: 600; color: #1A365D;">Topología:</label>
+                                    <label for="style" class="form-label" style="font-size: 1.4rem; font-weight: 600; color: #1A365D;">
+                                        <i class="fas fa-shapes me-2"></i>Topología:
+                                    </label>
                                     <select name="style" id="style" class="form-select" style="font-size: 1.3rem; padding: 0.8rem; border: 2px solid #1A365D;">
-                                        <option value="ring" {{ $settings?->style === 'ring' ? 'selected' : '' }}>Anillo</option>
-                                        <option value="flat" {{ $settings?->style === 'flat' ? 'selected' : '' }}>Plano</option>
-                                        <option value="stacked" {{ $settings?->style === 'stacked' ? 'selected' : '' }}>Stacked</option>
+                                        <option value="ring" {{ $settings?->style === 'ring' ? 'selected' : '' }}><i class="fas fa-circle-notch me-2"></i>Anillo</option>
+                                        <option value="flat" {{ $settings?->style === 'flat' ? 'selected' : '' }}><i class="fas fa-square me-2"></i>Plano</option>
+                                        <option value="stacked" {{ $settings?->style === 'stacked' ? 'selected' : '' }}><i class="fas fa-layer-group me-2"></i>Stacked</option>
                                     </select>
                                 </div>
                                 
                                 <div class="col-md-6">
-                                    <label for="radius" class="form-label" style="font-size: 1.4rem; font-weight: 600; color: #1A365D;">Radio (px):</label>
+                                    <label for="radius" class="form-label" style="font-size: 1.4rem; font-weight: 600; color: #1A365D;">
+                                        <i class="fas fa-ruler-combined me-2"></i>Radio (px):
+                                    </label>
                                     <input type="number" name="radius" id="radius" value="{{ $settings?->radius ?? 300 }}" 
                                         class="form-control" style="font-size: 1.3rem; padding: 0.8rem; border: 2px solid #1A365D;" 
                                         min="100" max="1000">
@@ -182,7 +192,9 @@
 
                             <div class="row mt-3">
                                 <div class="col-md-6">
-                                    <label for="duration" class="form-label" style="font-size: 1.4rem; font-weight: 600; color: #1A365D;">Duración del giro (s):</label>
+                                    <label for="duration" class="form-label" style="font-size: 1.4rem; font-weight: 600; color: #1A365D;">
+                                        <i class="fas fa-clock me-2"></i>Duración del giro (s):
+                                    </label>
                                     <input type="number" name="duration" id="duration" value="{{ $settings?->duration ?? 20 }}" 
                                         class="form-control" style="font-size: 1.3rem; padding: 0.8rem; border: 2px solid #1A365D;" 
                                         min="5" max="60">
@@ -190,7 +202,9 @@
                                 
                                 <div class="col-md-6 d-flex align-items-center">
                                     <div class="holo-toggle-container">
-                                        <span class="holo-toggle-label" style="font-size: 1.4rem; font-weight: 600; color: #1A365D; margin-right: 15px;">Animación de brillo:</span>
+                                        <span class="holo-toggle-label" style="font-size: 1.4rem; font-weight: 600; color: #1A365D; margin-right: 15px;">
+                                            <i class="fas fa-sparkles me-2"></i>Animación de brillo:
+                                        </span>
                                         <div class="toggle-container" style="transform: scale(0.8); transform-origin: left center;">
                                             <div class="toggle-wrap">
                                                 <input class="toggle-input" id="brightness_animation" name="brightness_animation" type="checkbox" {{ $settings?->brightness_animation ? 'checked' : '' }}>

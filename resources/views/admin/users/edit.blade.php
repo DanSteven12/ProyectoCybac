@@ -3,84 +3,129 @@
 @section('content')
 <div class="container-fluid px-4 mt-5">
     <div class="row justify-content-center">
-        <div class="col-12 col-lg-8 col-xl-6">
+        <div class="col-12 col-xxl-10">
             <div class="card shadow-sm" style="border: 2px solid #1A365D;">
-                <div class="card-header py-2" style="background-color: #1A365D; color: #FFFFFF; border-bottom: 3px solid #FF6B35;">
+                <div class="card-header py-3" style="background-color: #1A365D; color: #FFFFFF; border-bottom: 3px solid #FF6B35;">
                     <div class="d-flex justify-content-between align-items-center">
-                        <h2 class="mb-0" style="font-weight: 700; font-size: 1.8rem;">
-                            <i class="fas fa-user-edit me-2"></i>EDITAR USUARIO
+                        <h2 class="mb-0" style="font-weight: 700; font-size: 2.0rem;">
+                            <i class="fas fa-user-edit me-3"></i>EDITAR USUARIO
                         </h2>
                     </div>
                 </div>
 
-                <div class="card-body p-3">
-                    <form method="POST" action="{{ route('admin.users.update', $user->id) }}" class="needs-validation" novalidate>
+                <div class="card-body p-4" style="background-color: #F4F4F4;">
+                    @if($errors->any())
+                        <div class="alert alert-dismissible fade show alert-error" role="alert">
+                            <div class="d-flex align-items-center">
+                                <i class="fas fa-exclamation-circle me-3 alert-icon"></i>
+                                <div class="alert-message">
+                                    <strong>Error en el formulario:</strong>
+                                    <ul class="mb-0 ps-4">
+                                        @foreach($errors->all() as $error)
+                                            <li>{{ $error }}</li>
+                                        @endforeach
+                                    </ul>
+                                </div>
+                                <button type="button" class="btn-close btn-close-white ms-auto" data-bs-dismiss="alert" aria-label="Close"></button>
+                            </div>
+                        </div>
+                    @endif
+                    
+                    <form method="POST" action="{{ route('admin.users.update', $user) }}" class="needs-validation" novalidate id="userFormEdit">
                         @csrf
                         @method('PUT')
+                        <input type="hidden" name="redirect_filter" value="{{ $redirectFilter }}">
 
-                        <div class="row g-3">
+                        <div class="row">
                             <!-- Columna Izquierda -->
                             <div class="col-md-6">
                                 <!-- Nombres -->
-                                <div class="mb-3">
-                                    <label for="names" class="form-label fw-bold" style="color: #1A365D; font-size: 1.4rem;">Nombres</label>
-                                    <input type="text" class="form-control @error('names') is-invalid @enderror" 
-                                        id="names" name="names" value="{{ old('names', $user->names) }}" 
-                                        style="border: 2px solid #1A365D; border-radius: 6px; padding: 10px 14px; font-size: 1.3rem;" required>
+                                <div class="mb-4 position-relative">
+                                    <label for="names" class="block mb-2" style="font-size: 1.4rem; color: #1A365D; font-weight: 600;">
+                                        <i class="fas fa-user me-2"></i>Nombres
+                                    </label>
+                                    <div class="input-group">
+                                        <input type="text" class="form-control w-full p-3 border-2 rounded-lg @error('names') is-invalid @enderror" 
+                                            id="names" name="names" value="{{ old('names', $user->names) }}" 
+                                            style="border-color: #1A365D; font-size: 1.3rem; color: #1A365D; width: 100%;"
+                                            maxlength="50"
+                                            placeholder="Escribe los nombres del usuario"
+                                            pattern="^[a-zA-ZáéíóúÁÉÍÓÚñÑ\s]+$"
+                                            required>
+                                    </div>
+                                    <small id="names-counter" style="font-size: 1.1rem; color: #1A365D; display: block; text-align: right;">{{ strlen(old('names', $user->names)) }} / 50</small>
                                     @error('names')
-                                        <div class="invalid-feedback" style="font-size: 1.2rem;">
+                                        <div class="invalid-feedback" style="display: block; color: #FF6B35; font-size: 1.2rem;">
                                             <i class="fas fa-exclamation-circle me-2"></i>{{ $message }}
                                         </div>
                                     @enderror
                                 </div>
 
                                 <!-- Apellidos -->
-                                <div class="mb-3">
-                                    <label for="last_name" class="form-label fw-bold" style="color: #1A365D; font-size: 1.4rem;">Apellidos</label>
-                                    <input type="text" class="form-control @error('last_name') is-invalid @enderror" 
-                                        id="last_name" name="last_name" value="{{ old('last_name', $user->last_name) }}" 
-                                        style="border: 2px solid #1A365D; border-radius: 6px; padding: 10px 14px; font-size: 1.3rem;" required>
+                                <div class="mb-4 position-relative">
+                                    <label for="last_name" class="block mb-2" style="font-size: 1.4rem; color: #1A365D; font-weight: 600;">
+                                        <i class="fas fa-user-tag me-2"></i>Apellidos
+                                    </label>
+                                    <div class="input-group">
+                                        <input type="text" class="form-control w-full p-3 border-2 rounded-lg @error('last_name') is-invalid @enderror" 
+                                            id="last_name" name="last_name" value="{{ old('last_name', $user->last_name) }}" 
+                                            style="border-color: #1A365D; font-size: 1.3rem; color: #1A365D; width: 100%;"
+                                            maxlength="50"
+                                            placeholder="Escribe los apellidos del usuario"
+                                            pattern="^[a-zA-ZáéíóúÁÉÍÓÚñÑ\s]+$"
+                                            required>
+                                    </div>
+                                    <small id="last_name-counter" style="font-size: 1.1rem; color: #1A365D; display: block; text-align: right;">{{ strlen(old('last_name', $user->last_name)) }} / 50</small>
                                     @error('last_name')
-                                        <div class="invalid-feedback" style="font-size: 1.2rem;">
+                                        <div class="invalid-feedback" style="display: block; color: #FF6B35; font-size: 1.2rem;">
                                             <i class="fas fa-exclamation-circle me-2"></i>{{ $message }}
                                         </div>
                                     @enderror
                                 </div>
 
                                 <!-- Email -->
-                                <div class="mb-3">
-                                    <label for="email" class="form-label fw-bold" style="color: #1A365D; font-size: 1.4rem;">Email</label>
-                                    <input type="email" class="form-control @error('email') is-invalid @enderror" 
-                                        id="email" name="email" value="{{ old('email', $user->email) }}" 
-                                        style="border: 2px solid #1A365D; border-radius: 6px; padding: 10px 14px; font-size: 1.3rem;" 
-                                        readonly required> <!-- readonly para no dejar editar el email-->
+                                <div class="mb-4 position-relative">
+                                    <label for="email" class="block mb-2" style="font-size: 1.4rem; color: #1A365D; font-weight: 600;">
+                                        <i class="fas fa-envelope me-2"></i>Email
+                                    </label>
+                                    <div class="input-group">
+                                        <input type="email" class="form-control w-full p-3 border-2 rounded-lg @error('email') is-invalid @enderror" 
+                                            id="email" name="email" value="{{ old('email', $user->email) }}" 
+                                            style="border-color: #1A365D; font-size: 1.3rem; color: #1A365D; width: 100%;"
+                                            placeholder="Escribe el correo electrónico"
+                                            required>
+                                    </div>
                                     @error('email')
-                                        <div class="invalid-feedback" style="font-size: 1.2rem;">
+                                        <div class="invalid-feedback" style="display: block; color: #FF6B35; font-size: 1.2rem;">
                                             <i class="fas fa-exclamation-circle me-2"></i>{{ $message }}
                                         </div>
                                     @enderror
                                 </div>
 
                                 <!-- Contraseña (Opcional) -->
-                                <div class="mb-3">
-                                    <label for="password" class="form-label fw-bold" style="color: #1A365D; font-size: 1.4rem;">Contraseña</label>
-                                    <input type="password" class="form-control @error('password') is-invalid @enderror" 
+                                <div class="mb-4">
+                                    <label for="password" class="block mb-2" style="font-size: 1.4rem; color: #1A365D; font-weight: 600;">
+                                        <i class="fas fa-lock me-2"></i>Contraseña
+                                    </label>
+                                    <input type="password" class="form-control w-full p-3 border-2 rounded-lg @error('password') is-invalid @enderror" 
                                         id="password" name="password" 
-                                        style="border: 2px solid #1A365D; border-radius: 6px; padding: 10px 14px; font-size: 1.3rem;"
+                                        style="border-color: #1A365D; font-size: 1.3rem; color: #1A365D; width: 100%;"
                                         placeholder="Dejar en blanco para no cambiar">
                                     @error('password')
-                                        <div class="invalid-feedback" style="font-size: 1.2rem;">
+                                        <div class="invalid-feedback" style="display: block; color: #FF6B35; font-size: 1.2rem;">
                                             <i class="fas fa-exclamation-circle me-2"></i>{{ $message }}
                                         </div>
                                     @enderror
                                 </div>
 
                                 <!-- Confirmar Contraseña -->
-                                <div class="mb-3">
-                                    <label for="password_confirmation" class="form-label fw-bold" style="color: #1A365D; font-size: 1.4rem;">Confirmar Contraseña</label>
-                                    <input type="password" class="form-control" 
+                                <div class="mb-4">
+                                    <label for="password_confirmation" class="block mb-2" style="font-size: 1.4rem; color: #1A365D; font-weight: 600;">
+                                        <i class="fas fa-lock me-2"></i>Confirmar Contraseña
+                                    </label>
+                                    <input type="password" class="form-control w-full p-3 border-2 rounded-lg" 
                                         id="password_confirmation" name="password_confirmation" 
-                                        style="border: 2px solid #1A365D; border-radius: 6px; padding: 10px 14px; font-size: 1.3rem;"
+                                        style="border-color: #1A365D; font-size: 1.3rem; color: #1A365D; width: 100%;"
                                         placeholder="Confirmar nueva contraseña">
                                 </div>
                             </div>
@@ -88,92 +133,115 @@
                             <!-- Columna Derecha -->
                             <div class="col-md-6">
                                 <!-- Rol -->
-                                <div class="mb-3">
-                                    <label for="rol_id" class="form-label fw-bold" style="color: #1A365D; font-size: 1.4rem;">Rol</label>
-                                    <input type="text" class="form-control" 
-                                        value="{{ $user->role->name_rol ?? 'No asignado' }}" 
-                                        style="border: 2px solid #1A365D; border-radius: 6px; padding: 10px 14px; font-size: 1.3rem; background-color: #f8f9fa;" 
-                                        readonly>
-                                    <input type="hidden" name="rol_id" value="{{ $user->rol_id }}">
+                                <div class="mb-4 position-relative">
+                                    <label for="rol_id" class="block mb-2" style="font-size: 1.4rem; color: #1A365D; font-weight: 600;">
+                                        <i class="fas fa-user-tie me-2"></i>Rol
+                                    </label>
+                                    <div class="input-group">
+                                        <select class="form-control w-full p-3 border-2 rounded-lg @error('rol_id') is-invalid @enderror" id="rol_id" name="rol_id" 
+                                            style="border-color: #1A365D; font-size: 1.3rem; color: #1A365D; width: 100%;" required>
+                                            <option value="">Seleccione un rol</option>
+                                            @foreach($roles as $role)
+                                                <option value="{{ $role->id }}" {{ old('rol_id', $user->rol_id) == $role->id ? 'selected' : '' }}>
+                                                    {{ $role->name_rol }}
+                                                </option>
+                                            @endforeach
+                                        </select>
+                                    </div>
+                                    @error('rol_id')
+                                        <div class="invalid-feedback" style="display: block; color: #FF6B35; font-size: 1.2rem;">
+                                            <i class="fas fa-exclamation-circle me-2"></i>{{ $message }}
+                                        </div>
+                                    @enderror
                                 </div>
-
 
                                 <!-- Estado -->
-                                <div class="mb-3">
-                                    <label for="status_id" class="form-label fw-bold" style="color: #1A365D; font-size: 1.4rem;">Estado</label>
-                                    <select class="form-select @error('status_id') is-invalid @enderror" id="status_id" name="status_id" 
-                                            style="border: 2px solid #1A365D; border-radius: 6px; padding: 10px 14px; font-size: 1.3rem;" required>
-                                        <option value="">Seleccione estado</option>
-                                        @foreach ($statuses as $status)
-                                            @if(in_array($status->name, ['Activo', 'Inactivo', 'Pendiente']))
-                                                <option value="{{ $status->id }}" {{ $user->status_id == $status->id ? 'selected' : '' }}>
+                                <div class="mb-4 position-relative">
+                                    <label for="status_id" class="block mb-2" style="font-size: 1.4rem; color: #1A365D; font-weight: 600;">
+                                        <i class="fas fa-user-check me-2"></i>Estado
+                                    </label>
+                                    <div class="input-group">
+                                        <select class="form-control w-full p-3 border-2 rounded-lg @error('status_id') is-invalid @enderror" id="status_id" name="status_id" 
+                                            style="border-color: #1A365D; font-size: 1.3rem; color: #1A365D; width: 100%;" required>
+                                            <option value="">Seleccione estado</option>
+                                            @foreach ($statuses->where('type', 1)->whereIn('name', ['Activo', 'Inactivo']) as $status)
+                                                <option value="{{ $status->id }}" {{ old('status_id', $user->status_id) == $status->id ? 'selected' : '' }}>
                                                     {{ $status->name }}
                                                 </option>
-                                            @endif
-                                        @endforeach
-                                    </select>
+                                            @endforeach
+                                        </select>
+                                    </div>
                                     @error('status_id')
-                                        <div class="invalid-feedback" style="font-size: 1.2rem;">
+                                        <div class="invalid-feedback" style="display: block; color: #FF6B35; font-size: 1.2rem;">
                                             <i class="fas fa-exclamation-circle me-2"></i>{{ $message }}
                                         </div>
                                     @enderror
                                 </div>
 
-                                <!-- Fecha de Nacimiento modificada -->
-                                <div class="mb-3">
-                                    <label for="birth_date" class="form-label fw-bold" style="color: #1A365D; font-size: 1.4rem;">Fecha de Nacimiento</label>
-                                    <input type="text" class="form-control @error('birth_date') is-invalid @enderror" 
-                                        id="birth_date" name="birth_date" 
-                                        placeholder="Selecciona tu fecha" readonly
-                                        value="{{ old('birth_date', $user->birth_date) }}"
-                                        style="border: 2px solid #1A365D; border-radius: 6px; padding: 10px 14px; font-size: 1.3rem; background-color: #FFFFFF; cursor: pointer;">
+                                <!-- Fecha Nacimiento -->
+                                <div class="mb-4 position-relative">
+                                    <label for="birth_date" class="block mb-2" style="font-size: 1.4rem; color: #1A365D; font-weight: 600;">
+                                        <i class="fas fa-calendar-alt me-2"></i>Fecha Nacimiento
+                                    </label>
+                                    <div class="input-group">
+                                        <input type="date" class="form-control w-full p-3 border-2 rounded-lg @error('birth_date') is-invalid @enderror" 
+                                            id="birth_date" name="birth_date" value="{{ old('birth_date', $user->birth_date) }}" 
+                                            style="border-color: #1A365D; font-size: 1.3rem; color: #1A365D; width: 100%;" required>
+                                    </div>
                                     @error('birth_date')
-                                        <div class="invalid-feedback" style="font-size: 1.3rem;">
+                                        <div class="invalid-feedback" style="display: block; color: #FF6B35; font-size: 1.2rem;">
                                             <i class="fas fa-exclamation-circle me-2"></i>{{ $message }}
                                         </div>
                                     @enderror
-                                    <small class="text-muted" style="font-size: 1.3rem; color: #1A365D !important;">Debe tener 18 años cumplidos</small>
                                 </div>
 
                                 <!-- Género -->
-                                <div class="mb-3">
-                                    <label class="form-label fw-bold d-block" style="color: #1A365D; font-size: 1.4rem;">Género</label>
-                                    <div class="d-flex gap-3">
+                                <div class="mb-4">
+                                    <label class="block mb-2" style="font-size: 1.4rem; color: #1A365D; font-weight: 600;">
+                                        <i class="fas fa-venus-mars me-2"></i>Género
+                                    </label>
+                                    <div class="d-flex gap-4">
                                         <div class="form-check">
                                             <input class="form-check-input" type="radio" name="gender" id="masculino" 
-                                                value="Masculino" {{ $user->gender == 'Masculino' ? 'checked' : '' }} 
-                                                style="width: 22px; height: 22px; margin-top: 4px;" required>
-                                            <label class="form-check-label fw-bold" for="masculino" style="font-size: 1.3rem; color: #1A365D;">Masculino</label>
+                                                value="Masculino" {{ old('gender', $user->gender) == 'Masculino' ? 'checked' : '' }} 
+                                                style="width: 20px; height: 20px; margin-top: 4px;" required>
+                                            <label class="form-check-label" for="masculino" style="font-size: 1.3rem; color: #1A365D;">Masculino</label>
                                         </div>
                                         <div class="form-check">
                                             <input class="form-check-input" type="radio" name="gender" id="femenino" 
-                                                value="Femenino" {{ $user->gender == 'Femenino' ? 'checked' : '' }} 
-                                                style="width: 22px; height: 22px; margin-top: 4px;">
-                                            <label class="form-check-label fw-bold" for="femenino" style="font-size: 1.3rem; color: #1A365D;">Femenino</label>
+                                                value="Femenino" {{ old('gender', $user->gender) == 'Femenino' ? 'checked' : '' }} 
+                                                style="width: 20px; height: 20px; margin-top: 4px;">
+                                            <label class="form-check-label" for="femenino" style="font-size: 1.3rem; color: #1A365D;">Femenino</label>
                                         </div>
                                     </div>
                                     @error('gender')
-                                        <div class="text-danger small mt-2" style="font-size: 1.2rem;">
+                                        <div class="invalid-feedback" style="display: block; color: #FF6B35; font-size: 1.2rem;">
                                             <i class="fas fa-exclamation-circle me-2"></i>{{ $message }}
                                         </div>
                                     @enderror
                                 </div>
 
                                 <!-- Sección de Especialidad y Certificación -->
-                                <div class="row g-2">
+                                <div class="row g-3">
                                     <!-- Especialidad -->
                                     <div class="col-md-6">
-                                        <div class="form-group">
-                                            <label for="specialty" class="form-label fw-bold mb-1" style="color: #1A365D; font-size: 1.4rem;">
-                                                Especialidad
+                                        <div class="form-group position-relative">
+                                            <label for="specialty" class="block mb-2" style="font-size: 1.4rem; color: #1A365D; font-weight: 600;">
+                                                <i class="fas fa-certificate me-2"></i>Especialidad
                                             </label>
-                                            <input type="text" class="form-control @error('specialty') is-invalid @enderror" 
-                                                id="specialty" name="specialty" value="{{ old('specialty', $user->specialty) }}"
-                                                style="border: 2px solid #1A365D; border-radius: 6px; padding: 10px 14px; 
-                                                        font-size: 1.3rem; width: 100%;">
+                                            <div class="input-group">
+                                                <input type="text" class="form-control w-full p-3 border-2 rounded-lg @error('specialty') is-invalid @enderror" 
+                                                    id="specialty" name="specialty" value="{{ old('specialty', $user->specialty) }}"
+                                                    style="border-color: #1A365D; font-size: 1.3rem; color: #1A365D; width: 100%;"
+                                                    disabled>
+                                                <span class="input-group-text validation-icon" style="border-color: #1A365D; display: {{ old('specialty', $user->specialty) ? 'flex' : 'none' }};">
+                                                    <i class="fas fa-check-circle text-success valid-icon"></i>
+                                                    <i class="fas fa-exclamation-circle text-danger invalid-icon"></i>
+                                                </span>
+                                            </div>
                                             @error('specialty')
-                                                <div class="invalid-feedback mt-1" style="font-size: 1.2rem;">
-                                                    {{ $message }}
+                                                <div class="invalid-feedback" style="display: block; color: #FF6B35; font-size: 1.2rem;">
+                                                    <i class="fas fa-exclamation-circle me-2"></i>{{ $message }}
                                                 </div>
                                             @enderror
                                         </div>
@@ -181,17 +249,23 @@
 
                                     <!-- Certificación -->
                                     <div class="col-md-6">
-                                        <div class="form-group">
-                                            <label for="certification" class="form-label fw-bold mb-1" style="color: #1A365D; font-size: 1.4rem;">
-                                                Certificación
+                                        <div class="form-group position-relative">
+                                            <label for="certification" class="block mb-2" style="font-size: 1.4rem; color: #1A365D; font-weight: 600;">
+                                                <i class="fas fa-award me-2"></i>Certificación
                                             </label>
-                                            <input type="text" class="form-control @error('certification') is-invalid @enderror" 
-                                                id="certification" name="certification" value="{{ old('certification', $user->certification) }}"
-                                                style="border: 2px solid #1A365D; border-radius: 6px; padding: 10px 14px; 
-                                                        font-size: 1.3rem; width: 100%;">
+                                            <div class="input-group">
+                                                <input type="text" class="form-control w-full p-3 border-2 rounded-lg @error('certification') is-invalid @enderror" 
+                                                    id="certification" name="certification" value="{{ old('certification', $user->certification) }}"
+                                                    style="border-color: #1A365D; font-size: 1.3rem; color: #1A365D; width: 100%;"
+                                                    disabled>
+                                                <span class="input-group-text validation-icon" style="border-color: #1A365D; display: {{ old('certification', $user->certification) ? 'flex' : 'none' }};">
+                                                    <i class="fas fa-check-circle text-success valid-icon"></i>
+                                                    <i class="fas fa-exclamation-circle text-danger invalid-icon"></i>
+                                                </span>
+                                            </div>
                                             @error('certification')
-                                                <div class="invalid-feedback mt-1" style="font-size: 1.2rem;">
-                                                    {{ $message }}
+                                                <div class="invalid-feedback" style="display: block; color: #FF6B35; font-size: 1.2rem;">
+                                                    <i class="fas fa-exclamation-circle me-2"></i>{{ $message }}
                                                 </div>
                                             @enderror
                                         </div>
@@ -200,15 +274,14 @@
                             </div>
                         </div>
 
-                        <!-- Botones -->
-                        <div class="d-flex justify-content-end gap-2 mt-3">
-                            <a href="{{ route('admin.users.index') }}" class="btn py-1 px-3" 
-                            style="background-color: #1A365D; color: #FFFFFF; font-weight: 600; font-size: 1.3rem; border: 2px solid #1A365D;">
-                                <i class="fas fa-times-circle me-1"></i> CANCELAR
+                        <div class="d-flex justify-content-end mt-5">
+                            <a href="{{ route('admin.users.index', ['roleFilter' => $redirectFilter]) }}" class="btn py-2 px-4 me-3"
+                                style="background-color: #1A365D; color: #FFFFFF; font-weight: 600; font-size: 1.3rem;">
+                                <i class="fas fa-times me-2"></i> CANCELAR
                             </a>
-                            <button type="submit" class="btn py-1 px-3" 
-                                    style="background-color: #FF6B35; color: #FFFFFF; font-weight: 600; font-size: 1.3rem;">
-                                <i class="fas fa-save me-1"></i> ACTUALIZAR USUARIO
+                            <button type="submit" id="submitBtnEdit" class="btn py-2 px-4"
+                                style="background-color: #2EC4B6; color: #FFFFFF; font-weight: 600; font-size: 1.3rem;">
+                                <i class="fas fa-save me-2"></i> ACTUALIZAR USUARIO
                             </button>
                         </div>
                     </form>
@@ -218,408 +291,355 @@
     </div>
 </div>
 
-<!-- Flatpickr CSS -->
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
-
 <style>
-    .card {
-        border-radius: 10px;
-        overflow: hidden;
-        margin-top: 10px;
+    /* Validaciones para inputs */
+    .is-valid {
+        border-color: #28a745 !important;
+        background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 8 8'%3e%3cpath fill='%232EC4B6' d='M2.3 6.73L.6 4.53c-.4-1.04.46-1.4 1.1-.8l1.1 1.4 3.4-3.8c.6-.63 1.6-.27 1.2.7l-4 4.6c-.43.5-.8.4-1.1.1z'/%3e%3c/svg%3e") !important;
+        background-repeat: no-repeat;
+        background-position: right calc(0.375em + 0.1875rem) center;
+        background-size: calc(0.75em + 0.375rem) calc(0.75em + 0.375rem);
+    }
+
+    .is-invalid {
+        border-color: #FF6B35 !important;
+        background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 12' width='12' height='12' fill='none' stroke='%23FF6B35'%3e%3ccircle cx='6' cy='6' r='4.5'/%3e%3cpath stroke-linejoin='round' d='M5.8 3.6h.4L6 6.5z'/%3e%3ccircle cx='6' cy='8.2' r='.6' fill='%23FF6B35' stroke='none'/%3e%3c/svg%3e") !important;
+        background-repeat: no-repeat;
+        background-position: right calc(0.375em + 0.1875rem) center;
+        background-size: calc(0.75em + 0.375rem) calc(0.75em + 0.375rem);
     }
     
-    .container-fluid {
-        padding-top: 0.5rem !important;
+    .validation-icon {
+        border-left: none !important;
     }
     
-    .form-control:focus, .form-select:focus {
-        border-color: #FF6B35;
-        box-shadow: 0 0 0 0.25rem rgba(255, 107, 53, 0.25);
+    .form-control.is-valid {
+        border-right: none !important;
     }
     
-    .invalid-feedback {
-        display: block;
-        margin-top: 8px;
-        padding: 8px 12px;
-        background-color: rgba(255, 107, 53, 0.1);
-        border-radius: 6px;
-        border-left: 4px solid #FF6B35;
-        font-size: 1.2rem;
+    .valid-icon, .invalid-icon {
+        display: none;
     }
     
-    .btn {
+    .is-valid + .input-group-text .valid-icon {
+        display: inline;
+    }
+    
+    .is-invalid + .input-group-text .invalid-icon {
+        display: inline;
+    }
+    
+    .input-group-text {
         transition: all 0.3s ease;
-        border-radius: 8px;
-        padding: 0.65rem 1.5rem;
-    }
-    
-    .btn:hover {
-        transform: translateY(-3px);
-        box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
-    }
-    
-    /* ESTILOS DEL ALERT - TAMAÑOS AUMENTADOS */
-    .alert-error {
-        background-color: #FF6B35;
-        color: #FFFFFF;
-        border-left: 5px solid #1A365D;
-        font-size: 1.6rem;
-        margin-bottom: 1.5rem;
-        padding: 1.5rem 2rem;
-        border-radius: 8px;
-    }
-
-    .alert-error .alert-icon {
-        font-size: 2.5rem;
-        margin-right: 1.2rem;
-    }
-
-    .alert-error .alert-message strong {
-        font-size: 1.8rem;
-        display: block;
-        margin-bottom: 0.8rem;
-    }
-
-    .alert-error ul {
-        margin-bottom: 0;
-        padding-left: 2.2rem;
-    }
-
-    .alert-error li {
-        font-size: 1.5rem;
-        margin-bottom: 0.5rem;
-    }
-
-    .btn-close-white {
-        filter: invert(1);
-        opacity: 0.8;
-        font-size: 2rem;
-    }
-
-    /* ESTILOS SWEETALERT2 - TAMAÑOS AUMENTADOS */
-    .swal2-popup {
-        width: 450px !important;
-        border-radius: 10px !important;
-        padding: 2rem !important;
-        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-        border: 2px solid #1A365D !important;
-        background: #FFFFFF !important;
-    }
-        
-    .swal2-title {
-        font-size: 1.8rem !important;
-        color: #1A365D !important;
-        font-weight: 700 !important;
-        margin-bottom: 1.2rem !important;
-    }
-        
-    .swal2-content {
-        font-size: 1.5rem !important;
-        color: #1A365D !important;
-        line-height: 1.6;
-    }
-        
-    .swal2-confirm {
-        background-color: #1A365D !important;
-        color: white !important;
-        border: none !important;
-        font-size: 1.3rem !important;
-        padding: 0.8rem 2.5rem !important;
-        border-radius: 6px !important;
-        font-weight: 600 !important;
-        margin-top: 1rem;
-    }
-        
-    .swal2-icon.swal2-warning {
-        color: #FF6B35 !important;
-        border-color: #FF6B35 !important;
-        transform: scale(1.2);
-        margin: 1.2rem auto 0.8rem;
-    }
-    
-    /* ESTILOS PARA EL CALENDARIO */
-    .flatpickr-calendar {
-        width: 320px !important;
-        font-family: 'Poppins', sans-serif !important;
-        box-shadow: 0 10px 20px rgba(0,0,0,0.2) !important;
-        border: 2px solid #1A365D !important;
-        border-radius: 8px !important;
-    }
-    
-    .flatpickr-day.selected, 
-    .flatpickr-day.selected:hover {
-        background: #FF6B35 !important;
-        border-color: #FF6B35 !important;
-    }
-    
-    .flatpickr-day.today {
-        border-color: #2EC4B6 !important;
-    }
-    
-    .flatpickr-day.today:hover {
-        background: #2EC4B6 !important;
-        color: white !important;
-    }
-    
-    .flatpickr-months .flatpickr-month {
-        background: #1A365D !important;
-        color: white !important;
-        fill: white !important;
-        border-radius: 6px 6px 0 0 !important;
-    }
-    
-    .flatpickr-weekdays {
-        background: #1A365D !important;
-    }
-    
-    .flatpickr-weekday {
-        color: white !important;
-    }
-    
-    .flatpickr-current-month .flatpickr-monthDropdown-months {
-        background: #1A365D !important;
-        color: white !important;
-    }
-    
-    .flatpickr-current-month input.cur-year {
-        color: white !important;
-        font-weight: 600 !important;
-    }
-
-    /* Ajustes para móviles */
-    @media (max-width: 768px) {
-        .card-header h2 {
-            font-size: 1.5rem !important;
-        }
-        
-        .container-fluid {
-            padding-top: 0 !important;
-        }
-        
-        .form-label, .form-check-label {
-            font-size: 1.3rem !important;
-        }
-        
-        .form-control, .form-select {
-            font-size: 1.2rem !important;
-            padding: 12px 14px !important;
-        }
-        
-        .btn {
-            font-size: 1.2rem !important;
-            padding: 0.8rem 1.2rem !important;
-        }
-        
-        .d-flex.gap-3 {
-            gap: 1.5rem !important;
-        }
-        
-        .invalid-feedback {
-            font-size: 1.1rem !important;
-            padding: 10px 12px !important;
-        }
-        
-        .form-check-input {
-            width: 20px !important;
-            height: 20px !important;
-            margin-top: 5px !important;
-        }
-        
-        /* ESTILOS DEL ALERT EN MÓVIL - TAMAÑOS AUMENTADOS */
-        .alert-error {
-            font-size: 1.8rem;
-            padding: 1.8rem 2rem;
-        }
-
-        .alert-error .alert-icon {
-            font-size: 3rem;
-        }
-
-        .alert-error .alert-message strong {
-            font-size: 2rem;
-        }
-
-        .alert-error li {
-            font-size: 1.7rem;
-        }
-
-        .btn-close-white {
-            font-size: 2.5rem;
-        }
-        
-        .swal2-popup {
-            width: 350px !important;
-            padding: 1.5rem !important;
-        }
-        
-        .swal2-title {
-            font-size: 1.8rem !important;
-        }
-        
-        .swal2-content {
-            font-size: 1.5rem !important;
-        }
-        
-        .swal2-confirm {
-            font-size: 1.4rem !important;
-            padding: 0.8rem 1.8rem !important;
-        }
-    }
-    
-    /* Reducción general de espacios verticales */
-    .row.g-3 {
-        row-gap: 0.8rem !important;
-    }
-    
-    .mb-3 {
-        margin-bottom: 0.8rem !important;
-    }
-    
-    .card-body {
-        padding-top: 1rem !important;
-        padding-bottom: 1rem !important;
     }
 </style>
 
-@section('scripts')
-<!-- SweetAlert2 para diálogos personalizados -->
+
+@push('scripts')
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-<!-- Include Font Awesome for icons -->
-<script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
-<!-- Flatpickr JS -->
 <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
 <script src="https://cdn.jsdelivr.net/npm/flatpickr/dist/l10n/es.js"></script>
-
 <script>
-    document.addEventListener('DOMContentLoaded', function() {
-        // Validación del formulario
-        (function () {
-            'use strict';
-            var forms = document.querySelectorAll('.needs-validation');
-            
-            Array.prototype.slice.call(forms).forEach(function (form) {
-                form.addEventListener('submit', function (event) {
-                    if (!form.checkValidity()) {
-                        event.preventDefault();
-                        event.stopPropagation();
+document.addEventListener('DOMContentLoaded', function () {
+    const form = document.getElementById('userFormEdit');
+    const submitBtn = document.getElementById('submitBtnEdit');
+    const namesInput = document.getElementById('names');
+    const lastNameInput = document.getElementById('last_name');
+    const emailInput = document.getElementById('email');
+    const namesCounter = document.getElementById('names-counter');
+    const lastNameCounter = document.getElementById('last_name-counter');
+    const rolSelect = document.getElementById('rol_id');
+    const statusSelect = document.getElementById('status_id');
+    const birthDateInput = document.getElementById('birth_date');
+    const specialtyInput = document.getElementById('specialty');
+    const certificationInput = document.getElementById('certification');
+    const genderInputs = document.querySelectorAll('input[name="gender"]');
 
-                        // Mostrar alerta de campos incompletos
-                        Swal.fire({
-                            icon: 'warning',
-                            title: '<span style="font-size: 1.8rem; color: #1A365D; font-weight: 700;">Campos incompletos</span>',
-                            html: '<span style="font-size: 1.5rem; color: #1A365D;">Por favor completa todos los campos obligatorios antes de continuar.</span>',
-                            confirmButtonText: 'Aceptar',
-                            confirmButtonColor: '#1A365D',
-                            background: '#FFFFFF',
-                            iconColor: '#FF6B35',
-                            customClass: {
-                                container: 'swal2-container-custom',
-                                popup: 'swal2-popup-custom'
-                            }
-                        });
-                    }
+    const maxNames = 50;
+    const maxLastName = 50;
+    const nameRegex = /^[a-zA-ZáéíóúÁÉÍÓÚñÑ\s]+$/;
 
-                    form.classList.add('was-validated');
-                }, false);
-            });
-        })();
+    function toggleValidationIcon(input, valid) {
+        const iconContainer = input.parentElement.querySelector('.validation-icon');
+        if (!iconContainer) return;
 
-        // Calculamos la fecha exacta de hace 18 años
-        const today = new Date();
-        const maxDate = new Date(
-            today.getFullYear() - 18,
-            today.getMonth(),
-            today.getDate()
-        );
+        if (valid) {
+            iconContainer.style.display = 'flex';
+            iconContainer.querySelector('.valid-icon').style.display = 'inline';
+            iconContainer.querySelector('.invalid-icon').style.display = 'none';
+        } else {
+            iconContainer.style.display = 'flex';
+            iconContainer.querySelector('.valid-icon').style.display = 'none';
+            iconContainer.querySelector('.invalid-icon').style.display = 'inline';
+        }
+    }
 
-        // Configuración del datepicker modificada
-        const birthDatePicker = flatpickr("#birth_date", {
-            dateFormat: "Y-m-d",
-            locale: "es",
-            disableMobile: true,
-            maxDate: maxDate,
-            minDate: new Date().fp_incr(-100 * 365), // Máximo 100 años
-            allowInput: false,
-            clickOpens: true,
-            defaultDate: "{{ old('birth_date', $user->birth_date) }}", // Usar fecha existente
-            onChange: function(selectedDates, dateStr, instance) {
-                // Validar edad mínima
-                const minAgeDate = new Date();
-                minAgeDate.setFullYear(minAgeDate.getFullYear() - 18);
-                
-                if (selectedDates[0] > minAgeDate) {
-                    const errorElement = document.querySelector('#birth_date').nextElementSibling;
-                    if (errorElement && errorElement.classList.contains('invalid-feedback')) {
-                        errorElement.style.display = 'block';
-                        errorElement.innerHTML = '<i class="fas fa-exclamation-circle me-2"></i>Debes tener al menos 18 años cumplidos';
-                    }
-                    instance.clear();
-                } else {
-                    const errorElement = document.querySelector('#birth_date').nextElementSibling;
-                    if (errorElement && errorElement.classList.contains('invalid-feedback')) {
-                        errorElement.style.display = 'none';
-                    }
-                }
-            },
-            onOpen: function(selectedDates, dateStr, instance) {
-                // Enfocar el año para facilitar selección
-                setTimeout(() => {
-                    const yearInput = instance.calendarContainer.querySelector('.numInput.cur-year');
-                    if (yearInput) yearInput.focus();
-                }, 100);
-            }
-        });
+    function updateCounter(input, counter, max) {
+        const length = input.value.length;
+        counter.textContent = `${length} / ${max}`;
+        counter.style.color = (length > max * 0.9) ? '#FF6B35' : '#1A365D';
+    }
 
-        // Validación adicional para asegurar 18 años cumplidos
-        document.querySelector('form').addEventListener('submit', function(e) {
-            const birthDateInput = document.getElementById('birth_date');
-            const errorElement = birthDateInput.nextElementSibling;
-            
-            if (!birthDateInput.value) {
-                e.preventDefault();
-                if (errorElement && errorElement.classList.contains('invalid-feedback')) {
-                    errorElement.style.display = 'block';
-                    errorElement.innerHTML = '<i class="fas fa-exclamation-circle me-2"></i>Por favor selecciona tu fecha de nacimiento';
-                }
-                return;
-            }
-            
-            const birthDate = new Date(birthDateInput.value);
-            const today = new Date();
-            let age = today.getFullYear() - birthDate.getFullYear();
-            const monthDiff = today.getMonth() - birthDate.getMonth();
-            
-            if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < birthDate.getDate())) {
-                age--;
-            }
-            
-            if (age < 18) {
-                e.preventDefault();
-                if (errorElement && errorElement.classList.contains('invalid-feedback')) {
-                    errorElement.style.display = 'block';
-                    errorElement.innerHTML = '<i class="fas fa-exclamation-circle me-2"></i>Debes tener al menos 18 años cumplidos';
-                }
-                birthDatePicker.open();
-            }
-        });
-        
-        // Enable tooltips
-        var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
-        var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
-            return new bootstrap.Tooltip(tooltipTriggerEl);
-        });
-        
-        // Manejar campos de contraseña
-        const passwordField = document.getElementById('password');
-        const confirmPasswordField = document.getElementById('password_confirmation');
-        
-        passwordField.addEventListener('input', function() {
-            if (passwordField.value === '') {
-                confirmPasswordField.required = false;
-            } else {
-                confirmPasswordField.required = true;
+    function validateInput(input, regex) {
+        const feedbackId = input.id + '-feedback';
+        const feedbackElement = document.getElementById(feedbackId);
+
+        input.classList.remove('is-valid', 'is-invalid');
+
+        if (input.value.trim() === '') {
+            if (feedbackElement) feedbackElement.style.display = 'none';
+            toggleValidationIcon(input, false);
+            return false;
+        }
+
+        if (regex.test(input.value)) {
+            input.classList.add('is-valid');
+            if (feedbackElement) feedbackElement.style.display = 'none';
+            toggleValidationIcon(input, true);
+            return true;
+        } else {
+            input.classList.add('is-invalid');
+            if (feedbackElement) feedbackElement.style.display = 'block';
+            toggleValidationIcon(input, false);
+            return false;
+        }
+    }
+
+    function validateEmail(input) {
+        const feedbackElement = document.getElementById('email-feedback');
+        const value = input.value.trim();
+
+        input.classList.remove('is-valid', 'is-invalid');
+
+        if (value === '') {
+            if (feedbackElement) feedbackElement.style.display = 'none';
+            toggleValidationIcon(input, false);
+            return false;
+        }
+
+        const comRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.com$/;
+
+        if (comRegex.test(value)) {
+            input.classList.add('is-valid');
+            if (feedbackElement) feedbackElement.style.display = 'none';
+            toggleValidationIcon(input, true);
+            return true;
+        } else {
+            input.classList.add('is-invalid');
+            if (feedbackElement) feedbackElement.style.display = 'block';
+            toggleValidationIcon(input, false);
+            return false;
+        }
+    }
+
+    function initializeFields() {
+        validateInput(namesInput, nameRegex);
+        validateInput(lastNameInput, nameRegex);
+        validateEmail(emailInput);
+        updateCounter(namesInput, namesCounter, maxNames);
+        updateCounter(lastNameInput, lastNameCounter, maxLastName);
+        toggleValidationIcon(namesInput, namesInput.classList.contains('is-valid'));
+        toggleValidationIcon(lastNameInput, lastNameInput.classList.contains('is-valid'));
+        toggleValidationIcon(emailInput, emailInput.classList.contains('is-valid'));
+        toggleValidationIcon(rolSelect, rolSelect.value.trim() !== '');
+        toggleValidationIcon(statusSelect, statusSelect.value.trim() !== '');
+        toggleValidationIcon(birthDateInput, birthDateInput.value.trim() !== '');
+
+        // Para especialidad y certificación solo si habilitados
+        if (!specialtyInput.disabled) {
+            validateInput(specialtyInput, /.*/);
+            toggleValidationIcon(specialtyInput, specialtyInput.classList.contains('is-valid'));
+        } else {
+            clearValidation(specialtyInput);
+        }
+        if (!certificationInput.disabled) {
+            validateInput(certificationInput, /.*/);
+            toggleValidationIcon(certificationInput, certificationInput.classList.contains('is-valid'));
+        } else {
+            clearValidation(certificationInput);
+        }
+    }
+
+    function clearValidation(input) {
+        input.classList.remove('is-valid', 'is-invalid');
+        const iconContainer = input.parentElement.querySelector('.validation-icon');
+        if (iconContainer) iconContainer.style.display = 'none';
+        const feedbackElement = document.getElementById(input.id + '-feedback');
+        if (feedbackElement) feedbackElement.style.display = 'none';
+    }
+
+    namesInput.addEventListener('input', () => {
+        namesInput.value = namesInput.value.replace(/[^a-zA-ZáéíóúÁÉÍÓÚñÑ\s]/g, '');
+        updateCounter(namesInput, namesCounter, maxNames);
+        validateInput(namesInput, nameRegex);
+    });
+
+    lastNameInput.addEventListener('input', () => {
+        lastNameInput.value = lastNameInput.value.replace(/[^a-zA-ZáéíóúÁÉÍÓÚñÑ\s]/g, '');
+        updateCounter(lastNameInput, lastNameCounter, maxLastName);
+        validateInput(lastNameInput, nameRegex);
+    });
+
+    emailInput.addEventListener('input', () => {
+        emailInput.value = emailInput.value.replace(/[^a-zA-Z0-9@._%+-]/g, '');
+        validateEmail(emailInput);
+    });
+
+    const birthDatePicker = flatpickr("#birth_date", {
+        dateFormat: "Y-m-d",
+        locale: "es",
+        disableMobile: true,
+        maxDate: new Date(new Date().setFullYear(new Date().getFullYear() - 18)),
+        minDate: new Date(new Date().setFullYear(new Date().getFullYear() - 100)),
+        allowInput: false,
+        clickOpens: true,
+        defaultDate: "{{ old('birth_date', $user->birth_date) }}",
+        onChange: function(selectedDates, dateStr, instance) {
+            validateInput(birthDateInput, /.*/);
+        }
+    });
+
+    function checkInstructorFields() {
+        const selectedOption = rolSelect.options[rolSelect.selectedIndex];
+        const isInstructor = selectedOption.textContent.toLowerCase().includes('instructor');
+
+        specialtyInput.disabled = !isInstructor;
+        certificationInput.disabled = !isInstructor;
+
+        if (!isInstructor) {
+            specialtyInput.value = '';
+            certificationInput.value = '';
+            clearValidation(specialtyInput);
+            clearValidation(certificationInput);
+        } else {
+            validateInput(specialtyInput, /.*/);
+            validateInput(certificationInput, /.*/);
+        }
+    }
+
+    rolSelect.addEventListener('change', function() {
+        checkInstructorFields();
+        validateInput(rolSelect, /.*/);
+        toggleValidationIcon(rolSelect, rolSelect.value.trim() !== '');
+    });
+
+    statusSelect.addEventListener('change', function() {
+        validateInput(statusSelect, /.*/);
+        toggleValidationIcon(statusSelect, statusSelect.value.trim() !== '');
+    });
+
+    genderInputs.forEach(input => {
+        input.addEventListener('change', function() {
+            const iconContainer = this.closest('.form-check').querySelector('.validation-icon');
+            if (iconContainer) {
+                iconContainer.style.display = this.checked ? 'flex' : 'none';
+                iconContainer.querySelector('.valid-icon').style.display = 'inline';
+                iconContainer.querySelector('.invalid-icon').style.display = 'none';
             }
         });
     });
+
+    initializeFields();
+    checkInstructorFields();
+
+    form.addEventListener('submit', function (event) {
+        let isValid = true;
+
+        if (!namesInput.value.trim() || namesInput.classList.contains('is-invalid')) {
+            namesInput.classList.add('is-invalid');
+            toggleValidationIcon(namesInput, false);
+            isValid = false;
+        }
+
+        if (!lastNameInput.value.trim() || lastNameInput.classList.contains('is-invalid')) {
+            lastNameInput.classList.add('is-invalid');
+            toggleValidationIcon(lastNameInput, false);
+            isValid = false;
+        }
+
+        if (!emailInput.value.trim() || emailInput.classList.contains('is-invalid')) {
+            emailInput.classList.add('is-invalid');
+            toggleValidationIcon(emailInput, false);
+            isValid = false;
+        }
+
+        if (!rolSelect.value) {
+            rolSelect.classList.add('is-invalid');
+            toggleValidationIcon(rolSelect, false);
+            isValid = false;
+        }
+
+        if (!statusSelect.value) {
+            statusSelect.classList.add('is-invalid');
+            toggleValidationIcon(statusSelect, false);
+            isValid = false;
+        }
+
+        if (!birthDateInput.value) {
+            birthDateInput.classList.add('is-invalid');
+            toggleValidationIcon(birthDateInput, false);
+            isValid = false;
+        }
+
+        // Validar solo si están habilitados
+        if (!specialtyInput.disabled && specialtyInput.classList.contains('is-invalid')) {
+            isValid = false;
+        }
+
+        if (!certificationInput.disabled && certificationInput.classList.contains('is-invalid')) {
+            isValid = false;
+        }
+
+        if (!document.querySelector('input[name="gender"]:checked')) {
+            isValid = false;
+            Swal.fire({
+                icon: 'warning',
+                title: '¡Error!',
+                text: 'Por favor seleccione un género',
+                confirmButtonColor: '#1A365D'
+            });
+        }
+
+        const password = document.getElementById('password').value;
+        const confirmPassword = document.getElementById('password_confirmation').value;
+        if (password && password !== confirmPassword) {
+            Swal.fire({
+                icon: 'error',
+                title: 'Error en contraseña',
+                text: 'Las contraseñas no coinciden',
+                confirmButtonColor: '#1A365D'
+            });
+            isValid = false;
+        }
+
+        if (!isValid) {
+            event.preventDefault();
+            event.stopPropagation();
+
+            Swal.fire({
+                icon: 'warning',
+                title: '¡Error!',
+                text: 'Por favor complete todos los campos obligatorios correctamente',
+                confirmButtonText: 'Aceptar',
+                confirmButtonColor: '#1A365D',
+                background: '#FFFFFF',
+                iconColor: '#FF6B35',
+                color: '#1A365D',
+                width: 400
+            });
+
+            form.classList.add('was-validated');
+        }
+    });
+
+    const passwordField = document.getElementById('password');
+    const confirmPasswordField = document.getElementById('password_confirmation');
+
+    passwordField.addEventListener('input', function() {
+        confirmPasswordField.required = passwordField.value !== '';
+    });
+});
 </script>
+@endpush
+
 @endsection
