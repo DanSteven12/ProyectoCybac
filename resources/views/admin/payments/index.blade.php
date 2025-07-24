@@ -44,7 +44,7 @@
                                 <span class="input-group-text bg-white border-end-0">
                                     <i class="fas fa-circle text-azul-marino"></i>
                                 </span>
-                                <select name="estado" id="estado" class="form-select border-start-0 ps-2 estado-select" style="font-size: 1.3rem;" onchange="this.form.submit()">
+                                <select name="estado" id="estado" class="form-select border-start-0 ps-2 estado-select" style="font-size: 1.3rem; width: 100%;" onchange="this.form.submit()">
                                     <option value="pendiente" class="text-warning" {{ request('estado', 'pendiente') == 'pendiente' ? 'selected' : '' }}>Pendiente</option>
                                     <option value="aprobado" class="text-success" {{ request('estado') == 'aprobado' ? 'selected' : '' }}>Aprobado</option>
                                     <option value="rechazado" class="text-danger" {{ request('estado') == 'rechazado' ? 'selected' : '' }}>Rechazado</option>
@@ -135,7 +135,7 @@
                             <label for="mes" class="form-label fw-medium text-azul-marino mb-2" style="font-size: 1.4rem;">
                                 <i class="fas fa-calendar-alt me-2"></i>Mes
                             </label>
-                            <select name="mes" id="mes" class="form-select" style="font-size: 1.3rem;" required>
+                            <select name="mes" id="mes" class="form-select" style="font-size: 1.3rem; width: 100%;" required>
                                 @foreach([
                                     1 => 'Enero', 2 => 'Febrero', 3 => 'Marzo', 4 => 'Abril',
                                     5 => 'Mayo', 6 => 'Junio', 7 => 'Julio', 8 => 'Agosto',
@@ -151,7 +151,7 @@
                             <label for="anio" class="form-label fw-medium text-azul-marino mb-2" style="font-size: 1.4rem;">
                                 <i class="fas fa-calendar me-2"></i>Año
                             </label>
-                            <select name="anio" id="anio" class="form-select" required style="font-size: 1.3rem;">
+                            <select name="anio" id="anio" class="form-select" required style="font-size: 1.3rem; width: 100%;">
                                 @for ($i = date('Y'); $i <= date('Y') + 5; $i++)
                                     <option value="{{ $i }}" {{ $i == date('Y') ? 'selected' : '' }}>{{ $i }}</option>
                                 @endfor
@@ -215,124 +215,116 @@
     </div>
 
     <!-- Tabla de pagos - Diseño Premium -->
-    <div class="card border-0 shadow-lg mb-5 overflow-hidden">
-        <div class="card-header bg-white py-3 border-bottom">
-            <div class="d-flex justify-content-between align-items-center">
-                <h5 class="mb-0 fw-semibold text-azul-marino" style="font-size: 1.5rem;">
-                    <i class="fas fa-list-ul me-2"></i>Registros de Pagos
-                </h5>
-                <span class="badge bg-light text-azul-marino py-2 px-3" style="font-size: 1.4rem;">
-                    <i class="fas fa-database me-1"></i> {{ $payments->total() }} registros
-                </span>
-            </div>
-        </div>
-        
-        <div class="card-body p-0">
-            <div class="table-responsive">
-                <table class="table table-hover align-middle mb-0">
-                    <thead class="bg-light">
-                        <tr>
-                            <th class="text-azul-marino fw-medium py-3" style="font-size: 1.4rem; min-width: 200px;">Usuario</th>
-                            <th class="text-azul-marino fw-medium py-3" style="font-size: 1.4rem;">Membresía</th>
-                            <th class="text-azul-marino fw-medium py-3" style="font-size: 1.4rem;">Monto</th>
-                            <th class="text-azul-marino fw-medium py-3" style="font-size: 1.4rem;">Estado</th>
-                            <th class="text-azul-marino fw-medium py-3" style="font-size: 1.4rem;">Fecha</th>
-                            <th class="text-azul-marino fw-medium py-3" style="font-size: 1.4rem;">Comprobante</th>
-                            <th id="th-comentario" class="text-azul-marino fw-medium py-3" style="display: none; font-size: 1.4rem;">Comentario</th>
-                            <th id="th-accion" class="text-azul-marino fw-medium py-3" style="font-size: 1.4rem;">Acción</th>
-                        </tr>
-                    </thead>
-                    <tbody id="payment-table-body">
-                        @foreach($payments as $payment)
-                        @php
-                            $statusClass = match($payment->status->name) {
-                                'Pendiente de revisión' => 'pendiente',
-                                'Aprobado' => 'aprobado',
-                                'Rechazado' => 'rechazado',
-                                'Vencido' => 'vencido',
-                                default => ''
-                            };
-                            
-                            $statusColor = match($payment->status->name) {
-                                'Pendiente de revisión' => 'warning',
-                                'Aprobado' => 'success',
-                                'Rechazado' => 'danger',
-                                'Vencido' => 'secondary',
-                                default => 'primary'
-                            };
-                        @endphp
-                        <tr class="payment-row {{ $statusClass }}">
-                            <td class="py-3" style="font-size: 1.4rem;">
-                                <div class="d-flex align-items-center">
-                                    <div class="avatar-sm rounded-circle bg-azul-marino text-white d-flex align-items-center justify-content-center me-3">
-                                        {{ substr($payment->user->names, 0, 1) }}{{ substr($payment->user->last_name, 0, 1) }}
-                                    </div>
-                                    <div>
-                                        <h6 class="mb-0 fw-semibold" style="font-size: 1.4rem;">{{ $payment->user->names }} {{ $payment->user->last_name }}</h6>
-                                        <small class="text-muted" style="font-size: 1.3rem;">{{ $payment->user->email }}</small>
-                                    </div>
-                                </div>
-                            </td>
-                            <td class="py-3" style="font-size: 1.4rem;">
-                                <span class="fw-medium">{{ $payment->membership->name }}</span>
-                                <small class="text-muted d-block" style="font-size: 1.3rem;">({{ $payment->membership->duration }} días)</small>
-                            </td>
-                            <td class="py-3 fw-medium" style="font-size: 1.4rem;">${{ number_format($payment->price, 2) }}</td>
-                            <td class="py-3" style="font-size: 1.4rem;">
-                                <span class="badge bg-{{ $statusColor }} text-white py-2 px-3 rounded-pill">{{ $payment->status->name }}</span>
-                            </td>
-                            <td class="py-3" style="font-size: 1.4rem;">
-                                <div class="d-flex flex-column">
-                                    <span>{{ \Carbon\Carbon::parse($payment->date)->translatedFormat('d M Y') }}</span>
-                                    @if($statusClass === 'vencido' && $payment->expiration_date)
-                                    <small class="text-danger" style="font-size: 1.3rem;">
-                                        <i class="fas fa-clock me-1"></i>Expiró: {{ \Carbon\Carbon::parse($payment->expiration_date)->translatedFormat('d M Y') }}
-                                    </small>
-                                    @endif
-                                </div>
-                            </td>
-                            <td class="py-3" style="font-size: 1.4rem;">
-                                <a href="{{ Storage::url($payment->receipt_url) }}" target="_blank" 
-                                   class="btn btn-sm btn-outline-primary d-flex align-items-center" style="font-size: 1.3rem;">
-                                    <i class="fas fa-eye me-2"></i> Ver
-                                </a>
-                            </td>
-                            <td class="comentario-col py-3" style="{{ $statusClass === 'rechazado' ? '' : 'display:none' }}; font-size: 1.4rem;">
-                                <small class="text-muted" style="font-size: 1.3rem;">{{ $statusClass === 'rechazado' ? ($payment->comment ?? 'Sin comentario') : '' }}</small>
-                            </td>
-                            <td class="accion-col py-3" style="font-size: 1.4rem;">
-                                @if($statusClass === 'pendiente')
-                                <form id="form-{{ $payment->id }}" action="{{ route('admin.payments.update', $payment) }}" method="POST">
-                                    @csrf
-                                    @method('PUT')
-                                    <div class="d-flex gap-2">
-                                        <div class="flex-grow-1">
-                                            <select name="status_id" onchange="handleStatusChange(this, {{ $payment->id }})" class="form-select form-select-sm" style="font-size: 1.3rem;">
-                                                <option value="4" selected>Pendiente</option>
-                                                <option value="5">Aprobar</option>
-                                                <option value="6">Rechazar</option>
-                                            </select>
-                                        </div>
-                                        <div id="comment-area-{{ $payment->id }}" class="flex-grow-1" style="display: none;">
-                                            <div class="input-group input-group-sm">
-                                                <input type="text" name="comment" class="form-control" 
-                                                    placeholder="Motivo" required style="font-size: 1.3rem;">
-                                                <button type="submit" class="btn btn-sm btn-primary">
-                                                    <i class="fas fa-check"></i>
-                                                </button>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </form>
-                                @endif
-                            </td>
-                        </tr>
-                        @endforeach
-                    </tbody>
-                </table>
-            </div>
+   <div class="card border-0 shadow-lg mb-5 overflow-hidden">
+    <div class="card-header bg-white py-3 border-bottom">
+        <div class="d-flex justify-content-between align-items-center">
+            <h5 class="mb-0 fw-semibold text-azul-marino" style="font-size: 1.5rem;">
+                <i class="fas fa-list-ul me-2"></i>Registros de Pagos
+            </h5>
+            <span class="badge bg-light text-azul-marino py-2 px-3" style="font-size: 1.4rem;">
+                <i class="fas fa-database me-1"></i> {{ $payments->total() }} registros
+            </span>
         </div>
     </div>
+    
+    <div class="card-body p-0">
+        <div class="table-responsive">
+            <table class="table table-hover align-middle mb-0">
+                <thead class="bg-light">
+                    <tr>
+                        <th class="text-azul-marino fw-medium py-3" style="font-size: 1.4rem; min-width: 200px;">Usuario</th>
+                        <th class="text-azul-marino fw-medium py-3" style="font-size: 1.4rem;">Membresía</th>
+                        <th class="text-azul-marino fw-medium py-3" style="font-size: 1.4rem;">Monto</th>
+                        <th class="text-azul-marino fw-medium py-3" style="font-size: 1.4rem;">Estado</th>
+                        <th class="text-azul-marino fw-medium py-3" style="font-size: 1.4rem;">Fecha</th>
+                        <th class="text-azul-marino fw-medium py-3" style="font-size: 1.4rem;">Comprobante</th>
+                        <th id="th-comentario" class="text-azul-marino fw-medium py-3" style="display: none; font-size: 1.4rem;">Comentario</th>
+                        <th id="th-accion" class="text-azul-marino fw-medium py-3" style="font-size: 1.4rem;">Acción</th>
+                    </tr>
+                </thead>
+                <tbody id="payment-table-body">
+                    @foreach($payments as $payment)
+                    @php
+                        $statusClass = match($payment->status->name) {
+                            'Pendiente de revisión' => 'pendiente',
+                            'Aprobado' => 'aprobado',
+                            'Rechazado' => 'rechazado',
+                            'Vencido' => 'vencido',
+                            default => ''
+                        };
+                        
+                        $statusColor = match($payment->status->name) {
+                            'Pendiente de revisión' => 'warning',
+                            'Aprobado' => 'success',
+                            'Rechazado' => 'danger',
+                            'Vencido' => 'secondary',
+                            default => 'primary'
+                        };
+                    @endphp
+                    <tr class="payment-row {{ $statusClass }}">
+                        <td class="py-3" style="font-size: 1.4rem;">
+                            <div class="d-flex align-items-center">
+                                <div class="avatar-sm rounded-circle bg-azul-marino text-white d-flex align-items-center justify-content-center me-3">
+                                    {{ substr($payment->user->names, 0, 1) }}{{ substr($payment->user->last_name, 0, 1) }}
+                                </div>
+                                <div>
+                                    <h6 class="mb-0 fw-semibold" style="font-size: 1.4rem;">{{ $payment->user->names }} {{ $payment->user->last_name }}</h6>
+                                    <small class="text-muted" style="font-size: 1.3rem;">{{ $payment->user->email }}</small>
+                                </div>
+                            </div>
+                        </td>
+                        <td class="py-3" style="font-size: 1.4rem;">
+                            <span class="fw-medium">{{ $payment->membership->name }}</span>
+                            <small class="text-muted d-block" style="font-size: 1.3rem;">({{ $payment->membership->duration }} días)</small>
+                        </td>
+                        <td class="py-3 fw-medium" style="font-size: 1.4rem;">${{ number_format($payment->price, 2) }}</td>
+                        <td class="py-3" style="font-size: 1.4rem;">
+                            <span class="badge bg-{{ $statusColor }} text-white py-2 px-3 rounded-pill">{{ $payment->status->name }}</span>
+                        </td>
+                        <td class="py-3" style="font-size: 1.4rem;">
+                            <div class="d-flex flex-column">
+                                <span>{{ \Carbon\Carbon::parse($payment->date)->translatedFormat('d M Y') }}</span>
+                                @if($statusClass === 'vencido' && $payment->expiration_date)
+                                <small class="text-danger" style="font-size: 1.3rem;">
+                                    <i class="fas fa-clock me-1"></i>Expiró: {{ \Carbon\Carbon::parse($payment->expiration_date)->translatedFormat('d M Y') }}
+                                </small>
+                                @endif
+                            </div>
+                        </td>
+                        <td class="py-3" style="font-size: 1.4rem;">
+                            <a href="{{ Storage::url($payment->receipt_url) }}" target="_blank" 
+                               class="btn btn-sm btn-outline-primary d-flex align-items-center" style="font-size: 1.3rem;">
+                                <i class="fas fa-eye me-2"></i> Ver
+                            </a>
+                        </td>
+                        <td class="comentario-col py-3" style="{{ $statusClass === 'rechazado' ? '' : 'display:none' }}; font-size: 1.4rem;">
+                            <small class="text-muted" style="font-size: 1.3rem;">{{ $statusClass === 'rechazado' ? ($payment->comment ?? 'Sin comentario') : '' }}</small>
+                        </td>
+                        <td class="accion-col py-3" style="font-size: 1.4rem;">
+                            @if($statusClass === 'pendiente')
+                            <form id="form-{{ $payment->id }}" action="{{ route('admin.payments.update', $payment) }}" method="POST">
+                                @csrf
+                                @method('PUT')
+                                <div class="d-flex gap-2">
+                                    <div class="flex-grow-1">
+                                        <select name="status_id" onchange="handleStatusChange(this, {{ $payment->id }})" class="form-select form-select-sm" style="font-size: 1.3rem; width: 100%;">
+                                            <option value="4" selected>Pendiente</option>
+                                            <option value="5">Aprobar</option>
+                                            <option value="6">Rechazar</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <input type="hidden" name="comment" id="comment-{{ $payment->id }}" value="">
+                            </form>
+                            @endif
+                        </td>
+                    </tr>
+                    @endforeach
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
 
     <!-- Paginación Inferior - Centrada -->
     <div class="d-flex justify-content-center mt-4">
@@ -671,6 +663,17 @@
             padding: 6px 10px;
             font-size: 1.2rem;
         }
+
+        /* Ajustes para selects en móvil */
+        .form-select, .estado-select {
+            width: 100% !important;
+            font-size: 1.2rem !important;
+        }
+    }
+
+    /* Asegurar que los selects ocupen todo el ancho disponible */
+    select.form-select, select.estado-select {
+        width: 100%;
     }
 </style>
 
@@ -689,42 +692,6 @@ document.addEventListener('DOMContentLoaded', function () {
             row.style.opacity = '1';
             row.style.transform = 'translateY(0)';
         }, 50);
-    });
-
-    // Confirmación para rechazar (original)
-    document.querySelectorAll('[id^="form-"]').forEach(form => {
-        form.addEventListener('submit', function (e) {
-            const select = form.querySelector('select[name="status_id"]');
-            if (select.value == 6) { // Rechazado
-                e.preventDefault();
-                Swal.fire({
-                    title: '¿Estás seguro?',
-                    text: "¿Quieres rechazar este pago?",
-                    icon: 'warning',
-                    customClass: {
-                        popup: 'logout-alert',
-                        title: 'logout-title',
-                        htmlContainer: 'logout-message',
-                        actions: 'logout-actions',
-                        confirmButton: 'logout-confirm',
-                        cancelButton: 'logout-cancel'
-                    },
-                    showCancelButton: true,
-                    confirmButtonText: 'Sí, rechazar',
-                    cancelButtonText: 'Cancelar'
-                }).then((result) => {
-                    if (result.isConfirmed) {
-                        form.submit();
-                    } else {
-                        select.value = 4; // Volver a Pendiente
-                        const commentArea = form.querySelector('[id^="comment-area-"]');
-                        if (commentArea) {
-                            commentArea.style.display = 'none';
-                        }
-                    }
-                });
-            }
-        });
     });
 
     // Nuevo código para el select de estado
@@ -748,13 +715,52 @@ document.addEventListener('DOMContentLoaded', function () {
 // Funciones originales
 function handleStatusChange(select, id) {
     const form = document.getElementById(`form-${id}`);
-    const commentArea = document.getElementById(`comment-area-${id}`);
+    const commentInput = document.getElementById(`comment-${id}`);
 
     switch (parseInt(select.value)) {
         case 6: // Rechazado
-            commentArea.style.display = 'block';
-            commentArea.style.animation = 'fadeIn 0.3s ease';
-            break;
+    Swal.fire({
+        title: 'Rechazar Pago',
+        text: "Por favor ingresa el motivo del rechazo:",
+        input: 'text',
+        inputPlaceholder: 'Máximo 60 caracteres...',
+        inputAttributes: {
+            required: 'required',
+            maxlength: 60,
+            placeholder: 'Máximo 60 caracteres...'
+        },
+        showCancelButton: true,
+        confirmButtonText: 'Confirmar Rechazo',
+        cancelButtonText: 'Cancelar',
+        customClass: {
+            popup: 'logout-alert',
+            title: 'logout-title',
+            htmlContainer: 'logout-message',
+            actions: 'logout-actions',
+            confirmButton: 'logout-confirm',
+            cancelButton: 'logout-cancel'
+        },
+        preConfirm: (comment) => {
+            if (!comment) {
+                Swal.showValidationMessage('Debes ingresar un motivo');
+                return false;
+            }
+            if (comment.length > 60) {
+                Swal.showValidationMessage('El motivo no debe exceder los 60 caracteres');
+                return false;
+            }
+            return comment;
+        }
+    }).then((result) => {
+        if (result.isConfirmed) {
+            commentInput.value = result.value;
+            form.submit();
+        } else {
+            select.value = 4;
+        }
+    });
+    break;
+
             
         case 5: // Aprobado
             Swal.fire({
@@ -777,17 +783,12 @@ function handleStatusChange(select, id) {
                     form.submit();
                 } else {
                     select.value = 4; // Volver a Pendiente
-                    if (commentArea) {
-                        commentArea.style.display = 'none';
-                    }
                 }
             });
             break;
             
         case 4: // Pendiente
-            if (commentArea) {
-                commentArea.style.display = 'none';
-            }
+            // No se necesita acción
             break;
     }
 }

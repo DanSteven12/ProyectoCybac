@@ -3,16 +3,12 @@
 @section('content')
 
 @php
-    // Definimos las variables necesarias con valores por defecto
     $style = $settings->style ?? 'ring';
     $duration = $settings->duration ?? 20;
     $radius = $settings->radius ?? 300;
     $brightness = $settings->brightness_animation ?? false;
 @endphp
 
-
-
-<!-- Filtros SVG para el efecto de resplandor -->
 <svg class="svg-filters">
     <defs>
         <filter id="glow" x="-20%" y="-20%" width="140%" height="140%">
@@ -22,20 +18,17 @@
     </defs>
 </svg>
 
-<!-- Modal para imágenes -->
 <div id="imageModal" class="modal">
     <span class="close">&times;</span>
     <img class="modal-content" id="modalImage">
 </div>
 
-<!-- Mover el header-spacer fuera del condicional para que siempre se muestre -->
 <div class="header-spacer"></div>
 
 @if(isset($slides) && $slides->count())
     @php
         $count = $slides->count();
         $angle = 360 / $count;
-        // Ajustamos el radio basado en el número de slides para mejor distribución
         $dynamicRadius = $count > 8 ? $radius + 50 : $radius;
     @endphp
 
@@ -52,9 +45,11 @@
                         };
                         $zIndex = $style === 'stacked' ? $count - $index : 1;
                     @endphp
-                    <div class="slide-card {{ $style === 'stacked' ? '' : '' }}"
-                         style="transform: {{ $style !== 'stacked' ? 'translate(-50%, -50%) ' . $transform : '' }};
-                                z-index: {{ $zIndex }};"
+                    <div class="slide-card {{ $style }}"
+                         style="
+                            transform: {{ $style !== 'stacked' ? 'translate(-50%, -50%) ' . $transform : '' }};
+                            z-index: {{ $zIndex }};
+                         "
                          onclick="openModal('{{ asset('storage/' . $slide->image_path) }}')">
                         <img src="{{ asset('storage/' . $slide->image_path) }}" alt="Slide Image">
                         @if($slide->description)
@@ -67,91 +62,89 @@
     </div>
 
     @if($style === 'stacked')
-    <script>
-        document.addEventListener("DOMContentLoaded", function () {
-            const cards = Array.from(document.querySelectorAll('.slide-card'));
-            let currentIndex = 0;
+        <script>
+            document.addEventListener("DOMContentLoaded", function () {
+                const cards = Array.from(document.querySelectorAll('.slide-card'));
+                let currentIndex = 0;
 
-            function updateStacked() {
-                cards.forEach((card, index) => {
-                    card.classList.remove('stacked-current', 'stacked-left', 'stacked-right', 'stacked-hidden');
-                    const offset = (index - currentIndex + cards.length) % cards.length;
-                    if (offset === 0) {
-                        card.classList.add('stacked-current');
-                    } else if (offset === 1) {
-                        card.classList.add('stacked-right');
-                    } else if (offset === cards.length - 1) {
-                        card.classList.add('stacked-left');
-                    } else {
-                        card.classList.add('stacked-hidden');
-                    }
-                });
-            }
+                function updateStacked() {
+                    cards.forEach((card, index) => {
+                        card.classList.remove('stacked-current', 'stacked-left', 'stacked-right', 'stacked-hidden');
+                        const offset = (index - currentIndex + cards.length) % cards.length;
+                        if (offset === 0) {
+                            card.classList.add('stacked-current');
+                        } else if (offset === 1) {
+                            card.classList.add('stacked-right');
+                        } else if (offset === cards.length - 1) {
+                            card.classList.add('stacked-left');
+                        } else {
+                            card.classList.add('stacked-hidden');
+                        }
+                    });
+                }
 
-            updateStacked();
-            setInterval(() => {
-                currentIndex = (currentIndex + 1) % cards.length;
                 updateStacked();
-            }, {{ $duration * 1000 }});
-        });
-    </script>
+                setInterval(() => {
+                    currentIndex = (currentIndex + 1) % cards.length;
+                    updateStacked();
+                }, {{ $duration * 1000 }});
+            });
+        </script>
     @endif
 @endif
 
-<!-- Resto del contenido existente -->
 <div class="container">
     <div class="content-wrapper">
-        <!-- MAPA -->
+        <!-- MAPA - A LA IZQUIERDA -->
         <div class="map-section">
             <div class="map-header">
-                <h2>Nuestra ubicación</h2>
-                <p>
+                <h1 style="font-size: 3rem;">Nuestra ubicación</h1>
+                <h2 style="font-size: 2.2rem;">
                     Encuéntranos fácilmente en
-                    <strong>
-                        {{ $centerInfo && $centerInfo->address ? $centerInfo->address : 'nuestra ubicación' }}
+                    <strong style="font-size: 2.3rem;">
+                        {{ $centerInfo->address ?? 'nuestra ubicación' }}
                     </strong>
-                </p>
+                </h2>
             </div>
             <div class="map-container">
-    @if($centerInfo && $centerInfo->map_embed)
-        <div class="map-embed-wrapper">
-            {!! $centerInfo->map_embed !!}
-        </div>
-    @else
-        <iframe
-            class="map-iframe"
-            src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3820.346830757997!2d-93.17619122508016!3d16.759411484024596!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x85ecd9ec7cc2372d%3A0xaa879f1e51acb17a!2sPlaza%20la%20gloria!5e0!3m2!1ses!2smx!4v1749506336739!5m2!1ses!2smx&zoom=14&center=16.759411,-93.176191&language=es&region=MX"
-            allowfullscreen=""
-            loading="lazy"
-            referrerpolicy="no-referrer-when-downgrade"
-        ></iframe>
-    @endif
-</div>
+                @if($centerInfo && $centerInfo->map_embed)
+                    <div class="map-embed-wrapper">
+                        {!! $centerInfo->map_embed !!}
+                    </div>
+                @else
+                    <iframe
+                        class="map-iframe"
+                        src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3820.346830757997!2d-93.17619122508016!3d16.759411484024596!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x85ecd9ec7cc2372d%3A0xaa879f1e51acb17a!2sPlaza%20la%20gloria!5e0!3m2!1ses!2smx!4v1749506336739!5m2!1ses!2smx"
+                        allowfullscreen
+                        loading="lazy"
+                        referrerpolicy="no-referrer-when-downgrade">
+                    </iframe>
+                @endif
+            </div>
             <center>
-                <button id="getDirectionsBtn" class="directions-button">Cómo llegar desde tu ubicación</button>
+                <button id="getDirectionsBtn" class="directions-button" style="font-size: 1.8rem; padding: 15px 30px;">
+                    Cómo llegar desde tu ubicación
+                </button>
             </center>
         </div>
 
-        <!-- INFORMACIÓN DEL CENTRO -->
-        <section class="info-section">
-            <h2>Información del Centro</h2>
-
-            @if($centerInfo)
-                <div class="info-card">
-                    <h3>Horarios</h3>
-                    <p><strong>Días laborales:</strong> {{ $centerInfo->days ?? 'No especificado' }}</p>
-                    <p>
-                        <strong>Apertura:</strong>
-                        {{ $centerInfo->opening_time ? \Carbon\Carbon::parse($centerInfo->opening_time)->format('h:i A') : 'No especificado' }}
-                    </p>
-                    <p>
-                        <strong>Cierre:</strong>
-                        {{ $centerInfo->closing_time ? \Carbon\Carbon::parse($centerInfo->closing_time)->format('h:i A') : 'No especificado' }}
-                    </p>
+        <!-- SECCIÓN DERECHA CON HORARIOS SOLO Y CONTACTO + SERVICIOS ACOMPAÑADOS -->
+        <div class="right-section">
+            <!-- HORARIOS SOLO -->
+            <div class="info-card solo-card">
+                <center><h1 style="font-size: 2.5rem;">Horarios</h1></center>
+                @if($centerInfo)
+                    <h3 style="font-size: 2rem;">Días laborales: {{ $centerInfo->days ?? 'No especificado' }}</h3>
+                    <h3 style="font-size: 2rem;">
+                        Apertura: {{ $centerInfo->opening_time ? \Carbon\Carbon::parse($centerInfo->opening_time)->format('h:i A') : 'No especificado' }}
+                    </h3>
+                    <h3 style="font-size: 2rem;">
+                        Cierre: {{ $centerInfo->closing_time ? \Carbon\Carbon::parse($centerInfo->closing_time)->format('h:i A') : 'No especificado' }}
+                    </h3>
                     @if($centerInfo->schedule)
                         <div class="mt-2">
-                            <strong>Observaciones:</strong>
-                            <ul class="ps-3">
+                            <strong style="font-size: 2rem;">Observaciones:</strong>
+                            <ul class="ps-3" style="font-size: 1.8rem;">
                                 @foreach(explode("\n", $centerInfo->schedule) as $line)
                                     @if(trim($line) !== '')
                                         <li>{{ $line }}</li>
@@ -160,102 +153,78 @@
                             </ul>
                         </div>
                     @endif
-                </div>
+                @else
+                    <p style="font-size: 2rem;">No hay información disponible del centro.</p>
+                @endif
+            </div>
 
-               @php
-    $numeroWhatsapp = preg_replace('/\D/', '', $centerInfo->phone);
-    $mensajeWhatsapp = urlencode('Hola, me gustaría recibir más información sobre los servicios.');
-@endphp
+            <!-- CONTACTO Y SERVICIOS ACOMPAÑADOS -->
+            <div class="paired-cards">
+                <!-- CONTACTO -->
+                <div class="info-card">
+                    @if($centerInfo)
+                        @php
+                            $numeroWhatsapp = preg_replace('/\D/', '', $centerInfo->phone);
+                            $mensajeWhatsapp = urlencode('Hola, me gustaría recibir más información sobre los servicios.');
+                        @endphp
 
-<div class="info-card" style="background-color: #f8f9fa; border-radius: 10px; padding: 25px; box-shadow: 0 4px 8px rgba(0,0,0,0.1);">
-    <h3 class="mb-4" style="color: #2c3e50; border-bottom: 2px solid #3498db; padding-bottom: 10px; font-size: 1.8rem;">Contacto</h3>
+                        <center><h1 style="font-size: 2.5rem;">Contacto</h1></center>
 
-    <div class="contact-section" style="margin-bottom: 20px; padding: 15px; background-color: white; border-radius: 8px; border-left: 4px solid #3498db;">
-        <h4 style="color: #2c3e50; font-size: 1.2rem; margin-bottom: 10px;">
-            <span style="font-size: 1.3rem;">📞</span> <strong>Teléfono</strong>
-        </h4>
-        <div style="margin-left: 25px;">
-            <a href="tel:+52{{ $numeroWhatsapp }}" style="color: #2c3e50; text-decoration: none; display: block; margin-bottom: 8px; transition: color 0.3s;">
-                <span style="margin-right: 8px;">📱</span> Llamar: {{ $centerInfo->phone }}
-            </a>
-            <a href="https://wa.me/52{{ $numeroWhatsapp }}?text={{ $mensajeWhatsapp }}" target="_blank" style="color: #25D366; text-decoration: none; display: block; transition: color 0.3s;">
-                <span style="margin-right: 8px;">💬</span> Abrir en WhatsApp
-            </a>
-        </div>
-    </div>
+                        <div class="contact-section" style="margin-bottom: 25px;">
+                            <h4 style="font-size: 2.1rem;">📞 Teléfono</h4>
+                            <a href="tel:+52{{ $numeroWhatsapp }}" style="font-size: 1.8rem;">
+                                📱 Llamar: {{ $centerInfo->phone }}
+                            </a><br>
+                            <a href="https://wa.me/52{{ $numeroWhatsapp }}?text={{ $mensajeWhatsapp }}" target="_blank" style="font-size: 1.8rem; color: #25D366;">
+                                💬 WhatsApp
+                            </a>
+                        </div>
 
-    <div class="contact-section" style="margin-bottom: 20px; padding: 15px; background-color: white; border-radius: 8px; border-left: 4px solid #e74c3c;">
-        <h4 style="color: #2c3e50; font-size: 1.2rem; margin-bottom: 10px;">
-            <span style="font-size: 1.3rem;">✉</span> <strong>Email</strong>
-        </h4>
-        <div style="margin-left: 25px;">
-            <a href="mailto:{{ $centerInfo->email }}" style="color: #2c3e50; text-decoration: none; display: block; margin-bottom: 8px; transition: color 0.3s;">
-                <span style="margin-right: 8px;">📩</span> {{ $centerInfo->email }}
-            </a>
-            <a href="https://mail.google.com/mail/?view=cm&to={{ $centerInfo->email }}&su=Consulta%20desde%20el%20sitio&body=Hola,%20me%20gustaría%20recibir%20más%20información." target="_blank" style="color: #d93025; text-decoration: none; display: block; transition: color 0.3s;">
-                <span style="margin-right: 8px;">📧</span> Abrir en Gmail
-            </a>
-        </div>
-    </div>
-
-    <div class="contact-section" style="padding: 15px; background-color: white; border-radius: 8px; border-left: 4px solid #2ecc71;">
-        <h4 style="color: #2c3e50; font-size: 1.2rem; margin-bottom: 10px;">
-            <span style="font-size: 1.3rem;">📍</span> <strong>Dirección</strong>
-        </h4>
-        <div style="margin-left: 25px; color: #34495e; line-height: 1.5;">
-            {{ $centerInfo->address }}
-        </div>
-    </div>
+                        <div class="contact-section" style="margin-bottom: 25px;">
+    <h4 style="font-size: 2.1rem;">✉ Email</h4>
+    <a href="mailto:{{ $centerInfo->email }}" style="font-size: 1.8rem; word-break: break-all;">
+        📩 {{ $centerInfo->email }}
+    </a><br>
+    <a href="https://mail.google.com/mail/?view=cm&to={{ $centerInfo->email }}&su=Consulta%20desde%20el%20sitio&body=Hola,%20me%20gustaría%20recibir%20más%20información." target="_blank" style="font-size: 1.8rem; color: #d93025;">
+        📧 Abrir en Gmail
+    </a>
 </div>
 
-                @if($centerInfo->services)
-                    <div class="info-card">
-                        <h3>Servicios</h3>
-                        <ul class="ps-3">
-                            @foreach(explode("\n", $centerInfo->services) as $service)
-                                @if(trim($service) !== '')
-                                    <li>{{ $service }}</li>
-                                @endif
-                            @endforeach
-                        </ul>
-                    </div>
-                @endif
-            @else
-                <div class="info-card">
-                    <p>No hay información disponible del centro.</p>
+                        <div class="contact-section">
+                            <h4 style="font-size: 2.1rem;">📍 Dirección</h4>
+                            <div style="font-size: 1.8rem;">
+                                {{ $centerInfo->address }}
+                            </div>
+                        </div>
+                    @endif
                 </div>
-            @endif
 
-            <!-- SERVICIOS COMO VIÑETAS EN TRES COLUMNAS -->
-            @if(isset($services) && $services->count() > 0)
+                <!-- NUESTROS SERVICIOS -->
                 <div class="info-card">
-                    <h3>Nuestros Servicios</h3>
-                    <div class="three-column-services">
-                        @php
-                            $chunks = $services->take(12)->chunk(4);
-                        @endphp
-                        @foreach($chunks as $column)
-                            <ul>
-                                @foreach($column as $service)
-                                    <li>
-                                        <a href="#service-{{ $service->id }}">
-                                            {{ $service->name }}
-                                        </a>
-                                    </li>
-                                @endforeach
-                            </ul>
-                        @endforeach
-                    </div>
+                    @if(isset($services) && $services->count() > 0)
+                        <h3 style="font-size: 2.2rem;">Nuestros Servicios</h3>
+                        <div class="three-column-services">
+                            @php
+                                $chunks = $services->take(12)->chunk(4);
+                            @endphp
+                            @foreach($chunks as $column)
+                                <ul style="font-size: 2rem;">
+                                    @foreach($column as $service)
+                                        <li>
+                                            <a href="#service-{{ $service->id }}" style="font-size: 1.9rem;">
+                                                {{ $service->name }}
+                                            </a>
+                                        </li>
+                                    @endforeach
+                                </ul>
+                            @endforeach
+                        </div>
+                    @endif
                 </div>
-            @else
-                <div class="info-card">
-                    <p>No hay servicios registrados.</p>
-                </div>
-            @endif
-        </section>
+            </div>
+        </div>
     </div>
 
-    <!-- DETALLES DE SERVICIOS -->
     @if(isset($services) && $services->count() > 0)
         <div class="activities-section">
             @foreach($services as $index => $service)
@@ -264,16 +233,16 @@
                         @if($service->image_url)
                             <img src="{{ asset('storage/' . str_replace('public/', '', $service->image_url)) }}" alt="{{ $service->name }}" onclick="openModal('{{ asset('storage/' . str_replace('public/', '', $service->image_url)) }}')">
                         @endif
-                        <div class="description">
-                            <h3>{{ $service->name }}</h3>
-                            <p>{{ $service->description }}</p>
-                        </div>
+                        <div class="description" style="padding: 25px;">
+    <h3 style="font-size: 2.8rem;">{{ $service->name }}</h3>
+    <p style="font-size: 2rem; word-wrap: break-word; overflow-wrap: break-word; white-space: pre-wrap;">{{ $service->description }}</p>
+</div>
                     </div>
                 </div>
             @endforeach
         </div>
     @else
-        <p class="text-center text-gray-500 mt-8">No hay servicios para mostrar.</p>
+        <p class="text-center text-gray-500 mt-8" style="font-size: 2.2rem; padding: 20px;">No hay servicios para mostrar.</p>
     @endif
 </div>
 
@@ -475,15 +444,14 @@
     /* Estilos para el layout principal */
     .content-wrapper {
         display: flex;
-        flex-wrap: wrap;
         gap: 30px;
         margin-top: 40px;
     }
 
     /* Sección del mapa - Diseño mejorado */
     .map-section {
-        flex: 2;
-        min-width: 0;
+        flex: 1;
+        min-width: 45%;
     }
 
     .map-header {
@@ -511,39 +479,39 @@
     }
 
     /* Contenedor principal del mapa */
-.map-container {
-    width: 100%;
-    height: 65vh; /* 65% del viewport height para mejor adaptación */
-    min-height: 400px;
-    max-height: 600px;
-    position: relative;
-    overflow: hidden;
-    border-radius: 15px;
-    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
-    margin: 20px 0;
-    border: 1px solid rgba(0,0,0,0.1);
-}
+    .map-container {
+        width: 100%;
+        height: 65vh;
+        min-height: 400px;
+        max-height: 600px;
+        position: relative;
+        overflow: hidden;
+        border-radius: 15px;
+        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+        margin: 20px 0;
+        border: 1px solid rgba(0,0,0,0.1);
+    }
 
-/* Iframe del mapa */
-.map-iframe {
-    width: 100%;
-    height: 100%;
-    border: none;
-    filter: grayscale(20%) contrast(110%);
-}
+    /* Iframe del mapa */
+    .map-iframe {
+        width: 100%;
+        height: 100%;
+        border: none;
+        filter: grayscale(20%) contrast(110%);
+    }
 
-/* Contenedor para mapas embed personalizados */
-.map-embed-wrapper {
-    width: 100%;
-    height: 100%;
-    overflow: hidden;
-}
+    /* Contenedor para mapas embed personalizados */
+    .map-embed-wrapper {
+        width: 100%;
+        height: 100%;
+        overflow: hidden;
+    }
 
-.map-embed-wrapper iframe {
-    width: 100%;
-    height: 100%;
-    border: none;
-}
+    .map-embed-wrapper iframe {
+        width: 100%;
+        height: 100%;
+        border: none;
+    }
 
     /* Botón de direcciones con efecto hover */
     .directions-button {
@@ -570,40 +538,50 @@
         box-shadow: 0 8px 20px var(--sombra-naranja);
     }
 
-    /* Sección de información - Tarjetas modernas */
-    .info-section {
+    /* Sección derecha con horarios y contacto + servicios */
+    .right-section {
         flex: 1;
-        background-color: white;
-        padding: 30px;
-        border-radius: 15px;
-        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08);
-        min-width: 0;
-        border: 1px solid rgba(0, 0, 0, 0.05);
+        min-width: 50%;
+        display: flex;
+        flex-direction: column;
+        gap: 20px;
     }
 
-    .info-section h2 {
-        color: var(--azul-marino);
-        font-size: 2.5rem;
-        border-bottom: 2px solid var(--verde-esmeralda);
-        padding-bottom: 15px;
-        margin-bottom: 30px;
-        text-align: center;
-    }
-
-    .info-card {
+    .solo-card {
+        width: 100%;
         background-color: white;
         padding: 25px;
         border-radius: 10px;
         border-left: 5px solid var(--naranja-brillante);
-        margin-bottom: 20px;
         box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
         transition: transform 0.3s ease;
     }
 
-    .info-card:hover {
+    .solo-card:hover {
         transform: translateY(-5px);
     }
 
+    .paired-cards {
+        display: flex;
+        gap: 20px;
+    }
+
+    .paired-cards .info-card {
+        flex: 1;
+        min-width: 0;
+        background-color: white;
+        padding: 25px;
+        border-radius: 10px;
+        border-left: 5px solid var(--naranja-brillante);
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+        transition: transform 0.3s ease;
+    }
+
+    .paired-cards .info-card:hover {
+        transform: translateY(-5px);
+    }
+
+    /* Estilos comunes para tarjetas de información */
     .info-card h3 {
         margin-top: 0;
         color: var(--azul-marino);
@@ -815,6 +793,7 @@
     .close:hover {
         color: var(--naranja-brillante);
     }
+    
 
     /* Media queries para responsividad */
     @media (max-width: 1200px) {
@@ -870,6 +849,15 @@
         }
 
         .content-wrapper {
+            flex-direction: column;
+        }
+
+        .map-section, .right-section {
+            width: 100%;
+            min-width: 100%;
+        }
+
+        .paired-cards {
             flex-direction: column;
         }
 
@@ -949,10 +937,6 @@
             flex-direction: column;
         }
 
-        .info-section h2 {
-            font-size: 2rem;
-        }
-
         .map-header h2 {
             font-size: 1.6rem;
         }
@@ -1019,10 +1003,6 @@
             max-height: 250px;
         }
 
-        .info-section h2 {
-            font-size: 1.8rem;
-        }
-
         .map-header h2 {
             font-size: 1.4rem;
         }
@@ -1063,10 +1043,6 @@
             height: 250px;
         }
 
-        .info-section {
-            padding: 20px;
-        }
-
         .description h3 {
             font-size: 1.4rem;
         }
@@ -1089,8 +1065,8 @@
             function (position) {
                 const lat = position.coords.latitude;
                 const lng = position.coords.longitude;
-                const destination = encodeURIComponent(`{{ $centerInfo && $centerInfo->address ? $centerInfo->address : 'Plaza La Gloria, Tuxtla Gutiérrez, Chiapas' }}`);
-                const mapsUrl = `https://www.google.com/maps/dir/?api=1&origin=${lat},${lng}&destination=${destination}&travelmode=driving`;
+                const destination = encodeURIComponent({{ $centerInfo && $centerInfo->address ? $centerInfo->address : 'Plaza La Gloria, Tuxtla Gutiérrez, Chiapas' }});
+                const mapsUrl = https://www.google.com/maps/dir/?api=1&origin=${lat},${lng}&destination=${destination}&travelmode=driving;
                 window.open(mapsUrl, '_blank');
             },
             function () {

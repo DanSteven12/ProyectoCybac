@@ -1,18 +1,86 @@
 @extends('layouts.admi-app-master')
 
-@section('content')
-<div class="container-fluid px-4">
-    <!-- Nuevo Encabezado Mejorado -->
-    <div class="container-fluid px-4 mt-4">
-        <div class="row justify-content-center">
-            <div class="col-md-12">
-                <div class="card border-0 shadow-lg">
-                    <div class="card-body p-5">
-                        <div class="welcome-content text-center">
-                            <div class="welcome-header mb-5">
-                                <h1 class="display-3 fw-bold text-primary-dark mb-4">PANEL DE ADMINISTRACIÓN <span class="text-gradient">FITNFLOW</span></h1>
-                                <p class="fs-3 text-primary-dark opacity-75">Desde este panel podrás administrar todas las operaciones de tu centro fitness de manera eficiente y profesional.</p>
-                                <div class="divider mx-auto my-4" style="width: 150px; height: 4px; background: linear-gradient(90deg, #1A365D 0%, #FF6B35 100%);"></div>
+    @section('content')
+    <div class="container-fluid px-4">
+        <!-- Encabezado Mejorado (sin cambios) -->
+        <div class="container-fluid px-4 mt-4">
+            <div class="row justify-content-center">
+                <div class="col-md-12">
+                    <div class="card border-0 shadow-lg">
+                        <div class="card-body p-5">
+                            <div class="welcome-content text-center">
+                                <div class="welcome-header mb-5">
+                                    <h1 class="display-3 fw-bold text-primary-dark mb-4">PANEL DE ADMINISTRACIÓN <span class="text-gradient">FITNFLOW</span></h1>
+                                    <p class="fs-3 text-primary-dark opacity-75">Gestión integral de tu centro fitness</p>
+                                    <div class="divider mx-auto my-4" style="width: 150px; height: 4px; background: linear-gradient(90deg, var(--azul-marino) 0%, var(--naranja-brillante) 100%);"></div>
+
+                                    <!-- Menú Horizontal con Iconos y Texto -->
+                                    <div class="d-flex flex-wrap justify-content-center gap-4 py-4">
+                                        <!-- Botón CLASES -->
+                                        <div class="text-center mx-3">
+                                            <a href="{{ route('admin.classes.index') }}" class="btn-icon-menu-final rounded-circle d-flex align-items-center justify-content-center mb-2">
+                                                <i class="fas fa-chalkboard-teacher"></i>
+                                            </a>
+                                            <span class="menu-label-final">CLASES</span>
+                                        </div>
+                                        
+                                        <!-- Botón PAGOS -->
+                                        <div class="text-center mx-3">
+                                            <a href="{{ route('admin.payments.index') }}" class="btn-icon-menu-final rounded-circle d-flex align-items-center justify-content-center mb-2" style="background: var(--naranja-brillante);">
+                                                <i class="fas fa-credit-card"></i>
+                                            </a>
+                                            <span class="menu-label-final">PAGOS</span>
+                                        </div>
+                                        
+                                        <!-- Botón MEMBRESÍAS -->
+                                        <div class="text-center mx-3">
+                                            <a href="{{ route('admin.memberships.index') }}" class="btn-icon-menu-final rounded-circle d-flex align-items-center justify-content-center mb-2" style="background: var(--verde-esmeralda);">
+                                                <i class="fas fa-id-card"></i>
+                                            </a>
+                                            <span class="menu-label-final">MEMBRESÍAS</span>
+                                        </div>
+                                        
+                                        <!-- Botón CARRUSEL -->
+                                        <div class="text-center mx-3">
+                                            <a href="{{ route('admin.carousel.index')}}" class="btn-icon-menu-final rounded-circle d-flex align-items-center justify-content-center mb-2">
+                                                <i class="fas fa-images"></i>
+                                            </a>
+                                            <span class="menu-label-final">CARRUSEL</span>
+                                        </div>
+                                        
+                                        <!-- Botón INFORMACIÓN -->
+                                        <div class="text-center mx-3">
+                                            <a href="{{ route('admin.center-information.index')}}" class="btn-icon-menu-final rounded-circle d-flex align-items-center justify-content-center mb-2" style="background: var(--naranja-brillante);">
+                                                <i class="fas fa-info-circle"></i>
+                                            </a>
+                                            <span class="menu-label-final">INFORMACIÓN</span>
+                                        </div>
+                                        
+                                        <!-- Botón REQUERIMIENTOS -->
+                                        <div class="text-center mx-3">
+                                            <a href="{{ route('admin.requirements.index') }}" class="btn-icon-menu-final rounded-circle d-flex align-items-center justify-content-center mb-2" style="background: var(--verde-esmeralda);">
+                                                <i class="fas fa-tasks"></i>
+                                            </a>
+                                            <span class="menu-label-final">REQUERIMIENTOS</span>
+                                        </div>
+                                        
+                                        <!-- Botón SERVICIOS -->
+                                        <div class="text-center mx-3">
+                                            <a href="{{ route('admin.service.index') }}" class="btn-icon-menu-final rounded-circle d-flex align-items-center justify-content-center mb-2">
+                                                <i class="fas fa-dumbbell"></i>
+                                            </a>
+                                            <span class="menu-label-final">SERVICIOS</span>
+                                        </div>
+                                        
+                                        <!-- Botón USUARIOS -->
+                                        <div class="text-center mx-3">
+                                            <a href="{{ route('admin.users.index') }}" class="btn-icon-menu-final rounded-circle d-flex align-items-center justify-content-center mb-2" style="background: var(--naranja-brillante);">
+                                                <i class="fas fa-users"></i>
+                                            </a>
+                                            <span class="menu-label-final">USUARIOS</span>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -21,7 +89,6 @@
         </div>
     </div>
     <br>
-
     <!-- Header Mejorado -->
     <div class="d-sm-flex align-items-center justify-content-between mb-5">
         <div class="d-flex align-items-center">
@@ -205,6 +272,55 @@
 
 
 <style>
+   :root {
+        --azul-marino: #1A365D;
+        --naranja-brillante: #FF6B35;
+        --verde-esmeralda: #2EC4B6;
+    }
+    
+    /* Estilo para los botones de icono - Versión final */
+    .btn-icon-menu-final {
+        width: 85px;
+        height: 85px;
+        background: var(--azul-marino);
+        color: white;
+        border: none;
+        font-size: 2.2rem;
+        transition: all 0.3s ease;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+    }
+    
+    .btn-icon-menu-final:hover {
+        transform: translateY(-5px) scale(1.05);
+        box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+        opacity: 0.95;
+    }
+    
+    /* Texto debajo de los botones */
+    .menu-label-final {
+        display: block;
+        font-size: 1.4rem;
+        font-weight: 700;
+        color: var(--azul-marino);
+        margin-top: 10px;
+        letter-spacing: 0.5px;
+    }
+    
+    .rounded-circle {
+        border-radius: 50% !important;
+    }
+    
+    /* Espaciado entre elementos */
+    .gap-4 {
+        gap: 1.5rem;
+    }
+    
+    /* Efecto de escala al hover */
+    @media (min-width: 992px) {
+        .btn-icon-menu-final:hover {
+            transform: translateY(-5px) scale(1.08);
+        }
+    }
     /* Estilos adicionales para mejorar la visualización */
     .card {
         border-radius: 15px;
