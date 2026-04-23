@@ -882,11 +882,11 @@
         <div class="logo-container">
             <!-- Logo con efecto neón -->
             <div class="logo-wrapper">
-                <img src="/images/logo.png" alt="FITNFLOW" class="logo">
+                {{-- <img src="/images/logo.png" alt="FITNFLOW" class="logo"> --}}
             </div>
             
             <!-- Texto SVG animado -->
-            <svg viewBox="0 0 800 100" xmlns="http://www.w3.org/2000/svg" class="svg-brand" style="max-width: 100%; height: 80px;">
+             <svg viewBox="0 0 800 100" xmlns="http://www.w3.org/2000/svg" class="svg-brand" style="max-width: 100%; height: 80px;">
                 <text x="50%" y="50%" dominant-baseline="middle" text-anchor="middle"
                     font-family="Poppins, sans-serif" font-size="60" fill="none"
                     stroke="#2EC4B6" stroke-width="2">
@@ -894,7 +894,7 @@
                     <animate attributeName="stroke-dasharray" from="0, 1000" to="600, 0" dur="3s" repeatCount="indefinite" />
                     <animate attributeName="stroke-dashoffset" from="0" to="-600" dur="3s" repeatCount="indefinite" />
                 </text>
-            </svg>
+            </svg> 
         </div>
         
         <div class="header-controls">
@@ -941,7 +941,7 @@
             <i class="fas fa-history"></i>
             <span class="menu-label">Historial de Clases</span>
         </a>
-        @endif
+        @endif 
     </div>
 </div>
 

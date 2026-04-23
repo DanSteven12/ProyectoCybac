@@ -11,28 +11,11 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('registration_management', function (Blueprint $table) {
-            $table->id(); // PK autoincremental
-
-            // Claves foráneas
-            $table->unsignedBigInteger('user_id');
-            $table->unsignedBigInteger('class_id');
-
-            // Restricciones de clave foránea
-            $table->foreign('user_id')
-                  ->references('id')
-                  ->on('users')
-                  ->onDelete('cascade');
-
-            $table->foreign('class_id')
-                  ->references('id')
-                  ->on('classes')
-                  ->onDelete('cascade');
-
+        Schema::create('requirements', function (Blueprint $table) {
+            $table->id();
+            $table->foreignId('service_id')->constrained()->onDelete('cascade');
+            $table->string('name');
             $table->timestamps();
-
-            // Índice compuesto para evitar inscripciones duplicadas
-            $table->unique(['user_id', 'class_id']);
         });
     }
 
@@ -41,6 +24,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('registration_management');
+        Schema::dropIfExists('requirements');
     }
 };

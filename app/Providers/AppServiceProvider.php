@@ -32,15 +32,23 @@ class AppServiceProvider extends ServiceProvider
     'layouts.partials.admi-navbar',
     'layouts.partials.footer'  // Agregas la vista del footer aquí
 ], function ($view) {
-    $view->with('services', \App\Models\Service::all());  // Aquí agregas $services
+    if (\Illuminate\Support\Facades\Schema::hasTable('services')) {
+        $view->with('services', \App\Models\Service::all());  // Aquí agregas $services
+    } else {
+        $view->with('services', collect());
+    }
 });
 
 
 
         // Compartir info del centro a todas las vistas
         View::composer('*', function ($view) {
-            $centerInfo = CenterInformation::first();
-            $view->with('centerInfo', $centerInfo);
+            if (\Illuminate\Support\Facades\Schema::hasTable('center_information')) {
+                $centerInfo = CenterInformation::first();
+                $view->with('centerInfo', $centerInfo);
+            } else {
+                $view->with('centerInfo', null);
+            }
         });
 
         // Compartir estado de membresía aprobada a todas las vistas para usuarios autenticados

@@ -142,7 +142,7 @@
                                 {{ $paymentStatuses['approved'] }}
                             </div>
                             <div class="mt-3 text-muted fs-5">
-                                <i class="fas fa-percentage me-2"></i> {{ round(($paymentStatuses['approved']/$paymentStatuses['total'])*100) }}% del total
+                                <i class="fas fa-percentage me-2"></i> {{ $paymentStatuses['total'] > 0 ? round(($paymentStatuses['approved']/$paymentStatuses['total'])*100) : 0 }}% del total
                             </div>
                         </div>
                         <div class="col-auto">
