@@ -1,66 +1,190 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# Proyecto Cybac
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+Sistema web integral de gestión y administración para centro deportivo y de acondicionamiento físico.
 
-## About Laravel
+---
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+## 📋 ¿Qué hace el proyecto?
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+**Proyecto Cybac** es una plataforma web desarrollada para automatizar y centralizar la administración integral de un centro deportivo o gimnasio. Su objetivo general es optimizar la gestión operativa, la interacción con los clientes y el control de pagos y servicios.
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+### Principales Funcionalidades por Rol
 
-## Learning Laravel
+1. **Administrador (`admin`):**
+   * **Gestión de Usuarios:** Registro, edición, baja y asignación de roles.
+   * **Servicios y Requisitos:** Configuración de servicios ofrecidos y requisitos de inscripción.
+   * **Membresías:** Creación, edición y administración de tarifas y planes de membresía.
+   * **Clases y Cupos:** Programación de clases presenciales, asignación de instructores y control de inscritos.
+   * **Control de Pagos:** Revisión de comprobantes subidos por usuarios, aprobación o rechazo de transacciones y generación de reportes financieros en PDF.
+   * **CMS Informativo:** Gestión de datos de contacto/horarios del centro y slides del carrusel principal.
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+2. **Instructor (`instructor`):**
+   * Panel de control con visualización de clases asignadas y participantes.
 
-You may also try the [Laravel Bootcamp](https://bootcamp.laravel.com), where you will be guided through building a modern Laravel application from scratch.
+3. **Usuario / Cliente (`usuario`):**
+   * Consulta y adquisición de planes de membresía.
+   * Carga de comprobantes de pago digitales para su validación.
+   * Consulta de disponibilidad de clases y reserva/cancelación de cupos.
+   * Calificación de clases recibidas e historial de asistencias y pagos.
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+---
 
-## Laravel Sponsors
+## 🛠️ ¿Qué tecnologías utiliza?
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
+### Backend
+* **Lenguaje:** [PHP ^8.1](https://www.php.net/)
+* **Framework:** [Laravel 10.x](https://laravel.com)
+* **Control de Roles y Permisos:** [Spatie Laravel Permission 6.x](https://spatie.be/docs/laravel-permission)
+* **Generación de Reportes PDF:** [Barryvdh Laravel DomPDF 3.x](https://github.com/barryvdh/laravel-dompdf)
+* **Componentes Reactivos:** [Livewire 3.x](https://livewire.laravel.com)
+* **Autenticación y Seguridad:** Laravel UI / Sanctum
 
-### Premium Partners
+### Frontend
+* **Motor de Vistas:** Blade Templating Engine
+* **Diseño y Estilos:** Bootstrap 5.3
+* **Empaquetador de Módulos:** [Vite 5.x](https://vitejs.dev)
+* **Cliente HTTP:** Axios
 
-- **[Vehikl](https://vehikl.com/)**
-- **[Tighten Co.](https://tighten.co)**
-- **[WebReinvent](https://webreinvent.com/)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel/)**
-- **[Cyber-Duck](https://cyber-duck.co.uk)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Jump24](https://jump24.co.uk)**
-- **[Redberry](https://redberry.international/laravel/)**
-- **[Active Logic](https://activelogic.com)**
-- **[byte5](https://byte5.de)**
-- **[OP.GG](https://op.gg)**
+### Base de Datos
+* **Motor:** MySQL 8.0+ / MariaDB 10.x
 
-## Contributing
+---
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+## 💻 ¿Qué se necesita instalar?
 
-## Code of Conduct
+Para ejecutar este proyecto en un entorno local se requiere tener instalado:
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+1. **PHP:** Versión 8.1 o superior con las siguientes extensiones habilitadas:
+   * `pdo`, `pdo_mysql`, `mbstring`, `openssl`, `tokenizer`, `xml`, `ctype`, `json`, `bcmath`, `fileinfo`, `gd` o `imagick`.
+2. **Composer:** Gestor de dependencias de PHP (versión 2.x).
+3. **Node.js y npm:** Entorno de ejecución JavaScript (Node.js >= 18.x y npm >= 9.x).
+4. **Servidor de Base de Datos:** MySQL o MariaDB (a través de entornos como Laragon, XAMPP o MySQL Server independiente).
+5. **Git:** Sistema de control de versiones.
 
-## Security Vulnerabilities
+---
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+## 🚀 ¿Cómo se configura e instala?
 
-## License
+Sigue estos pasos en tu terminal para configurar el entorno de desarrollo:
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+1. **Clonar el repositorio:**
+   ```bash
+   git clone https://github.com/DanSteven12/ProyectoCybac.git
+   cd ProyectoCybac
+   ```
+
+2. **Instalar dependencias de Backend (PHP):**
+   ```bash
+   composer install
+   ```
+
+3. **Instalar dependencias de Frontend (Node.js):**
+   ```bash
+   npm install
+   ```
+
+4. **Configurar el archivo de variables de entorno:**
+   * Copiar la plantilla `.env.example` para crear el archivo `.env`:
+     ```bash
+     cp .env.example .env
+     ```
+   * Abrir `.env` y configurar las credenciales de tu base de datos:
+     ```dotenv
+     DB_CONNECTION=mysql
+     DB_HOST=127.0.0.1
+     DB_PORT=3306
+     DB_DATABASE=proyecto
+     DB_USERNAME=root
+     DB_PASSWORD=tu_contraseña
+     ```
+
+5. **Generar la clave de seguridad de la aplicación:**
+   ```bash
+   php artisan key:generate
+   ```
+
+6. **Ejecutar las migraciones y seeders:**
+   *(Crea las tablas en la base de datos e inserta los roles y estados iniciales)*
+   ```bash
+   php artisan migrate --seed
+   ```
+
+7. **Crear el enlace simbólico de almacenamiento:**
+   *(Permite el acceso público a imágenes y comprobantes de pago)*
+   ```bash
+   php artisan storage:link
+   ```
+
+---
+
+## ▶️ ¿Cómo ejecutar el proyecto?
+
+Para iniciar la aplicación en desarrollo, ejecuta simultáneamente:
+
+1. **Servidor backend de Laravel:**
+   ```bash
+   php artisan serve
+   ```
+   *Acceso web por defecto:* `http://127.0.0.1:8000`
+
+2. **Servidor de compilación en tiempo real de Vite:**
+   ```bash
+   npm run dev
+   ```
+
+*Para compilar los assets de producción de manera estática:*
+```bash
+npm run build
+```
+
+---
+
+## 📂 Estructura General del Proyecto
+
+```text
+ProyectoCybac/
+├── app/
+│   ├── Http/Controllers/
+│   │   ├── Admin/             # Controladores del panel de administración (clases, membresías, pagos, servicios, usuarios, CMS)
+│   │   ├── Auth/              # Controladores de recuperación y restablecimiento de contraseña
+│   │   ├── User/              # Controladores de clientes (dashboard, clases, membresías, historial de pagos)
+│   │   ├── AdminController.php
+│   │   ├── InstructorController.php
+│   │   ├── LoginController.php
+│   │   └── RegisterController.php
+│   └── Models/                # Modelos Eloquent (User, Role, Membership, Service, Classes, Payment, Registration, etc.)
+├── database/
+│   ├── migrations/            # Migraciones del esquema de base de datos
+│   └── seeders/               # Seeders de roles, estados y datos iniciales
+├── public/                    # Punto de entrada público (index.php) y assets estáticos
+├── resources/
+│   ├── css/                   # Estilos CSS
+│   ├── js/                    # Scripts JS
+│   └── views/                 # Vistas Blade organizadas por roles (admin, user, instructor, auth, layouts)
+├── routes/
+│   ├── web.php                # Rutas web del sistema con middlewares de rol y autenticación
+│   └── api.php                # Endpoints API (Sanctum)
+├── storage/                   # Logs, caché del framework y comprobantes/archivos subidos
+└── .env.example               # Plantilla de variables de entorno
+```
+
+---
+
+## 🌿 Información de Git y Control de Versiones
+
+* **Ramas principales del repositorio:**
+  * `main`: Rama de producción y versión estable del proyecto.
+  * `servicios`: Rama para el desarrollo del módulo de servicios.
+  * `docs/configuracion-repositorio`: Rama de trabajo para estandarización de configuración, gitignore y documentación.
+* **Buenas prácticas:**
+  * Nunca incluir el archivo `.env` en los commits.
+  * Mantener los archivos de compilación (`public/build`) y dependencias (`vendor/`, `node_modules/`) ignorados en Git.
+  * Crear ramas descriptivas para nuevas funcionalidades o correcciones (`feature/...`, `fix/...`, `docs/...`).
+
+---
+
+## 📄 Licencia
+
+Este proyecto está desarrollado sobre el framework Laravel y se distribuye bajo la licencia [MIT](https://opensource.org/licenses/MIT).
+
+
