@@ -3,475 +3,171 @@
 <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
 
 <style>
-:root {
-    --primary-dark: #1A365D;
-    --primary-light: #2EC4B6;
-    --accent-yellow: #FFD166;
-    --accent-orange: #FF6B35;
-    --accent-red: #d82c0d;
-    --white: #FFFFFF;
-    --light-gray: #f8f9fa;
-    --medium-gray: #e9ecef;
-    --dark-shadow: rgba(0, 0, 0, 0.15);
-    --transition: all 0.3s ease;
-}
-
-body {
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    line-height: 1.6;
-    color: #333;
-}
-
-.registrations-container {
+.class-records {
+    --cr-ink: #25223b;
+    --cr-muted: #716d85;
+    --cr-purple: #6554c0;
+    --cr-border: #eae7f2;
+    font-family: 'Segoe UI', sans-serif;
+    color: var(--cr-ink);
+    background: #f7f6fb;
+    border-radius: 24px;
+    padding: clamp(20px, 4vw, 48px);
+    margin: 24px auto;
     max-width: 1400px;
-    margin: 0 auto;
-    padding: 2rem 1.5rem;
-    width: 95%;
+    width: calc(100% - 32px);
+    line-height: 1.5;
 }
-
-.registrations-header {
-    text-align: center;
-    margin-bottom: 3rem;
-    position: relative;
-    padding-bottom: 1.5rem;
-}
-
-.registrations-header::after {
-    content: '';
-    position: absolute;
-    bottom: 0;
-    left: 50%;
-    transform: translateX(-50%);
-    width: 120px;
-    height: 4px;
-    background: linear-gradient(90deg, var(--primary-dark), var(--primary-light));
-    border-radius: 2px;
-}
-
-.registrations-title {
-    font-size: clamp(1.8rem, 4vw, 2.5rem);
-    color: var(--primary-dark);
-    margin-bottom: 1rem;
-    font-weight: 800;
-    letter-spacing: -0.5px;
-}
-
-.registrations-subtitle {
-    font-size: clamp(1rem, 3vw, 1.4rem);
-    color: var(--primary-dark);
-    opacity: 0.8;
-    font-weight: 400;
-    max-width: 700px;
-    margin: 0 auto;
-}
-
-.registrations-card {
-    background-color: var(--white);
-    border-radius: 12px;
-    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.08);
-    padding: clamp(1.5rem, 3vw, 2.5rem);
-    margin-bottom: 3rem;
-    border: none;
-    transition: var(--transition);
-}
-
-.registrations-card:hover {
-    box-shadow: 0 12px 35px rgba(0, 0, 0, 0.12);
-}
-
-.alert {
-    padding: 1.2rem 1.5rem;
-    margin-bottom: 2rem;
-    border-radius: 8px;
-    font-size: clamp(1rem, 3vw, 1.2rem);
-    display: flex;
-    align-items: center;
-    gap: 1rem;
-    border-left: 5px solid;
-    box-shadow: 0 3px 10px var(--dark-shadow);
-}
-
-.alert i {
-    font-size: 1.5rem;
-}
-
-.alert-success {
-    background-color: rgba(46, 196, 182, 0.15);
-    color: var(--primary-dark);
-    border-color: var(--primary-light);
-}
-
-.alert-danger {
-    background-color: rgba(255, 107, 53, 0.15);
-    color: var(--primary-dark);
-    border-color: var(--accent-orange);
-}
-
-/* ESTILOS PARA LA TABLA PRINCIPAL */
-.registrations-table {
-    width: 100%;
-    border-collapse: separate;
-    border-spacing: 0;
-    margin-top: 1.5rem;
-    overflow: hidden;
-}
-
-.registrations-table thead {
-    background: linear-gradient(135deg, var(--primary-dark), #2a4365);
-    color: var(--white);
-    position: sticky;
-    top: 0;
-}
-
-.registrations-table th, 
-.registrations-table td {
-    padding: clamp(0.8rem, 2vw, 1.2rem);
-    text-align: left;
-    font-size: clamp(0.95rem, 3vw, 1.1rem);
-    border-bottom: 1px solid var(--medium-gray);
-}
-
-.registrations-table th {
-    font-weight: 600;
-    text-transform: uppercase;
-    font-size: 0.9rem;
-    letter-spacing: 0.5px;
-}
-
-.registrations-table th i {
-    margin-right: 8px;
-}
-
-.registrations-table tbody tr {
-    transition: var(--transition);
-}
-
-.registrations-table tbody tr:last-child td {
-    border-bottom: none;
-}
-
-.registrations-table tbody tr:hover {
-    background-color: rgba(46, 196, 182, 0.05);
-    transform: translateY(-2px);
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
-}
-
-.registrations-table tbody tr:nth-child(even) {
-    background-color: var(--light-gray);
-}
-
-.registrations-table tbody tr:nth-child(even):hover {
-    background-color: rgba(46, 196, 182, 0.08);
-}
-
-/* ESTILOS PARA VERSIÓN MÓVIL (TABLA HORIZONTAL) */
-.mobile-table-container {
-    display: none;
-    width: 100%;
-    overflow-x: auto;
-    -webkit-overflow-scrolling: touch;
-    margin-top: 1rem;
-}
-
-.mobile-table {
-    min-width: 600px;
-    border-collapse: separate;
-    border-spacing: 0;
-}
-
-.mobile-table th, 
-.mobile-table td {
-    padding: 0.8rem;
-    text-align: left;
-    border-bottom: 1px solid var(--medium-gray);
-    white-space: nowrap;
-}
-
-.mobile-table th {
-    background: linear-gradient(135deg, var(--primary-dark), #2a4365);
-    color: var(--white);
-    font-weight: 600;
-    text-transform: uppercase;
-    font-size: 0.8rem;
-    letter-spacing: 0.5px;
-    position: sticky;
-    left: 0;
-}
-
-.mobile-table tbody tr {
-    background-color: var(--white);
-}
-
-.mobile-table tbody tr:nth-child(even) {
-    background-color: var(--light-gray);
-}
-
-.empty-state {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    padding: 3rem 1rem;
-    text-align: center;
-}
-
-.empty-icon {
-    font-size: clamp(3rem, 10vw, 5rem);
-    color: var(--medium-gray);
-    margin-bottom: 1.5rem;
-}
-
-.empty-message {
-    font-size: clamp(1.2rem, 3vw, 1.6rem);
-    color: var(--primary-dark);
-    margin-bottom: 1rem;
-    font-weight: 500;
-}
-
-.empty-submessage {
-    font-size: clamp(1rem, 3vw, 1.2rem);
-    color: #666;
-    max-width: 500px;
-    margin: 0 auto;
-}
-
-.divider {
-    height: 1px;
-    background: linear-gradient(90deg, transparent, var(--primary-light), transparent);
-    margin: 2.5rem 0;
-}
-
-/* Badge para estado de clases */
-.status-badge {
-    display: inline-block;
-    padding: 0.35rem 0.8rem;
-    border-radius: 50px;
-    font-size: 0.75rem;
-    font-weight: 600;
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
-}
-
-.badge-completed {
-    background-color: rgba(46, 196, 182, 0.15);
-    color: var(--primary-dark);
-}
-
-.badge-upcoming {
-    background-color: rgba(255, 209, 102, 0.15);
-    color: #8a6d3b;
-}
-
-.badge-cancelled {
-    background-color: rgba(255, 107, 53, 0.15);
-    color: var(--accent-orange);
-}
-
-/* MEDIA QUERIES PARA RESPONSIVE */
-@media (max-width: 992px) {
-    .registrations-container {
-        padding: 1.5rem 1rem;
-    }
-    
-    .registrations-card {
-        padding: 1.5rem;
-    }
-}
-
-/* Versión móvil - ocultar tabla normal y mostrar tabla horizontal */
+.class-records, .class-records * { box-sizing: border-box; }
+.class-records .cr-header { display: flex; align-items: center; justify-content: space-between; gap: 24px; margin-bottom: 32px; }
+.class-records .cr-eyebrow { display: flex; align-items: center; gap: 8px; color: var(--cr-purple); font-size: 11px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; margin: 0 0 12px; }
+.class-records .cr-eyebrow::before { content: ''; width: 20px; height: 2px; background: currentColor; }
+.class-records h1 { font-size: clamp(26px, 4vw, 38px); letter-spacing: -1.3px; line-height: 1.15; font-weight: 750; margin: 0 0 12px; color: var(--cr-ink); }
+.class-records .cr-subtitle { color: var(--cr-muted); font-size: 14px; margin: 0; max-width: 520px; }
+.class-records .cr-header-icon { display: grid; place-items: center; width: 76px; height: 76px; flex-shrink: 0; color: var(--cr-purple); background: #eeebfa; border: 1px solid #e2dcf7; border-radius: 24px; font-size: 28px; }
+.class-records .cr-panel { background: #fff; border: 1px solid var(--cr-border); border-radius: 18px; overflow: hidden; box-shadow: 0 8px 32px #30264e06; }
+.class-records .cr-panel-header { padding: 24px 28px; display: flex; align-items: center; justify-content: space-between; gap: 16px; }
+.class-records .cr-panel-title { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+.class-records h2 { font-size: 17px; font-weight: 650; margin: 0; color: var(--cr-ink); }
+.class-records .cr-count { color: var(--cr-purple); background: #f0edfb; padding: 3px 10px; border-radius: 8px; font-size: 12px; font-weight: 700; }
+.class-records .cr-panel-note { font-size: 12px; color: var(--cr-muted); margin: 0; }
+.class-records .cr-table-wrap { overflow-x: auto; }
+.class-records .cr-table { border-collapse: collapse; width: 100%; text-align: left; margin: 0; }
+.class-records .cr-table th { padding: 14px 20px; background: #faf9fd; border-block: 1px solid var(--cr-border); font-size: 10px; text-transform: uppercase; letter-spacing: 1.2px; color: var(--cr-muted); font-weight: 700; white-space: nowrap; }
+.class-records .cr-table td { padding: 22px 20px; border-bottom: 1px solid #f0edf5; font-size: 13px; vertical-align: middle; }
+.class-records .cr-table th:first-child, .class-records .cr-table td:first-child { padding-left: 28px; }
+.class-records .cr-table tbody tr:last-child td { border-bottom: none; }
+.class-records .cr-table tbody tr:hover { background: #fcfbff; }
+.class-records .cr-person { display: flex; align-items: center; gap: 12px; min-width: 170px; }
+.class-records .cr-avatar { display: grid; place-items: center; height: 40px; width: 40px; flex-shrink: 0; background: #eeeafa; color: #6957ae; border-radius: 13px; font-size: 13px; font-weight: 700; }
+.class-records tr:nth-child(3n+2) .cr-avatar { background: #e7f3ef; color: #367763; }
+.class-records tr:nth-child(3n+3) .cr-avatar { background: #fdf0e4; color: #986339; }
+.class-records .cr-name { font-weight: 650; overflow-wrap: anywhere; }
+.class-records .cr-service { display: inline-block; padding: 5px 10px; background: #f5f4f8; border: 1px solid #eeecf3; border-radius: 7px; font-size: 12px; }
+.class-records .cr-date { white-space: nowrap; }
+.class-records .cr-time { white-space: nowrap; font-variant-numeric: tabular-nums; color: var(--cr-muted); }
+.class-records .cr-time i { margin-right: 5px; font-size: 11px; }
+.class-records .cr-description { color: var(--cr-muted); min-width: 140px; max-width: 260px; overflow-wrap: anywhere; }
+.class-records .cr-status { display: inline-flex; align-items: center; gap: 6px; padding: 5px 10px; border-radius: 30px; font-size: 11px; font-weight: 650; white-space: nowrap; }
+.class-records .cr-status::before { content: ''; height: 5px; width: 5px; border-radius: 50%; background: currentColor; }
+.class-records .cr-completed { background: #eaf5ef; color: #28714f; }
+.class-records .cr-upcoming { background: #f0edfc; color: #6650b4; }
+.class-records .cr-footer { display: flex; align-items: center; gap: 8px; padding: 18px 28px; border-top: 1px solid var(--cr-border); font-size: 12px; color: var(--cr-muted); background: #fdfcfe; }
+.class-records .cr-footer i { color: #9991b3; }
+.class-records .cr-alert { display: flex; align-items: center; gap: 12px; padding: 15px 18px; margin-bottom: 20px; border-radius: 12px; font-size: 14px; overflow-wrap: anywhere; }
+.class-records .cr-success { color: #286447; background: #e9f5ee; border: 1px solid #cde8d8; }
+.class-records .cr-error { color: #a33d43; background: #fff0f0; border: 1px solid #f4d2d4; }
+.class-records .cr-empty { padding: 64px 24px; text-align: center; border-top: 1px solid var(--cr-border); }
+.class-records .cr-empty-icon { display: grid; place-items: center; margin: 0 auto 20px; width: 72px; height: 72px; border-radius: 24px; background: #f1eefb; color: var(--cr-purple); font-size: 26px; }
+.class-records .cr-empty h3 { margin: 0 0 10px; font-size: 20px; color: var(--cr-ink); }
+.class-records .cr-empty p { margin: 0 auto; max-width: 380px; font-size: 14px; color: var(--cr-muted); }
+.class-records .cr-sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0,0,0,0); white-space: nowrap; border: 0; }
 @media (max-width: 768px) {
-    .registrations-table {
-        display: none;
-    }
-    
-    .mobile-table-container {
-        display: block;
-    }
-    
-    .alert {
-        flex-direction: column;
-        text-align: center;
-        gap: 0.8rem;
-    }
-    
-    .empty-state {
-        padding: 2rem 0.5rem;
-    }
+    .class-records { width: calc(100% - 16px); padding: 24px 14px; margin: 12px auto; border-radius: 18px; }
+    .class-records .cr-header { gap: 12px; margin-bottom: 24px; }
+    .class-records .cr-header-icon { width: 48px; height: 48px; border-radius: 15px; font-size: 20px; }
+    .class-records .cr-panel-header { padding: 20px; flex-wrap: wrap; gap: 6px; }
+    .class-records .cr-panel-note { width: 100%; }
+    .class-records .cr-table-wrap { overflow: visible; padding: 0 12px 12px; }
+    .class-records .cr-table, .class-records .cr-table tbody { display: block; }
+    .class-records .cr-table thead { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0,0,0,0); }
+    .class-records .cr-table tbody tr { display: block; border: 1px solid var(--cr-border); border-radius: 12px; margin-bottom: 12px; padding: 4px 16px 12px; }
+    .class-records .cr-table tbody tr:last-child { margin-bottom: 0; }
+    .class-records .cr-table td { display: grid; grid-template-columns: 90px minmax(0, 1fr); align-items: start; gap: 10px; padding: 8px 0; border: none; min-width: 0; max-width: none; }
+    .class-records .cr-table td::before { content: attr(data-label); color: var(--cr-muted); font-size: 12px; font-weight: 500; }
+    .class-records .cr-table td:first-child { display: block; padding: 14px 0; margin-bottom: 8px; border-bottom: 1px solid var(--cr-border); }
+    .class-records .cr-table td:first-child::before { display: none; }
+    .class-records .cr-service, .class-records .cr-status { justify-self: start; }
+    .class-records .cr-date { white-space: normal; }
+    .class-records .cr-footer { padding: 16px 20px; }
 }
-
-/* Animaciones */
-@keyframes fadeIn {
-    from { opacity: 0; transform: translateY(10px); }
-    to { opacity: 1; transform: translateY(0); }
-}
-
-.registrations-card {
-    animation: fadeIn 0.5s ease-out;
-}
-
-.registrations-table tbody tr,
-.mobile-table tbody tr {
-    animation: fadeIn 0.3s ease-out;
-    animation-fill-mode: both;
-}
-
-.registrations-table tbody tr:nth-child(1),
-.mobile-table tbody tr:nth-child(1) { animation-delay: 0.1s; }
-.registrations-table tbody tr:nth-child(2),
-.mobile-table tbody tr:nth-child(2) { animation-delay: 0.2s; }
-.registrations-table tbody tr:nth-child(3),
-.mobile-table tbody tr:nth-child(3) { animation-delay: 0.3s; }
-.registrations-table tbody tr:nth-child(4),
-.mobile-table tbody tr:nth-child(4) { animation-delay: 0.4s; }
 </style>
 
-<div class="registrations-container">
-    <div class="registrations-header">
-        <div class="header-icon">
-            <i class="fas fa-chalkboard-teacher mb-3" style="color: var(--primary-dark); font-size: clamp(3rem, 10vw, 4.5rem);"></i>
+<div class="class-records">
+    <header class="cr-header">
+        <div>
+            <p class="cr-eyebrow">Panel de instructor</p>
+            <h1>Registros de clases</h1>
+            <p class="cr-subtitle">Tus clases, tu comunidad. Consulta los alumnos inscritos y los detalles de cada sesión.</p>
         </div>
-        <h1 class="registrations-title">Registros de Clases</h1>
-        <p class="registrations-subtitle">Visualiza todos los alumnos registrados en tus clases programadas</p>
-    </div>
+        <div class="cr-header-icon" aria-hidden="true"><i class="fas fa-chalkboard-teacher"></i></div>
+    </header>
 
-    <div class="registrations-card">
-        @if(session('success'))
-            <div class="alert alert-success">
-                <i class="fas fa-check-circle"></i> 
-                <div>{{ session('success') }}</div>
+    @if(session('success'))
+        <div class="cr-alert cr-success" role="status">
+            <i class="fas fa-circle-check" aria-hidden="true"></i>
+            <span>{{ session('success') }}</span>
+        </div>
+    @elseif(session('error'))
+        <div class="cr-alert cr-error" role="alert">
+            <i class="fas fa-circle-exclamation" aria-hidden="true"></i>
+            <span>{{ session('error') }}</span>
+        </div>
+    @endif
+
+    <section class="cr-panel" aria-labelledby="cr-list-title">
+        <div class="cr-panel-header">
+            <div class="cr-panel-title">
+                <h2 id="cr-list-title">Alumnos inscritos</h2>
+                <span class="cr-count">{{ $registrations->count() }} registros</span>
             </div>
-        @elseif(session('error'))
-            <div class="alert alert-danger">
-                <i class="fas fa-exclamation-triangle"></i> 
-                <div>{{ session('error') }}</div>
-            </div>
-        @endif
+            <p class="cr-panel-note">Detalle de inscripciones</p>
+        </div>
 
         @if($registrations->isEmpty())
-            <div class="empty-state">
-                <div class="empty-icon">
-                    <i class="fas fa-user-slash"></i>
-                </div>
-                <h3 class="empty-message">No hay registros disponibles</h3>
-                <p class="empty-submessage">Actualmente no tienes alumnos registrados en tus clases. Los registros aparecerán aquí cuando los alumnos se inscriban.</p>
+            <div class="cr-empty">
+                <div class="cr-empty-icon" aria-hidden="true"><i class="fas fa-user-group"></i></div>
+                <h3>Tu próxima clase empieza aquí</h3>
+                <p>Aún no tienes alumnos registrados. Cuando se inscriban en tus clases, podrás ver sus datos en este espacio.</p>
             </div>
         @else
-            <!-- Versión de escritorio (Tabla normal) -->
-            <div class="table-responsive">
-                <table class="registrations-table">
-                    <thead>
-                        <tr>
-                            <th><i class="fas fa-user"></i> Alumno</th>
-                            <th><i class="fas fa-dumbbell"></i> Servicio</th>
-                            <th><i class="far fa-calendar-alt"></i> Fecha</th>
-                            <th><i class="far fa-clock"></i> Hora</th>
-                            <th><i class="fas fa-align-left"></i> Descripción</th>
-                            <th><i class="fas fa-info-circle"></i> Estado</th>
+            <div class="cr-table-wrap">
+                <table class="cr-table" role="table">
+                    <caption class="cr-sr-only">Alumnos registrados en tus clases programadas</caption>
+                    <thead role="rowgroup">
+                        <tr role="row">
+                            <th scope="col" role="columnheader">Alumno</th>
+                            <th scope="col" role="columnheader">Servicio</th>
+                            <th scope="col" role="columnheader">Fecha</th>
+                            <th scope="col" role="columnheader">Hora</th>
+                            <th scope="col" role="columnheader">Descripción</th>
+                            <th scope="col" role="columnheader">Estado</th>
                         </tr>
                     </thead>
-                    <tbody>
+                    <tbody role="rowgroup">
                         @foreach($registrations as $registration)
                             @php
                                 $classDate = \Carbon\Carbon::parse($registration->class->date);
                                 $isPast = $classDate->isPast();
-                                $statusClass = $isPast ? 'badge-completed' : 'badge-upcoming';
+                                $statusClass = $isPast ? 'cr-completed' : 'cr-upcoming';
                                 $statusText = $isPast ? 'Completada' : 'Próxima';
+                                $initials = \Illuminate\Support\Str::upper(
+                                    \Illuminate\Support\Str::substr($registration->user->names, 0, 1) .
+                                    \Illuminate\Support\Str::substr($registration->user->last_name, 0, 1)
+                                );
                             @endphp
-                            <tr>
-                                <td>
-                                    <strong>{{ $registration->user->names }} {{ $registration->user->last_name }}</strong>
+                            <tr role="row">
+                                <td data-label="Alumno" role="cell">
+                                    <div class="cr-person">
+                                        <span class="cr-avatar" aria-hidden="true">{{ $initials }}</span>
+                                        <span class="cr-name">{{ $registration->user->names }} {{ $registration->user->last_name }}</span>
+                                    </div>
                                 </td>
-                                <td>{{ $registration->class->service->name }}</td>
-                                <td>{{ $classDate->translatedFormat('d \d\e F \d\e Y') }}</td>
-                                <td>{{ \Carbon\Carbon::parse($registration->class->time)->format('h:i A') }}</td>
-                                <td>{{ Str::limit($registration->class->description, 50, '...') }}</td>
-                                <td>
-                                    <span class="status-badge {{ $statusClass }}">{{ $statusText }}</span>
-                                </td>
+                                <td data-label="Servicio" role="cell"><span class="cr-service">{{ $registration->class->service->name }}</span></td>
+                                <td data-label="Fecha" class="cr-date" role="cell">{{ $classDate->translatedFormat('d \d\e M, Y') }}</td>
+                                <td data-label="Hora" class="cr-time" role="cell"><span><i class="far fa-clock" aria-hidden="true"></i>{{ \Carbon\Carbon::parse($registration->class->time)->format('h:i A') }}</span></td>
+                                <td data-label="Descripción" class="cr-description" role="cell">{{ \Illuminate\Support\Str::limit($registration->class->description, 50, '...') }}</td>
+                                <td data-label="Estado" role="cell"><span class="cr-status {{ $statusClass }}">{{ $statusText }}</span></td>
                             </tr>
                         @endforeach
                     </tbody>
                 </table>
             </div>
-
-            <!-- Versión móvil (Tabla horizontal) -->
-            <div class="mobile-table-container">
-                <table class="mobile-table">
-                    <thead>
-                        <tr>
-                            <th>Alumno</th>
-                            <th>Servicio</th>
-                            <th>Fecha</th>
-                            <th>Hora</th>
-                            <th>Descripción</th>
-                            <th>Estado</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @foreach($registrations as $registration)
-                            @php
-                                $classDate = \Carbon\Carbon::parse($registration->class->date);
-                                $isPast = $classDate->isPast();
-                                $statusClass = $isPast ? 'badge-completed' : 'badge-upcoming';
-                                $statusText = $isPast ? 'Completada' : 'Próxima';
-                            @endphp
-                            <tr>
-                                <td>
-                                    <strong>{{ $registration->user->names }} {{ $registration->user->last_name }}</strong>
-                                </td>
-                                <td>{{ $registration->class->service->name }}</td>
-                                <td>{{ $classDate->translatedFormat('d/m/Y') }}</td>
-                                <td>{{ \Carbon\Carbon::parse($registration->class->time)->format('h:i A') }}</td>
-                                <td>{{ Str::limit($registration->class->description, 30, '...') }}</td>
-                                <td>
-                                    <span class="status-badge {{ $statusClass }}">{{ $statusText }}</span>
-                                </td>
-                            </tr>
-                        @endforeach
-                    </tbody>
-                </table>
-            </div>
+            <footer class="cr-footer">
+                <i class="fas fa-list-check" aria-hidden="true"></i>
+                <span>Mostrando {{ $registrations->count() }} registros</span>
+            </footer>
         @endif
-
-        <div class="divider"></div>
-        
-        @if(!$registrations->isEmpty())
-            <div class="d-flex justify-content-end">
-                <small class="text-muted">Mostrando {{ $registrations->count() }} registros</small>
-            </div>
-        @endif
-    </div>
+    </section>
 </div>
-
-<script>
-document.addEventListener('DOMContentLoaded', function() {
-    // Interacción para la versión de escritorio
-    const tableRows = document.querySelectorAll('.registrations-table tbody tr');
-    tableRows.forEach(row => {
-        row.addEventListener('click', function() {
-            // Aquí puedes agregar funcionalidad al hacer clic en una fila
-            console.log('Clic en la fila:', this);
-        });
-        
-        row.addEventListener('mouseenter', function() {
-            this.style.transform = 'translateY(-3px)';
-            this.style.boxShadow = '0 6px 15px rgba(0, 0, 0, 0.1)';
-        });
-        
-        row.addEventListener('mouseleave', function() {
-            this.style.transform = '';
-            this.style.boxShadow = '';
-        });
-    });
-    
-    // Interacción para la versión móvil
-    const mobileRows = document.querySelectorAll('.mobile-table tbody tr');
-    mobileRows.forEach(row => {
-        row.addEventListener('click', function() {
-            // Aquí puedes agregar funcionalidad al hacer clic en una fila móvil
-            console.log('Clic en la fila móvil:', this);
-        });
-    });
-});
-</script>
 @endsection
