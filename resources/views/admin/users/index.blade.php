@@ -1,7 +1,7 @@
 @extends('layouts.admi-app-master')
 
 @section('content')
-<div class="container-fluid px-4 mt-5">
+<div class="container-fluid px-4 mt-5 users-design">
     <div class="row justify-content-center">
         <div class="col-12 col-xxl-10">
             <div class="card shadow-sm" style="border: 2px solid #1A365D;">
@@ -753,6 +753,7 @@
         }
     }
 </style>
+@include('admin.users._design')
 
 @section('scripts')
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>

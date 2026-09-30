@@ -1,7 +1,7 @@
 @extends('layouts.admi-app-master')
 
 @section('content')
-<div class="container-fluid px-4 mt-5">
+<div class="container-fluid px-4 mt-5 users-design users-form">
     <div class="row justify-content-center">
         <div class="col-12 col-lg-8 col-xl-6">
             <div class="card shadow-sm" style="border: 2px solid #1A365D;">
@@ -554,6 +554,7 @@
         cursor: not-allowed !important;
     }
 </style>
+@include('admin.users._design')
 
 @section('scripts')
 <!-- SweetAlert2 para diálogos personalizados -->
