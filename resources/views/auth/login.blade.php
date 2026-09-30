@@ -59,6 +59,7 @@
         .login-container {
             width: 100%;
             max-width: 450px;
+            animation: fadeIn 0.6s ease-out;
         }
 
         .login-card {
@@ -142,30 +143,8 @@
             transform: rotate(30deg);
         }
         
-        .brand-name {
-            font-size: 1.8rem;
-            font-weight: 700;
-            color: var(--blanco);
-            margin-top: 0.5rem;
-            text-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
-            letter-spacing: 1px;
-            position: relative;
-        }
-
-        .brand-name::after {
-            content: "";
-            position: absolute;
-            bottom: -8px;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 50px;
-            height: 3px;
-            background: var(--verde-esmeralda);
-            border-radius: 3px;
-        }
-
         .tagline {
-            font-size: 0.9rem;
+            font-size: 1rem;
             opacity: 0.9;
             margin-bottom: 0;
             margin-top: 1rem;
@@ -215,97 +194,6 @@
             margin-top: 0.25rem;
         }
 
-        .invalid-feedback i {
-            margin-right: 0.25rem;
-        }
-
-        /* Estilo para el contenedor de opciones */
-        .options__container {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        /* Estilo para cada item de opción */
-        .option__item {
-            position: relative;
-        }
-
-        .option__checkbox {
-            position: absolute;
-            opacity: 0;
-        }
-
-        .option__label {
-            display: flex;
-            align-items: center;
-            cursor: pointer;
-            position: relative;
-            padding-left: 28px;
-            color: var(--azul-marino);
-            font-size: 0.9rem;
-        }
-
-        .option__label:hover {
-            color: var(--naranja-brillante);
-        }
-
-        .option__icon {
-            position: absolute;
-            left: 0;
-            width: 20px;
-            height: 20px;
-            border: 2px solid var(--verde-esmeralda);
-            background: var(--blanco);
-            border-radius: 4px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .option__checkbox:checked + .option__label .option__icon {
-            background: var(--verde-esmeralda);
-            border-color: var(--azul-marino);
-        }
-
-        .option__checkbox:checked + .option__label .option__icon svg path {
-            fill: var(--blanco);
-        }
-
-        .option__icon svg path {
-            fill: transparent;
-        }
-
-        .option__checkbox:checked + .option__label .option__text {
-            font-weight: 600;
-        }
-
-        /* Estilo para el enlace de recuperación */
-        .option__link {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            color: var(--naranja-brillante);
-            font-size: 0.9rem;
-            text-decoration: none;
-        }
-
-        .option__link:hover {
-            color: var(--azul-marino);
-        }
-
-        .option__link .option__icon {
-            position: relative;
-            left: auto;
-            background: var(--naranja-brillante);
-            border-color: var(--azul-marino);
-        }
-
-        .option__link .option__icon svg path {
-            fill: var(--blanco);
-        }
-
-        /* Estilo para el contenedor de registro */
         .register__container {
             margin-top: 2rem;
         }
@@ -334,6 +222,8 @@
         .register__link {
             display: inline-flex;
             align-items: center;
+            justify-content: center;
+            width: 100%;
             gap: 8px;
             color: var(--azul-marino);
             text-decoration: none;
@@ -341,6 +231,7 @@
             border-radius: 8px;
             background: rgba(255, 255, 255, 0.7);
             border: 1px solid rgba(46, 196, 182, 0.3);
+            transition: all 0.2s ease;
         }
 
         .register__link:hover {
@@ -383,11 +274,13 @@
             padding-left: 3rem;
             background-color: var(--gris-claro);
             width: 100%;
+            transition: border-color 0.2s ease, box-shadow 0.2s ease;
         }
 
         .form-control:focus {
             border-color: var(--verde-esmeralda);
             box-shadow: 0 0 0 0.2rem rgba(46, 196, 182, 0.15);
+            background-color: var(--blanco);
         }
 
         .input-icon {
@@ -405,21 +298,28 @@
         }
 
         .btn-login {
-        background: var(--naranja-brillante);
-        border: none;
-        color: var(--blanco);
-        height: 3rem;
-        border-radius: 8px;
-        font-weight: 600;
-        width: 100%;
-        letter-spacing: 0.5px;
+            background: var(--naranja-brillante);
+            border: none;
+            color: var(--blanco);
+            height: 3rem;
+            border-radius: 8px;
+            font-weight: 600;
+            width: 100%;
+            letter-spacing: 0.5px;
+            transition: background-color 0.2s ease, transform 0.1s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
 
         .btn-login:hover {
-        background: var(--naranja-brillante);
-        color: var(--blanco);
-        transform: none;
-        box-shadow: none;
+            background: #e55a2b;
+            color: var(--blanco);
+        }
+
+        .btn-login:disabled {
+            background: #f19b78;
+            cursor: not-allowed;
         }
 
         .password-toggle {
@@ -459,33 +359,6 @@
             color: var(--azul-marino);
         }
 
-        .login-footer {
-            text-align: center;
-            padding: 0 2rem 1.5rem;
-        }
-
-        .login-footer a {
-            color: var(--verde-esmeralda);
-            text-decoration: none;
-            font-weight: 500;
-        }
-
-        .image-overlay {
-            position: absolute;
-            bottom: 0;
-            left: 0;
-            right: 0;
-            padding: 2rem;
-            background: linear-gradient(transparent, rgba(26, 54, 93, 0.8));
-            color: var(--blanco);
-        }
-
-        .image-text {
-            font-size: 1.8rem;
-            font-weight: 600;
-            margin-bottom: 0.5rem;
-        }
-
         .alert-danger {
             background-color: rgba(220, 53, 69, 0.1);
             border-color: rgba(220, 53, 69, 0.2);
@@ -504,58 +377,54 @@
             to { opacity: 1; transform: translateY(0); }
         }
 
-        .login-container {
-            animation: fadeIn 0.6s ease-out;
-        }
-
         .svg-logo text {
             filter: drop-shadow(0 0 5px #2EC4B6) drop-shadow(0 0 10px #2EC4B6);
             stroke-linecap: round;
             stroke-linejoin: round;
         } 
-
     </style>
 </head>
 <body>
-   <div class="login-wrapper">
-    <!-- Columna del formulario -->
-    <div class="login-form-container">
-        <div class="login-container">
-            <div class="login-card">
-                <div class="login-header">
-                    <!-- Efecto de partículas -->
-                    <div class="particles" id="particles-js"></div>
-                    <div class="logo-container">
-                        <img src="{{ asset('images/logo.png') }}" alt="Fitnflow" class="circular-logo">
-                        <!-- 🔥 Texto SVG animado tipo luz -->
-                        <svg viewBox="0 0 800 100" xmlns="http://www.w3.org/2000/svg" class="svg-logo" style="max-width: 100%; height: auto;">
-                            <text x="50%" y="50%" dominant-baseline="middle" text-anchor="middle"
-                                font-family="Poppins, sans-serif" font-size="80" fill="none"
-                                stroke="#2EC4B6" stroke-width="2">
-                                Fitnflow
-                                <animate attributeName="stroke-dasharray" from="0, 1000" to="600, 0" dur="3s" repeatCount="indefinite" />
-                                <animate attributeName="stroke-dashoffset" from="0" to="-600" dur="3s" repeatCount="indefinite" />
-                            </text>
-                        </svg>
-                        <p class="tagline" style="font-size: 1rem">Accede a tu cuenta para reservar clases</p>
+    <div class="login-wrapper">
+        <!-- Columna del formulario -->
+        <div class="login-form-container">
+            <div class="login-container">
+                <div class="login-card">
+                    <div class="login-header">
+                        <!-- Efecto de partículas -->
+                        <div class="particles" id="particles-js"></div>
+                        <div class="logo-container">
+                            <img src="{{ asset('images/logo.png') }}" alt="Fitnflow" class="circular-logo">
+                            <!-- Texto SVG animado -->
+                            <svg viewBox="0 0 800 100" xmlns="http://www.w3.org/2000/svg" class="svg-logo" style="max-width: 100%; height: auto;">
+                                <text x="50%" y="50%" dominant-baseline="middle" text-anchor="middle"
+                                    font-family="Poppins, sans-serif" font-size="80" fill="none"
+                                    stroke="#2EC4B6" stroke-width="2">
+                                    Fitnflow
+                                    <animate attributeName="stroke-dasharray" from="0, 1000" to="600, 0" dur="3s" repeatCount="indefinite" />
+                                    <animate attributeName="stroke-dashoffset" from="0" to="-600" dur="3s" repeatCount="indefinite" />
+                                </text>
+                            </svg>
+                            <p class="tagline">Accede a tu cuenta para reservar clases</p>
+                        </div>
                     </div>
-                </div>
 
-                    
                     <div class="login-body">
                         @if($errors->any())
-                            <div class="alert alert-danger mb-4">
+                            <div class="alert alert-danger mb-4" id="serverAlert">
                                 <i class="bi bi-exclamation-circle me-2"></i>
-                                @foreach ($errors->all() as $error)
-                                    {{ $error }}
+                                @foreach ($errors->all() as$error)
+                                    <div>{{ $error }}</div>
                                 @endforeach
                             </div>
                         @endif
 
-                        <form method="POST" action="{{ route('login') }}">
+                        <div id="jsAlertContainer"></div>
+
+                        <form method="POST" action="{{ route('login') }}" id="loginForm" novalidate>
                             @csrf
                             
-                           <div class="mb-4">
+                            <div class="mb-4">
                                 <label for="email" class="form-label">Correo electrónico</label>
                                 <div class="input-group-icon">
                                     <i class="bi bi-envelope input-icon"></i>
@@ -563,9 +432,13 @@
                                            name="email" 
                                            id="email"
                                            class="form-control @error('email') is-invalid @enderror" 
+                                           value="{{ old('email') }}"
                                            required 
                                            autofocus
                                            placeholder="ejemplo@correo.com">
+                                </div>
+                                <div class="invalid-feedback d-none" id="emailClientError">
+                                    <i class="bi bi-exclamation-circle me-1"></i>Ingresa un correo electrónico válido.
                                 </div>
                                 @error('email')
                                     <div class="invalid-feedback d-block">
@@ -585,9 +458,13 @@
                                            required>
                                     <button type="button" 
                                             class="password-toggle" 
-                                            onclick="togglePassword()">
+                                            onclick="togglePassword()"
+                                            aria-label="Mostrar u ocultar contraseña">
                                         <i class="bi bi-eye" id="toggleIcon"></i>
                                     </button>
+                                </div>
+                                <div class="invalid-feedback d-none" id="passwordClientError">
+                                    <i class="bi bi-exclamation-circle me-1"></i>Ingresa tu contraseña.
                                 </div>
                                 @error('password')
                                     <div class="invalid-feedback d-block">
@@ -599,20 +476,22 @@
                             <div class="d-flex justify-content-between align-items-center mb-4">
                                 <div class="form-check">
                                     <input type="checkbox" 
-                                        class="form-check-input" 
-                                        name="remember" 
-                                        id="remember">
+                                           class="form-check-input" 
+                                           name="remember" 
+                                           id="remember"
+                                           {{ old('remember') ? 'checked' : '' }}>
                                     <label class="form-check-label" for="remember">Recordar sesión</label>
                                 </div>
-                                <button type="button" 
-                                        class="btn-recovery" 
-                                        onclick="window.location.href='{{ route('password.request') }}'">
-                                    ¿Olvidaste tu contraseña?
-                                </button>
+                                @if (Route::has('password.request'))
+                                    <a href="{{ route('password.request') }}" class="btn-recovery">
+                                        ¿Olvidaste tu contraseña?
+                                    </a>
+                                @endif
                             </div>
 
-                            <button type="submit" class="btn btn-login mb-3">
-                                <i class="bi bi-box-arrow-in-right me-2"></i>Iniciar sesión
+                            <button type="submit" class="btn btn-login mb-3" id="btnSubmit">
+                                <i class="bi bi-box-arrow-in-right me-2" id="btnIcon"></i>
+                                <span id="btnText">Iniciar sesión</span>
                             </button>
 
                             <div class="register__container">
@@ -643,32 +522,86 @@
             <div class="image-overlay"></div>
         </div>
     </div>
-  <script>
-    // Esperar a que el DOM esté completamente cargado
-    document.addEventListener('DOMContentLoaded', function() {
-        // Seleccionar todas las alertas
-        const alerts = document.querySelectorAll('.alert');
-        
-        // Configurar el tiempo de desaparición (3000ms = 3 segundos)
-        const fadeTime = 3000;
-        
-        // Aplicar a cada alerta
-        alerts.forEach(alert => {
-            setTimeout(() => {
-                // Agregar clase para animación de desvanecimiento
-                alert.style.transition = 'opacity 0.5s ease-out';
-                alert.style.opacity = '0';
-                
-                // Eliminar el elemento después de la animación
-                setTimeout(() => {
-                    alert.remove();
-                }, 500); // 0.5s para coincidir con la duración de la transición
-            }, fadeTime);
-        });
-    });
-</script>
+
     <script>
-        // Función para mostrar/ocultar contraseña
+        document.addEventListener('DOMContentLoaded', function() {
+            // Manejo de desvanecimiento de alertas del servidor
+            const alerts = document.querySelectorAll('.alert');
+            alerts.forEach(alert => {
+                setTimeout(() => {
+                    alert.style.transition = 'opacity 0.5s ease-out';
+                    alert.style.opacity = '0';
+                    setTimeout(() => alert.remove(), 500);
+                }, 4000);
+            });
+
+            // Generador de partículas
+            const particlesContainer = document.getElementById('particles-js');
+            if (particlesContainer) {
+                const particleCount = 20;
+                for (let i = 0; i < particleCount; i++) {
+                    const particle = document.createElement('div');
+                    particle.classList.add('particle');
+                    const size = Math.random() * 2 + 1;
+                    particle.style.width = `${size}px`;
+                    particle.style.height = `${size}px`;
+                    particle.style.left = `${Math.random() * 100}%`;
+                    particle.style.top = `${Math.random() * 100}%`;
+                    particle.style.animationDuration = `${Math.random() * 10 + 10}s`;
+                    particle.style.animationDelay = `${Math.random() * 5}s`;
+                    particlesContainer.appendChild(particle);
+                }
+            }
+
+            // Validaciones dinámicas del cliente al enviar
+            const loginForm = document.getElementById('loginForm');
+            const emailInput = document.getElementById('email');
+            const passwordInput = document.getElementById('password');
+            const emailError = document.getElementById('emailClientError');
+            const passwordError = document.getElementById('passwordClientError');
+            const btnSubmit = document.getElementById('btnSubmit');
+            const btnText = document.getElementById('btnText');
+            const btnIcon = document.getElementById('btnIcon');
+
+            loginForm.addEventListener('submit', function(e) {
+                let isValid = true;
+                const emailValue = emailInput.value.trim();
+                const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+                // Validar Email
+                if (!emailRegex.test(emailValue)) {
+                    emailInput.classList.add('is-invalid');
+                    emailError.classList.remove('d-none');
+                    emailError.classList.add('d-block');
+                    isValid = false;
+                } else {
+                    emailInput.classList.remove('is-invalid');
+                    emailError.classList.add('d-none');
+                }
+
+                // Validar Contraseña
+                if (passwordInput.value.trim() === '') {
+                    passwordInput.classList.add('is-invalid');
+                    passwordError.classList.remove('d-none');
+                    passwordError.classList.add('d-block');
+                    isValid = false;
+                } else {
+                    passwordInput.classList.remove('is-invalid');
+                    passwordError.classList.add('d-none');
+                }
+
+                if (!isValid) {
+                    e.preventDefault();
+                } else {
+                    // Estado de carga para mejorar la experiencia de usuario (UX)
+                    btnSubmit.disabled = true;
+                    btnText.textContent = 'Verificando...';
+                    btnIcon.className = 'spinner-border spinner-border-sm me-2';
+                }
+            });
+        });
+
+        // Alternar visibilidad de contraseña
         function togglePassword() {
             const password = document.getElementById('password');
             const toggleIcon = document.getElementById('toggleIcon');
@@ -683,41 +616,6 @@
                 toggleIcon.classList.add('bi-eye');
             }
         }
-
-        // Limpiar campos al cargar (opcional)
-        document.addEventListener('DOMContentLoaded', function() {
-            document.getElementById('email').value = '';
-            document.getElementById('password').value = '';
-            
-            // Crear efecto de partículas
-            const particlesContainer = document.getElementById('particles-js');
-            if (particlesContainer) {
-                const particleCount = 20;
-                
-                for (let i = 0; i < particleCount; i++) {
-                    const particle = document.createElement('div');
-                    particle.classList.add('particle');
-                    
-                    // Tamaño aleatorio entre 1px y 3px
-                    const size = Math.random() * 2 + 1;
-                    particle.style.width = `${size}px`;
-                    particle.style.height = `${size}px`;
-                    
-                    // Posición inicial aleatoria
-                    particle.style.left = `${Math.random() * 100}%`;
-                    particle.style.top = `${Math.random() * 100}%`;
-                    
-                    // Animación con duración aleatoria
-                    const duration = Math.random() * 10 + 10;
-                    particle.style.animationDuration = `${duration}s`;
-                    
-                    // Retraso inicial aleatorio
-                    particle.style.animationDelay = `${Math.random() * 5}s`;
-                    
-                    particlesContainer.appendChild(particle);
-                }
-            }
-        });
     </script>
 </body>
 </html>
