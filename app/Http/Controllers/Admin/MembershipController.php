@@ -13,7 +13,7 @@ class MembershipController extends Controller
 {
     public function index()
     {
-        $memberships = Membership::with('latestPayment')->get();
+        $memberships = Membership::with(['status', 'latestPayment'])->get();
         return view('admin.memberships.index', compact('memberships'));
     }
 

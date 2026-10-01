@@ -45,7 +45,7 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                @foreach($memberships as $membership)
+                                @forelse($memberships as $membership)
                                     <tr class="row-membership">
                                         <td class="text-center membership-name">
                                             <span class="name-pill">
@@ -116,7 +116,14 @@
                                             </div>
                                         </td>
                                     </tr>
-                                @endforeach
+                                @empty
+                                    <tr>
+                                        <td colspan="6" class="text-center text-muted py-5" style="font-size: 1.2rem;">
+                                            <i class="fas fa-id-card-alt fs-1 d-block mb-3 text-muted opacity-50"></i>
+                                            <span class="fw-semibold">No hay membresías registradas</span>
+                                        </td>
+                                    </tr>
+                                @endforelse
                             </tbody>
                         </table>
                     </div>
@@ -133,8 +140,11 @@
         </div>
     </div>
 </div>
+@endsection
 
-:root {
+@section('styles')
+<style>
+    :root {
         --cybac-navy: #1A365D;
         --cybac-navy-strong: #122947;
         --cybac-orange: #FF6B35;
@@ -420,7 +430,9 @@
         }
     }
 </style>
+@endsection
 
+@section('scripts')
 <script>
     // Auto-dismiss alerts after 3 seconds
     document.addEventListener('DOMContentLoaded', function() {
