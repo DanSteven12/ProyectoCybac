@@ -413,7 +413,7 @@
                         @if($errors->any())
                             <div class="alert alert-danger mb-4" id="serverAlert">
                                 <i class="bi bi-exclamation-circle me-2"></i>
-                                @foreach ($errors->all() as$error)
+                                @foreach ($errors->all() as $error)
                                     <div>{{ $error }}</div>
                                 @endforeach
                             </div>
