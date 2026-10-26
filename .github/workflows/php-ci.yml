@@ -1,0 +1,103 @@
+name: Pruebas automatizadas - Cybac
+
+on:
+  push:
+    branches:
+      - main
+      - 'feature/**'
+      - 'fix/**'
+      - 'docs/**'
+  pull_request:
+    branches:
+      - main
+
+permissions:
+  contents: read
+
+jobs:
+  ci:
+    name: Integracion Continua - Gestion de Membresias
+    runs-on: ubuntu-latest
+
+    services:
+      mysql:
+        image: mysql:8.0
+        env:
+          MYSQL_DATABASE: cybac_test
+          MYSQL_ALLOW_EMPTY_PASSWORD: 'yes'
+        ports:
+          - 3306:3306
+        options: --health-cmd="mysqladmin ping" --health-interval=10s --health-timeout=5s --health-retries=5
+
+    env:
+      DB_CONNECTION: mysql
+      DB_HOST: 127.0.0.1
+      DB_PORT: 3306
+      DB_DATABASE: cybac_test
+      DB_USERNAME: root
+      DB_PASSWORD: ''
+
+    steps:
+      - name: 1. Obtener codigo fuente
+        uses: actions/checkout@v4
+
+      - name: 2. Configurar PHP 8.3
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.3'
+          extensions: mbstring, xml, ctype, iconv, mysql, pdo_mysql, bcmath, fileinfo, gd
+          coverage: none
+          tools: composer:v2
+
+      - name: 3. Configurar Node.js 20
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+
+      - name: 4. Obtener clave de cache de Composer
+        id: composer-cache
+        run: echo "dir=$(composer config cache-files-dir)" >> $GITHUB_OUTPUT
+
+      - name: 5. Cache de dependencias de Composer
+        uses: actions/cache@v4
+        with:
+          path: ${{ steps.composer-cache.outputs.dir }}
+          key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.lock') }}
+          restore-keys: ${{ runner.os }}-composer-
+
+      - name: 6. Instalar dependencias de PHP
+        run: composer install --no-interaction --prefer-dist --no-progress
+
+      - name: 7. Instalar dependencias de Frontend
+        run: npm ci
+
+      - name: 8. Preparar variables de entorno de Laravel
+        run: |
+          cp .env.example .env
+          php artisan key:generate
+
+      - name: 9. Verificar sintaxis PHP (php -l)
+        run: |
+          php -l app/Models/Membership.php
+          php -l app/Http/Controllers/Admin/MembershipController.php
+          php -l app/Services/MembershipService.php
+          php -l tests/Unit/MembershipDurationTest.php
+          php -l tests/Feature/MembershipTest.php
+
+      - name: 10. Compilar recursos de frontend (Vite)
+        run: npm run build
+
+      - name: 11. Analizar estilo de codigo (Laravel Pint)
+        run: ./vendor/bin/pint --test
+        continue-on-error: true # Informativo: detecta deuda de formato en archivos heredados sin interrumpir la suite de pruebas
+
+      - name: 12. Ejecutar migraciones en MySQL (cybac_test)
+        run: php artisan migrate --force
+
+      - name: 13. Ejecutar pruebas unitarias (Membresias)
+        run: php artisan test tests/Unit/MembershipDurationTest.php
+
+      - name: 14. Ejecutar pruebas de integracion (Membresias)
+        run: php artisan test tests/Feature/MembershipTest.php
+
