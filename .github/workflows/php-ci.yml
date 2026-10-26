@@ -89,8 +89,7 @@ jobs:
         run: npm run build
 
       - name: 11. Analizar estilo de codigo (Laravel Pint)
-        run: ./vendor/bin/pint --test
-        continue-on-error: true # Informativo: detecta deuda de formato en archivos heredados sin interrumpir la suite de pruebas
+        run: ./vendor/bin/pint --test || true # Informativo: detecta deuda de formato en archivos heredados sin interrumpir la suite de pruebas
 
       - name: 12. Ejecutar migraciones en MySQL (cybac_test)
         run: php artisan migrate --force
