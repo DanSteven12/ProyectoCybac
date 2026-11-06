@@ -14,8 +14,7 @@ class MembershipDurationTest extends TestCase
     {
         $membership = new Membership(['duration' => 30]);
 
-        // FALLO INTENCIONAL PARA EVIDENCIA DE CI (espera '2 meses' en vez de '1 mes')
-        $this->assertEquals('2 meses', $membership->readable_duration);
+        $this->assertEquals('1 mes', $membership->readable_duration);
     }
 
     /**
